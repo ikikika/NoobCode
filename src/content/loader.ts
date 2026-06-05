@@ -15,9 +15,7 @@ export async function loadProblem(slug: string): Promise<Problem> {
   const mod = await importer()
   const result = problemSchema.safeParse(mod.default)
   if (!result.success) {
-    throw new Error(
-      `Problem "${slug}" failed schema validation:\n${result.error.message}`,
-    )
+    throw new Error(`Problem "${slug}" failed schema validation:\n${result.error.message}`)
   }
 
   cache.set(slug, result.data)

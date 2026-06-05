@@ -14,7 +14,8 @@ export const useUiPrefs = create<UiPrefsState>()(
     (set, get) => ({
       diffLayout: 'split',
       setDiffLayout: (layout) => set({ diffLayout: layout }),
-      toggleDiffLayout: () => set({ diffLayout: get().diffLayout === 'split' ? 'inline' : 'split' }),
+      toggleDiffLayout: () =>
+        set({ diffLayout: get().diffLayout === 'split' ? 'inline' : 'split' }),
     }),
     { name: 'noobcode-ui', version: 1 },
   ),

@@ -73,9 +73,7 @@ export function ResultsPanel({ status, result, loadingMessage }: ResultsPanelPro
           <li key={i} className="rounded-md border border-line bg-surface-raised p-3 text-sm">
             <div className="flex items-center justify-between">
               <span className="font-medium text-fg">
-                <span className={c.passed ? 'text-pass' : 'text-fail'}>
-                  {c.passed ? '✓' : '✗'}
-                </span>{' '}
+                <span className={c.passed ? 'text-pass' : 'text-fail'}>{c.passed ? '✓' : '✗'}</span>{' '}
                 {c.name}
               </span>
               <span className="text-xs text-fg-subtle">{c.durationMs.toFixed(1)} ms</span>
@@ -86,7 +84,9 @@ export function ResultsPanel({ status, result, loadingMessage }: ResultsPanelPro
               <dt className="text-fg-subtle">expected</dt>
               <dd className="break-all">{formatValue(c.expected)}</dd>
               <dt className="text-fg-subtle">actual</dt>
-              <dd className={`break-all ${c.passed ? '' : 'text-fail'}`}>{formatValue(c.actual)}</dd>
+              <dd className={`break-all ${c.passed ? '' : 'text-fail'}`}>
+                {formatValue(c.actual)}
+              </dd>
               {c.error && (
                 <>
                   <dt className="text-fg-subtle">error</dt>

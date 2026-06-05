@@ -1,12 +1,23 @@
+import { lazy, Suspense } from 'react'
 import { createHashRouter, Navigate, RouterProvider } from 'react-router-dom'
 import { Layout } from './components/Layout'
 import { ProblemListPage } from './routes/ProblemListPage'
-import { ProblemDetailPage } from './routes/ProblemDetailPage'
 import { SkillsPage } from './routes/SkillsPage'
-import { monacoSetup } from './lib/monacoSetup'
+import { Spinner } from './components/Spinner'
 
-// Define Monaco themes before any editor mounts.
-monacoSetup()
+// The problem detail page pulls in Monaco — load it lazily so the list and
+// skills pages stay small and Monaco only downloads when a problem is opened.
+const ProblemDetailPage = lazy(() =>
+  import('./routes/ProblemDetailPage').then((m) => ({ default: m.ProblemDetailPage })),
+)
+
+function DetailFallback() {
+  return (
+    <div className="flex h-full items-center justify-center gap-2 text-sm text-fg-muted">
+      <Spinner size={18} /> Loading editor…
+    </div>
+  )
+}
 
 const router = createHashRouter([
   {
@@ -15,7 +26,14 @@ const router = createHashRouter([
     children: [
       { index: true, element: <ProblemListPage /> },
       { path: 'problems', element: <ProblemListPage /> },
-      { path: 'problems/:slug', element: <ProblemDetailPage /> },
+      {
+        path: 'problems/:slug',
+        element: (
+          <Suspense fallback={<DetailFallback />}>
+            <ProblemDetailPage />
+          </Suspense>
+        ),
+      },
       { path: 'skills', element: <SkillsPage /> },
       { path: '*', element: <Navigate to="/" replace /> },
     ],

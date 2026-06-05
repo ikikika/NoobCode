@@ -14,10 +14,10 @@ interface ComparePanelProps {
 export function ComparePanel({ problem, language }: ComparePanelProps) {
   const isDark = useTheme((s) => s.isDark)
   const diffLayout = useUiPrefs((s) => s.diffLayout)
-  const userCode = useProgressStore((s) => s.getCode(problem.slug, language)) || problem.starterCode[language]
+  const userCode =
+    useProgressStore((s) => s.getCode(problem.slug, language)) || problem.starterCode[language]
 
-  const reference =
-    problem.solutions.find((s) => s.technique?.optimal) ?? problem.solutions[0]
+  const reference = problem.solutions.find((s) => s.technique?.optimal) ?? problem.solutions[0]
   const referenceCode = reference.steps[reference.steps.length - 1].code[language]
 
   return (

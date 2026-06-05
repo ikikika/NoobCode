@@ -96,7 +96,11 @@ export abstract class WorkerLanguageRunner implements LanguageRunner {
             break
           case 'result':
             cleanup()
-            resolve({ ...msg.result, stdout: msg.result.stdout || stdout, stderr: msg.result.stderr || stderr })
+            resolve({
+              ...msg.result,
+              stdout: msg.result.stdout || stdout,
+              stderr: msg.result.stderr || stderr,
+            })
             break
           case 'error':
             cleanup()
@@ -106,7 +110,13 @@ export abstract class WorkerLanguageRunner implements LanguageRunner {
       }
 
       worker.addEventListener('message', onMessage)
-      this.send({ type: 'run', id, userCode: opts.userCode, functionName: opts.functionName, tests: opts.tests })
+      this.send({
+        type: 'run',
+        id,
+        userCode: opts.userCode,
+        functionName: opts.functionName,
+        tests: opts.tests,
+      })
     })
   }
 

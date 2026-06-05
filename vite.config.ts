@@ -15,12 +15,14 @@ export default defineConfig({
     react(),
     tailwindcss(),
     viteStaticCopy({
-      targets: [
-        { src: 'node_modules/pyodide/*', dest: 'pyodide', rename: { stripBase: 2 } },
-      ],
+      targets: [{ src: 'node_modules/pyodide/*', dest: 'pyodide', rename: { stripBase: 2 } }],
     }),
   ],
   worker: { format: 'es' },
+  // Monaco's editor.api core is a legitimately large, lazily-loaded chunk
+  // (~3.6 MB). Set the limit just above it so the warning flags a genuine
+  // regression rather than firing on this known dependency every build.
+  build: { chunkSizeWarningLimit: 4000 },
   optimizeDeps: { exclude: ['pyodide'] },
   server: { headers: crossOriginIsolationHeaders },
   preview: { headers: crossOriginIsolationHeaders },

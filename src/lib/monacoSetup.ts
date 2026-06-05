@@ -1,5 +1,20 @@
 import { loader } from '@monaco-editor/react'
-import * as monaco from 'monaco-editor'
+// Import only the editor core plus the two languages we actually use. This
+// avoids pulling in Monaco's full language pack (TS/HTML/CSS/JSON workers and
+// dozens of Monarch grammars), which would otherwise dominate the bundle.
+import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
+import 'monaco-editor/esm/vs/basic-languages/python/python.contribution'
+import 'monaco-editor/esm/vs/basic-languages/javascript/javascript.contribution'
+import 'monaco-editor/esm/vs/basic-languages/typescript/typescript.contribution'
+import EditorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
+
+// We register only the generic editor worker — the basic-language
+// contributions are tokenizer-only and need no dedicated language service.
+;(self as typeof globalThis & { MonacoEnvironment?: monaco.Environment }).MonacoEnvironment = {
+  getWorker() {
+    return new EditorWorker()
+  },
+}
 
 let done = false
 

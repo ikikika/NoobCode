@@ -54,16 +54,22 @@ export function buildReview(features: CodeFeatures, problem: Problem): MethodRev
       inefficiencies.push(
         'The optimal approach relies on a hash map/set for constant-time lookups, which your solution does not use.',
       )
-      suggestions.push('Introduce a dict/set (Python) or Map/Set (JS) to memoize values you have already seen.')
+      suggestions.push(
+        'Introduce a dict/set (Python) or Map/Set (JS) to memoize values you have already seen.',
+      )
     }
     if (features.usesSorting && !sig.usesSorting) {
       inefficiencies.push('Sorting adds an O(n log n) factor that the optimal solution avoids.')
-      suggestions.push('Consider whether a single linear pass with a hash structure removes the need to sort.')
+      suggestions.push(
+        'Consider whether a single linear pass with a hash structure removes the need to sort.',
+      )
     }
   }
 
   if (isOptimal && inefficiencies.length === 0) {
-    suggestions.push('Nice — this matches the optimal approach. Focus on edge cases and readability.')
+    suggestions.push(
+      'Nice — this matches the optimal approach. Focus on edge cases and readability.',
+    )
   }
 
   return {

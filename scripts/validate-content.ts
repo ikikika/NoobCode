@@ -33,7 +33,9 @@ async function main() {
         }
       }
     } catch (err) {
-      errors.push(`[${slug}] threw while loading: ${err instanceof Error ? err.message : String(err)}`)
+      errors.push(
+        `[${slug}] threw while loading: ${err instanceof Error ? err.message : String(err)}`,
+      )
     }
   }
 

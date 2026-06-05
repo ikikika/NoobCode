@@ -8,7 +8,7 @@
     <script>
       // Blocking FOUC-prevention: set theme class before first paint.
       // Default to dark when no preference is stored.
-      (function () {
+      ;(function () {
         try {
           var stored = localStorage.getItem('theme')
           var dark = stored ? stored === 'dark' : true

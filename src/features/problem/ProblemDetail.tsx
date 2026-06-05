@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels'
 import type { LanguageId, Problem } from '../../content/schema'
 import { Tabs } from '../../components/Tabs'
-import { Spinner } from '../../components/Spinner'
 import { useProgressStore } from '../../store/useProgressStore'
 import { useSolutionStore } from '../../store/useSolutionStore'
 import { useSettingsStore } from '../../store/useSettingsStore'
@@ -17,9 +16,10 @@ import { StepViewer } from '../steps/StepViewer'
 import { ProblemDescription } from './ProblemDescription'
 import { ReviewPanel } from '../review/ReviewPanel'
 import { ComparePanel } from '../review/ComparePanel'
+import { HistoryPanel } from '../review/HistoryPanel'
 
 type LeftTab = 'description' | 'solution'
-type RightTab = 'code' | 'results' | 'review' | 'compare'
+type RightTab = 'code' | 'results' | 'review' | 'compare' | 'history'
 
 export function ProblemDetail({ problem }: { problem: Problem }) {
   const [leftTab, setLeftTab] = useState<LeftTab>('description')
@@ -27,7 +27,6 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
 
   const lastLanguage = useProgressStore((s) => s.lastLanguage)
   const setLastLanguage = useProgressStore((s) => s.setLastLanguage)
-  const getCode = useProgressStore((s) => s.getCode)
   const saveCode = useProgressStore((s) => s.saveCode)
   const markSolved = useProgressStore((s) => s.markSolved)
   const updateSchedule = useProgressStore((s) => s.updateSchedule)
@@ -42,7 +41,7 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
   const apiKey = useSettingsStore((s) => s.apiKey)
   const model = useSettingsStore((s) => s.model)
 
-  const { run, status, result, loadingMessage } = useRunner()
+  const { run, interrupt, status, result, loadingMessage } = useRunner()
 
   // On problem mount, reset the solution viewer to the persisted language.
   useEffect(() => {
@@ -50,7 +49,9 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [problem.slug])
 
-  const code = getCode(problem.slug, language) || problem.starterCode[language]
+  // Reactive: re-renders when this slug+language code changes (e.g. on Reset).
+  const savedValue = useProgressStore((s) => s.savedCode[`${problem.slug}:${language}`])
+  const code = savedValue || problem.starterCode[language]
 
   const onChangeCode = (value: string) => saveCode(problem.slug, language, value)
 
@@ -66,7 +67,7 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
   const handleRun = async (sampleOnly: boolean) => {
     setRightTab('results')
     const fnName = problem.functionName[language]
-    const userCode = getCode(problem.slug, language) || problem.starterCode[language]
+    const userCode = code
     const tests = sampleOnly ? problem.tests.filter((t) => !t.hidden) : problem.tests
 
     const runResult = await run({ language, userCode, functionName: fnName, tests })
@@ -86,6 +87,8 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
           timestamp: Date.now(),
           passed,
           approachUsed: heuristicReview.approachUsed,
+          language,
+          code: userCode,
         })
         storeReview(problem.slug, heuristicReview)
         setRightTab('review')
@@ -95,6 +98,11 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
             heuristicReview,
             { problemTitle: problem.title, language, userCode, passed },
             { apiKey, model },
+            {
+              // Stream prose into the panel as it arrives.
+              onDelta: (proseSoFar) =>
+                storeReview(problem.slug, { ...heuristicReview, prose: proseSoFar, source: 'ai' }),
+            },
           )
           storeReview(problem.slug, enhanced)
         }
@@ -105,6 +113,21 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
   }
 
   const busy = status === 'loading' || status === 'running'
+
+  // Ctrl/Cmd+Enter runs all tests. A ref keeps the listener stable while
+  // always invoking the latest handler.
+  const runRef = useRef(handleRun)
+  runRef.current = handleRun
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+        e.preventDefault()
+        if (!(status === 'loading' || status === 'running')) void runRef.current(false)
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [status])
 
   return (
     <PanelGroup direction="horizontal" className="h-full">
@@ -122,7 +145,11 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
             {leftTab === 'description' ? (
               <ProblemDescription problem={problem} />
             ) : (
-              <StepViewer solutions={problem.solutions} language={language} />
+              <StepViewer
+                solutions={problem.solutions}
+                language={language}
+                problemTitle={problem.title}
+              />
             )}
           </div>
         </div>
@@ -148,14 +175,22 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
               >
                 Run Sample
               </button>
-              <button
-                onClick={() => handleRun(false)}
-                disabled={busy}
-                className="flex items-center gap-1.5 rounded-md bg-accent px-3 py-1 text-xs font-medium text-accent-contrast hover:bg-accent-hover disabled:opacity-50"
-              >
-                {busy && <Spinner size={12} />}
-                Run All
-              </button>
+              {busy ? (
+                <button
+                  onClick={() => interrupt(language)}
+                  className="rounded-md border border-fail px-3 py-1 text-xs font-medium text-fail hover:bg-fail-surface"
+                >
+                  Stop
+                </button>
+              ) : (
+                <button
+                  onClick={() => handleRun(false)}
+                  title="Run all tests (Ctrl/Cmd+Enter)"
+                  className="flex items-center gap-1.5 rounded-md bg-accent px-3 py-1 text-xs font-medium text-accent-contrast hover:bg-accent-hover"
+                >
+                  Run All
+                </button>
+              )}
             </div>
           </div>
 
@@ -165,6 +200,7 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
               { id: 'results', label: 'Results' },
               { id: 'review', label: 'Review' },
               { id: 'compare', label: 'Compare' },
+              { id: 'history', label: 'History' },
             ]}
             active={rightTab}
             onChange={(id) => setRightTab(id as RightTab)}
@@ -179,6 +215,7 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
             )}
             {rightTab === 'review' && <ReviewPanel slug={problem.slug} />}
             {rightTab === 'compare' && <ComparePanel problem={problem} language={language} />}
+            {rightTab === 'history' && <HistoryPanel problem={problem} language={language} />}
           </div>
         </div>
       </Panel>

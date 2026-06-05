@@ -1,19 +1,24 @@
+import { useEffect, useState } from 'react'
 import { DiffEditor } from '@monaco-editor/react'
 import type { LanguageId, Solution } from '../../content/schema'
 import { MONACO_LANGUAGE } from '../../content/schema'
 import { useTheme } from '../../store/useTheme'
 import { useUiPrefs } from '../../store/useUiPrefs'
 import { useSolutionStore } from '../../store/useSolutionStore'
+import { useSettingsStore } from '../../store/useSettingsStore'
 import { monacoThemeName } from '../../lib/monacoSetup'
 import { MarkdownView } from '../../components/MarkdownView'
+import { Spinner } from '../../components/Spinner'
+import { explainStep } from '../review/aiReview'
 import { SolutionPicker } from './SolutionPicker'
 
 interface StepViewerProps {
   solutions: Solution[]
   language: LanguageId
+  problemTitle: string
 }
 
-export function StepViewer({ solutions, language }: StepViewerProps) {
+export function StepViewer({ solutions, language, problemTitle }: StepViewerProps) {
   const isDark = useTheme((s) => s.isDark)
   const diffLayout = useUiPrefs((s) => s.diffLayout)
   const toggleDiffLayout = useUiPrefs((s) => s.toggleDiffLayout)
@@ -23,12 +28,35 @@ export function StepViewer({ solutions, language }: StepViewerProps) {
   const setSolutionIndex = useSolutionStore((s) => s.setSolutionIndex)
   const setStepIndex = useSolutionStore((s) => s.setStepIndex)
 
+  const aiEnabled = useSettingsStore((s) => s.aiEnabled)
+  const apiKey = useSettingsStore((s) => s.apiKey)
+  const model = useSettingsStore((s) => s.model)
+
   const solution = solutions[Math.min(activeSolutionIndex, solutions.length - 1)]
   const stepIndex = Math.min(activeStepIndex, solution.steps.length - 1)
   const step = solution.steps[stepIndex]
 
   const original = stepIndex > 0 ? solution.steps[stepIndex - 1].code[language] : ''
   const modified = step.code[language]
+
+  const [explanation, setExplanation] = useState<string | null>(null)
+  const [explaining, setExplaining] = useState(false)
+
+  // Clear any AI explanation when the step, solution, or language changes.
+  useEffect(() => {
+    setExplanation(null)
+    setExplaining(false)
+  }, [activeSolutionIndex, stepIndex, language])
+
+  const onExplain = async () => {
+    setExplaining(true)
+    const text = await explainStep(
+      { problemTitle, language, code: modified, stepTitle: step.title },
+      { apiKey, model },
+    )
+    setExplanation(text ?? 'Could not fetch an explanation right now.')
+    setExplaining(false)
+  }
 
   return (
     <div className="flex h-full flex-col">
@@ -99,6 +127,24 @@ export function StepViewer({ solutions, language }: StepViewerProps) {
         </div>
         {step.title && <h3 className="mb-1 text-sm font-semibold text-fg">{step.title}</h3>}
         <MarkdownView>{step.explanation}</MarkdownView>
+
+        {aiEnabled && apiKey && (
+          <div className="mt-3">
+            <button
+              onClick={onExplain}
+              disabled={explaining}
+              className="flex items-center gap-1.5 rounded-md border border-line px-2.5 py-1 text-xs text-accent hover:bg-surface-raised disabled:opacity-50"
+            >
+              {explaining && <Spinner size={12} />}
+              Explain this step
+            </button>
+            {explanation && (
+              <div className="mt-2 rounded-md bg-surface-sunken p-3">
+                <MarkdownView>{explanation}</MarkdownView>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   )

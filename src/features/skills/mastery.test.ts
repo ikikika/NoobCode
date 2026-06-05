@@ -19,9 +19,9 @@ describe('deriveMastery', () => {
   })
 
   it('returns weak when mostly failing', () => {
-    expect(deriveMastery([attempt(true), attempt(false), attempt(false), attempt(false)], NOW)).toBe(
-      'weak',
-    )
+    expect(
+      deriveMastery([attempt(true), attempt(false), attempt(false), attempt(false)], NOW),
+    ).toBe('weak')
   })
 
   it('returns learning for a mixed (>=0.4) pass rate', () => {

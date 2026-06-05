@@ -27,7 +27,9 @@ export function ReviewPanel({ slug }: { slug: string }) {
         </span>
         <span
           className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${
-            review.isOptimal ? 'bg-pass-surface text-pass' : 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-400'
+            review.isOptimal
+              ? 'bg-pass-surface text-pass'
+              : 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-400'
           }`}
         >
           {review.isOptimal ? 'Optimal' : 'Needs work'}
@@ -35,6 +37,12 @@ export function ReviewPanel({ slug }: { slug: string }) {
         {review.source === 'ai' && (
           <span className="rounded-full bg-accent/15 px-2.5 py-0.5 text-xs font-medium text-accent">
             AI coach
+          </span>
+        )}
+        {review.usage && (
+          <span className="ml-auto text-xs text-fg-subtle">
+            {review.usage.inputTokens + review.usage.outputTokens} tokens · $
+            {review.usage.costUsd.toFixed(4)}
           </span>
         )}
       </div>

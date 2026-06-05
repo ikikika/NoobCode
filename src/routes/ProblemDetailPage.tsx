@@ -4,6 +4,12 @@ import type { Problem } from '../content/schema'
 import { loadProblem } from '../content/loader'
 import { ProblemDetail } from '../features/problem/ProblemDetail'
 import { Spinner } from '../components/Spinner'
+import { monacoSetup } from '../lib/monacoSetup'
+
+// This module is the lazy boundary for everything Monaco-related. Defining the
+// custom themes here (at chunk load, before any editor mounts) keeps the heavy
+// monaco-editor import out of the main bundle.
+monacoSetup()
 
 export function ProblemDetailPage() {
   const { slug } = useParams<{ slug: string }>()

@@ -38,9 +38,7 @@ export function ProblemDescription({ problem }: { problem: Problem }) {
                     <span className="text-fg">{ex.output}</span>
                   </div>
                 </div>
-                {ex.explanation && (
-                  <p className="mt-1 text-xs text-fg-muted">{ex.explanation}</p>
-                )}
+                {ex.explanation && <p className="mt-1 text-xs text-fg-muted">{ex.explanation}</p>}
               </div>
             ))}
           </div>

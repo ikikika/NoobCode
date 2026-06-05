@@ -33,7 +33,9 @@ function PatternCard({ stat }: { stat: PatternStat }) {
     <div className="flex flex-col gap-2 rounded-lg border border-line bg-surface-raised p-3">
       <div className="flex items-center justify-between gap-2">
         <span className="text-sm font-semibold text-fg">{PATTERN_LABELS[stat.pattern]}</span>
-        <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${MASTERY_STYLES[stat.mastery]}`}>
+        <span
+          className={`rounded-full px-2 py-0.5 text-xs font-medium ${MASTERY_STYLES[stat.mastery]}`}
+        >
           {MASTERY_LABELS[stat.mastery]}
         </span>
       </div>

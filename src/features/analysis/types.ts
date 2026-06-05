@@ -20,6 +20,8 @@ export interface MethodReview {
   referenceApproach?: string
   prose?: string // optional AI-polished coaching text
   source: 'heuristic' | 'ai'
+  // Populated when the AI layer ran; lets the UI show token spend + cost.
+  usage?: { inputTokens: number; outputTokens: number; costUsd: number }
 }
 
 export interface AttemptRecord {
@@ -27,4 +29,7 @@ export interface AttemptRecord {
   timestamp: number
   passed: boolean
   approachUsed?: ApproachId
+  // Captured so past attempts can be diffed against the current code.
+  language?: 'python' | 'javascript'
+  code?: string
 }

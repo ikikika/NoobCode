@@ -25,7 +25,10 @@ afterEach(() => {
 describe('enhanceReview', () => {
   it('returns the heuristic unchanged and never fetches without an API key', async () => {
     const fetchSpy = vi.spyOn(globalThis, 'fetch')
-    const result = await enhanceReview(baseReview, context, { apiKey: '', model: 'claude-haiku-4-5' })
+    const result = await enhanceReview(baseReview, context, {
+      apiKey: '',
+      model: 'claude-haiku-4-5',
+    })
     expect(result).toEqual(baseReview)
     expect(fetchSpy).not.toHaveBeenCalled()
   })

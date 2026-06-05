@@ -60,7 +60,9 @@ export function analyzeJs(code: string, functionName: string): CodeFeatures {
   const maxLoopDepth = detectMaxLoopDepth(clean)
 
   const usesHashStructure =
-    /\bnew\s+Map\b|\bnew\s+Set\b/.test(clean) || /=\s*\{\s*\}/.test(clean) || /=\s*\{[^}]*:/.test(clean)
+    /\bnew\s+Map\b|\bnew\s+Set\b/.test(clean) ||
+    /=\s*\{\s*\}/.test(clean) ||
+    /=\s*\{[^}]*:/.test(clean)
 
   const usesSorting = /\.sort\s*\(/.test(clean)
 
