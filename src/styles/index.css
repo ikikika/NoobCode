@@ -1,0 +1,84 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+
+/* Dark is the default theme; .dark class is applied by the FOUC script. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Light palette */
+:root {
+  --color-surface: #ffffff;
+  --color-surface-raised: #f7f8fa;
+  --color-surface-sunken: #eceef2;
+  --color-fg: #1a1c20;
+  --color-fg-muted: #51555c;
+  --color-fg-subtle: #898f99;
+  --color-line: #d8dce2;
+  --color-accent: #2f6df6;
+  --color-accent-hover: #1f5be0;
+  --color-accent-contrast: #ffffff;
+  --color-diff-added: #1a7f37;
+  --color-diff-added-surface: #e6f6ea;
+  --color-diff-removed: #cf222e;
+  --color-diff-removed-surface: #ffebe9;
+  --color-pass: #1a7f37;
+  --color-pass-surface: #e6f6ea;
+  --color-fail: #cf222e;
+  --color-fail-surface: #ffebe9;
+}
+
+/* Dark palette */
+.dark {
+  --color-surface: #0f1115;
+  --color-surface-raised: #181b21;
+  --color-surface-sunken: #0a0c0f;
+  --color-fg: #e6e8ec;
+  --color-fg-muted: #a3a9b4;
+  --color-fg-subtle: #6b717c;
+  --color-line: #272b33;
+  --color-accent: #5b8cff;
+  --color-accent-hover: #7aa2ff;
+  --color-accent-contrast: #0f1115;
+  --color-diff-added: #3fb950;
+  --color-diff-added-surface: #0f2916;
+  --color-diff-removed: #f85149;
+  --color-diff-removed-surface: #2a1213;
+  --color-pass: #3fb950;
+  --color-pass-surface: #0f2916;
+  --color-fail: #f85149;
+  --color-fail-surface: #2a1213;
+}
+
+/* Map CSS variables to Tailwind color utilities (text-fg, bg-surface, etc.) */
+@theme inline {
+  --color-surface: var(--color-surface);
+  --color-surface-raised: var(--color-surface-raised);
+  --color-surface-sunken: var(--color-surface-sunken);
+  --color-fg: var(--color-fg);
+  --color-fg-muted: var(--color-fg-muted);
+  --color-fg-subtle: var(--color-fg-subtle);
+  --color-line: var(--color-line);
+  --color-accent: var(--color-accent);
+  --color-accent-hover: var(--color-accent-hover);
+  --color-accent-contrast: var(--color-accent-contrast);
+  --color-diff-added: var(--color-diff-added);
+  --color-diff-added-surface: var(--color-diff-added-surface);
+  --color-diff-removed: var(--color-diff-removed);
+  --color-diff-removed-surface: var(--color-diff-removed-surface);
+  --color-pass: var(--color-pass);
+  --color-pass-surface: var(--color-pass-surface);
+  --color-fail: var(--color-fail);
+  --color-fail-surface: var(--color-fail-surface);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-surface);
+  color: var(--color-fg);
+  font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
