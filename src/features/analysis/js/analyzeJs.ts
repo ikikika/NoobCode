@@ -1,95 +1,128 @@
+import { parse } from 'acorn'
 import type { CodeFeatures } from '../types'
 
-// Remove line/block comments and string/template literals so tokens inside
-// them do not trigger false positives.
-function stripCommentsAndStrings(code: string): string {
-  let out = code
-  // Block comments
-  out = out.replace(/\/\*[\s\S]*?\*\//g, ' ')
-  // Line comments
-  out = out.replace(/\/\/[^\n]*/g, ' ')
-  // String + template literals
-  out = out.replace(/'(?:\\.|[^'\\])*'/g, "''")
-  out = out.replace(/"(?:\\.|[^"\\])*"/g, '""')
-  out = out.replace(/`(?:\\.|[^`\\])*`/g, '``')
-  return out
+// Minimal ESTree node shape — we only touch `type` and recurse generically.
+interface Node {
+  type: string
+  [key: string]: unknown
 }
 
-// Walk the code tracking brace depth; remember which brace depths were opened
-// by a loop header so we can measure the deepest concurrent loop nesting.
-function detectMaxLoopDepth(code: string): number {
-  let maxDepth = 0
-  let loopDepth = 0
-  // Stack entry === true when the matching `{` was opened by a loop header.
-  const stack: boolean[] = []
-  let pendingLoop = false
+const LOOP_TYPES = new Set([
+  'ForStatement',
+  'ForInStatement',
+  'ForOfStatement',
+  'WhileStatement',
+  'DoWhileStatement',
+])
 
-  const loopHeader = /\b(for|while)\s*\(/g
-  // Mark positions where a loop header occurs.
-  const loopPositions = new Set<number>()
-  let m: RegExpExecArray | null
-  while ((m = loopHeader.exec(code))) {
-    loopPositions.add(m.index)
-  }
-
-  for (let i = 0; i < code.length; i++) {
-    const ch = code[i]
-    if (loopPositions.has(i)) {
-      pendingLoop = true
-    }
-    if (ch === '{') {
-      const isLoop = pendingLoop
-      stack.push(isLoop)
-      if (isLoop) {
-        loopDepth++
-        maxDepth = Math.max(maxDepth, loopDepth)
-      }
-      pendingLoop = false
-    } else if (ch === '}') {
-      const wasLoop = stack.pop()
-      if (wasLoop) loopDepth--
-    }
-  }
-
-  return maxDepth
+function isNode(value: unknown): value is Node {
+  return typeof value === 'object' && value !== null && typeof (value as Node).type === 'string'
 }
 
+/**
+ * AST-based analysis of a JavaScript solution. Replaces the old brace/regex
+ * heuristics with a real parse, so strings, comments, and nested structures no
+ * longer cause false positives. Produces the same CodeFeatures shape as the
+ * Python analyzer so downstream classification stays language-agnostic.
+ */
 export function analyzeJs(code: string, functionName: string): CodeFeatures {
-  const clean = stripCommentsAndStrings(code)
-
-  const maxLoopDepth = detectMaxLoopDepth(clean)
-
-  const usesHashStructure =
-    /\bnew\s+Map\b|\bnew\s+Set\b/.test(clean) ||
-    /=\s*\{\s*\}/.test(clean) ||
-    /=\s*\{[^}]*:/.test(clean)
-
-  const usesSorting = /\.sort\s*\(/.test(clean)
-
-  const twoPointerShape =
-    /\b(let|var|const)\s+\w+\s*=\s*0\b/.test(clean) && /length\s*-\s*1/.test(clean)
-
-  const returnCount = (clean.match(/\breturn\b/g) || []).length
-  const earlyReturn = returnCount > 1
-
-  // Recursion: remove the declaration line, then look for the function name
-  // being called elsewhere in the body.
-  let usesRecursion = false
-  if (functionName) {
-    const declRe = new RegExp(
-      `function\\s+${functionName}\\b|\\b${functionName}\\s*=\\s*(function|\\()|\\bconst\\s+${functionName}\\b`,
-    )
-    const body = clean.replace(declRe, ' ')
-    const callRe = new RegExp(`\\b${functionName}\\s*\\(`)
-    usesRecursion = callRe.test(body)
+  const features: CodeFeatures = {
+    maxLoopDepth: 0,
+    usesHashStructure: false,
+    usesSorting: false,
+    usesRecursion: false,
+    twoPointerShape: false,
+    earlyReturn: false,
   }
 
-  return {
-    maxLoopDepth,
-    usesHashStructure,
-    usesSorting,
-    usesRecursion,
-    twoPointerShape,
-    earlyReturn,
+  let program: Node
+  try {
+    program = parse(code, { ecmaVersion: 'latest' }) as unknown as Node
+  } catch {
+    // Unparseable code — return the all-false baseline rather than throwing.
+    return features
   }
+
+  let returnCount = 0
+  let hasZeroAssign = false
+  let hasLenMinusOne = false
+
+  const callsSelf = (callee: unknown): boolean =>
+    isNode(callee) && callee.type === 'Identifier' && (callee as Node).name === functionName
+
+  const isLenMinusOne = (node: Node): boolean =>
+    node.type === 'BinaryExpression' &&
+    (node as Node).operator === '-' &&
+    isNode((node as Node).right) &&
+    ((node as Node).right as Node).type === 'Literal' &&
+    ((node as Node).right as Node).value === 1 &&
+    /\blength\b/.test(JSON.stringify((node as Node).left))
+
+  const visit = (node: Node, loopDepth: number) => {
+    const nextDepth = LOOP_TYPES.has(node.type) ? loopDepth + 1 : loopDepth
+    if (LOOP_TYPES.has(node.type)) {
+      features.maxLoopDepth = Math.max(features.maxLoopDepth, nextDepth)
+    }
+
+    switch (node.type) {
+      case 'ReturnStatement':
+        returnCount++
+        break
+      case 'NewExpression': {
+        const callee = node.callee
+        if (isNode(callee) && callee.type === 'Identifier') {
+          const name = (callee as Node).name
+          if (name === 'Map' || name === 'Set' || name === 'WeakMap' || name === 'WeakSet') {
+            features.usesHashStructure = true
+          }
+        }
+        break
+      }
+      case 'ObjectExpression':
+        // Object literal used as a dictionary-style structure.
+        features.usesHashStructure = true
+        break
+      case 'CallExpression': {
+        const callee = node.callee
+        if (isNode(callee) && callee.type === 'MemberExpression') {
+          const prop = (callee as Node).property
+          if (isNode(prop) && (prop as Node).name === 'sort') features.usesSorting = true
+        }
+        if (callsSelf(callee)) features.usesRecursion = true
+        break
+      }
+      case 'VariableDeclarator': {
+        const init = node.init
+        if (isNode(init) && init.type === 'Literal' && (init as Node).value === 0) {
+          hasZeroAssign = true
+        }
+        break
+      }
+      case 'AssignmentExpression': {
+        const right = node.right
+        if (isNode(right) && right.type === 'Literal' && (right as Node).value === 0) {
+          hasZeroAssign = true
+        }
+        break
+      }
+      case 'BinaryExpression':
+        if (isLenMinusOne(node)) hasLenMinusOne = true
+        break
+    }
+
+    for (const key of Object.keys(node)) {
+      const child = node[key]
+      if (isNode(child)) {
+        visit(child, nextDepth)
+      } else if (Array.isArray(child)) {
+        for (const item of child) if (isNode(item)) visit(item, nextDepth)
+      }
+    }
+  }
+
+  visit(program, 0)
+
+  features.earlyReturn = returnCount > 1
+  features.twoPointerShape = hasZeroAssign && hasLenMinusOne
+  return features
 }

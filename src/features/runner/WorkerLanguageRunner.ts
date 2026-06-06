@@ -1,9 +1,11 @@
 import type { LanguageId } from '../../content/schema'
 import type { CodeFeatures } from '../analysis/types'
+import { canHardInterrupt } from '../../lib/crossOriginIsolated'
 import type { LanguageRunner, RunOptions, RunResult } from './LanguageRunner'
 import type { WorkerRequest, WorkerResponse } from './workerProtocol'
 
 const DEFAULT_TIMEOUT_MS = 10_000
+const SIGINT = 2
 
 export abstract class WorkerLanguageRunner implements LanguageRunner {
   abstract language: LanguageId
@@ -11,13 +13,28 @@ export abstract class WorkerLanguageRunner implements LanguageRunner {
   private worker: Worker | null = null
   private nextId = 1
   private initPromise: Promise<void> | null = null
+  private interruptBuffer: Uint8Array | null = null
 
   /** Subclasses construct their concrete Worker here. */
   protected abstract createWorker(): Worker
 
+  /**
+   * Whether this runner can be interrupted cooperatively (Pyodide's
+   * setInterruptBuffer). When true and the page is cross-origin isolated, a
+   * Stop signals the worker instead of terminating it — keeping the runtime
+   * warm. JS execution is synchronous in the worker and can't be interrupted
+   * this way, so it leaves this false and falls back to terminate.
+   */
+  protected get supportsHardInterrupt(): boolean {
+    return false
+  }
+
   private ensureWorker(): Worker {
     if (!this.worker) {
       this.worker = this.createWorker()
+      if (this.supportsHardInterrupt && canHardInterrupt) {
+        this.interruptBuffer = new Uint8Array(new SharedArrayBuffer(1))
+      }
     }
     return this.worker
   }
@@ -48,7 +65,7 @@ export abstract class WorkerLanguageRunner implements LanguageRunner {
         }
       }
       worker.addEventListener('message', onMessage)
-      this.send({ type: 'init', id })
+      this.send({ type: 'init', id, interruptBuffer: this.interruptBuffer ?? undefined })
     })
 
     return this.initPromise
@@ -59,6 +76,9 @@ export abstract class WorkerLanguageRunner implements LanguageRunner {
     const worker = this.ensureWorker()
     const id = this.nextId++
     const timeoutMs = opts.timeoutMs ?? DEFAULT_TIMEOUT_MS
+
+    // Clear any stale interrupt signal from a previous run.
+    if (this.interruptBuffer) Atomics.store(this.interruptBuffer, 0, 0)
 
     let stdout = ''
     let stderr = ''
@@ -144,14 +164,26 @@ export abstract class WorkerLanguageRunner implements LanguageRunner {
   }
 
   interrupt(): void {
+    // Cooperative path: raise KeyboardInterrupt in the running runtime and keep
+    // the worker warm (avoids a full Pyodide re-init/re-download).
+    if (this.interruptBuffer) {
+      Atomics.store(this.interruptBuffer, 0, SIGINT)
+      return
+    }
+    // Fallback: hard-kill the worker.
+    this.terminate()
+  }
+
+  dispose(): void {
+    this.terminate()
+  }
+
+  private terminate(): void {
     if (this.worker) {
       this.worker.terminate()
       this.worker = null
       this.initPromise = null
+      this.interruptBuffer = null
     }
-  }
-
-  dispose(): void {
-    this.interrupt()
   }
 }

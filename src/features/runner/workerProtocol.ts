@@ -6,6 +6,9 @@ import type { RunResult } from './LanguageRunner'
 export interface WorkerInitRequest {
   type: 'init'
   id: number
+  // SharedArrayBuffer-backed byte used for cooperative interruption (Pyodide
+  // setInterruptBuffer). Present only when the page is cross-origin isolated.
+  interruptBuffer?: Uint8Array
 }
 
 export interface WorkerRunRequest {

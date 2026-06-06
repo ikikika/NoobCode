@@ -11,10 +11,12 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "test": "vitest run",
-    "validate:content": "tsx scripts/validate-content.ts"
+    "validate:content": "tsx scripts/validate-content.ts",
+    "new:problem": "tsx scripts/new-problem.ts"
   },
   "dependencies": {
     "@monaco-editor/react": "4.7.0",
+    "acorn": "^8.14.0",
     "monaco-editor": "0.55.1",
     "pyodide": "0.29.4",
     "react": "^19.0.0",

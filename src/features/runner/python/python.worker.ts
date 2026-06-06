@@ -73,7 +73,9 @@ self.onmessage = async (e: MessageEvent<WorkerRequest>) => {
   const msg = e.data
   try {
     if (msg.type === 'init') {
-      await ensurePyodide(msg.id)
+      const py = await ensurePyodide(msg.id)
+      // Enable cooperative interruption when the main thread shared a buffer.
+      if (msg.interruptBuffer) py.setInterruptBuffer(msg.interruptBuffer)
       post({ type: 'ready', id: msg.id })
       return
     }

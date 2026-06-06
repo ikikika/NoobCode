@@ -14,7 +14,7 @@ export function Layout() {
 
   return (
     <div className="flex h-full flex-col bg-surface text-fg">
-      <header className="flex items-center gap-6 border-b border-line px-4 py-3">
+      <header className="flex flex-wrap items-center gap-x-6 gap-y-2 border-b border-line px-4 py-3">
         <NavLink to="/" className="flex items-center gap-2 text-base font-bold text-fg">
           <span className="text-accent">{'</>'}</span> NoobCode
         </NavLink>

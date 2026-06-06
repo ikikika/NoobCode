@@ -17,9 +17,11 @@ import { ProblemDescription } from './ProblemDescription'
 import { ReviewPanel } from '../review/ReviewPanel'
 import { ComparePanel } from '../review/ComparePanel'
 import { HistoryPanel } from '../review/HistoryPanel'
+import { ScratchPanel } from '../scratch/ScratchPanel'
+import { useMediaQuery } from '../../lib/useMediaQuery'
 
 type LeftTab = 'description' | 'solution'
-type RightTab = 'code' | 'results' | 'review' | 'compare' | 'history'
+type RightTab = 'code' | 'results' | 'review' | 'compare' | 'history' | 'scratch'
 
 export function ProblemDetail({ problem }: { problem: Problem }) {
   const [leftTab, setLeftTab] = useState<LeftTab>('description')
@@ -114,6 +116,10 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
 
   const busy = status === 'loading' || status === 'running'
 
+  // Stack the panels vertically on narrow screens; side-by-side otherwise.
+  const isWide = useMediaQuery('(min-width: 768px)')
+  const direction = isWide ? 'horizontal' : 'vertical'
+
   // Ctrl/Cmd+Enter runs all tests. A ref keeps the listener stable while
   // always invoking the latest handler.
   const runRef = useRef(handleRun)
@@ -130,8 +136,8 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
   }, [status])
 
   return (
-    <PanelGroup direction="horizontal" className="h-full">
-      <Panel defaultSize={48} minSize={25}>
+    <PanelGroup key={direction} direction={direction} className="h-full">
+      <Panel defaultSize={48} minSize={20}>
         <div className="flex h-full flex-col">
           <Tabs
             tabs={[
@@ -155,9 +161,11 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
         </div>
       </Panel>
 
-      <PanelResizeHandle className="w-1.5 bg-line/40 transition-colors hover:bg-accent" />
+      <PanelResizeHandle
+        className={`bg-line/40 transition-colors hover:bg-accent ${isWide ? 'w-1.5' : 'h-1.5'}`}
+      />
 
-      <Panel defaultSize={52} minSize={25}>
+      <Panel defaultSize={52} minSize={20}>
         <div className="flex h-full flex-col">
           <div className="flex flex-wrap items-center gap-2 border-b border-line p-2">
             <LanguageSelect value={language} onChange={onChangeLanguage} />
@@ -201,6 +209,7 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
               { id: 'review', label: 'Review' },
               { id: 'compare', label: 'Compare' },
               { id: 'history', label: 'History' },
+              { id: 'scratch', label: 'Scratch' },
             ]}
             active={rightTab}
             onChange={(id) => setRightTab(id as RightTab)}
@@ -216,6 +225,7 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
             {rightTab === 'review' && <ReviewPanel slug={problem.slug} />}
             {rightTab === 'compare' && <ComparePanel problem={problem} language={language} />}
             {rightTab === 'history' && <HistoryPanel problem={problem} language={language} />}
+            {rightTab === 'scratch' && <ScratchPanel problem={problem} language={language} />}
           </div>
         </div>
       </Panel>

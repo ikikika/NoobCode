@@ -8,3 +8,13 @@ createRoot(document.getElementById('root')!).render(
     <App />
   </StrictMode>,
 )
+
+// Register the service worker (production only) for offline support and to
+// cache the large Pyodide runtime across visits.
+if (import.meta.env.PROD && 'serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register(import.meta.env.BASE_URL + 'sw.js').catch(() => {
+      // Registration failure is non-fatal — the app still works online.
+    })
+  })
+}

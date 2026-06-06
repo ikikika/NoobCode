@@ -5,6 +5,10 @@ export const problemRegistry: Record<string, () => Promise<{ default: unknown }>
   'two-sum': () => import('./problems/two-sum/index'),
   'valid-parentheses': () => import('./problems/valid-parentheses/index'),
   'contains-duplicate': () => import('./problems/contains-duplicate/index'),
+  'binary-search': () => import('./problems/binary-search/index'),
+  'maximum-subarray': () => import('./problems/maximum-subarray/index'),
+  'best-time-to-buy-and-sell-stock': () =>
+    import('./problems/best-time-to-buy-and-sell-stock/index'),
 }
 
 // Lightweight metadata for the list/skills pages (no heavy code payload).
@@ -29,6 +33,27 @@ export const problemsMeta: ProblemMeta[] = [
     difficulty: 'easy',
     tags: ['array', 'hash-set', 'sorting'],
     patterns: ['hash-set', 'sorting'],
+  },
+  {
+    slug: 'binary-search',
+    title: 'Binary Search',
+    difficulty: 'easy',
+    tags: ['array', 'binary-search'],
+    patterns: ['binary-search', 'brute-force'],
+  },
+  {
+    slug: 'maximum-subarray',
+    title: 'Maximum Subarray',
+    difficulty: 'medium',
+    tags: ['array', 'dynamic-programming'],
+    patterns: ['dynamic-programming', 'brute-force'],
+  },
+  {
+    slug: 'best-time-to-buy-and-sell-stock',
+    title: 'Best Time to Buy and Sell Stock',
+    difficulty: 'easy',
+    tags: ['array', 'greedy'],
+    patterns: ['greedy', 'brute-force'],
   },
 ]
 

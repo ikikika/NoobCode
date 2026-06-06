@@ -42,6 +42,15 @@ export function useRunner() {
         setLoadingMessage('')
         return runResult
       } catch (err) {
+        const message = err instanceof Error ? err.message : String(err)
+        // A cooperative Stop surfaces as a KeyboardInterrupt from Pyodide —
+        // treat it as a clean cancellation, not an error.
+        if (message.includes('KeyboardInterrupt')) {
+          setResult(null)
+          setStatus('idle')
+          setLoadingMessage('')
+          return null
+        }
         setResult({
           passed: false,
           cases: [],
@@ -49,7 +58,7 @@ export function useRunner() {
           stderr: '',
           durationMs: 0,
           timedOut: false,
-          error: err instanceof Error ? err.message : String(err),
+          error: message,
         })
         setStatus('error')
         setLoadingMessage('')
