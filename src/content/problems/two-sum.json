@@ -52,17 +52,35 @@
       },
       "steps": [
         {
-          "title": "Iterate over the first index",
-          "explanation": "Loop over each index `i`. For each `i` we will look for a partner that completes the target sum.",
+          "title": "Start from the function shape",
+          "explanation": "Begin with the signature and a default `[]` return, so the function is valid before we add any logic.",
           "code": {
-            "python": "def two_sum(nums, target):\n    for i in range(len(nums)):\n        # look for a partner for nums[i]\n        pass\n",
-            "javascript": "function twoSum(nums, target) {\n  for (let i = 0; i < nums.length; i++) {\n    // look for a partner for nums[i]\n  }\n}\n",
-            "typescript": "function twoSum(nums: number[], target: number): number[] {\n  for (let i = 0; i < nums.length; i++) {\n    // look for a partner for nums[i]\n  }\n  return [];\n}\n"
+            "python": "def two_sum(nums, target):\n    return []\n",
+            "javascript": "function twoSum(nums, target) {\n  return [];\n}\n",
+            "typescript": "function twoSum(nums: number[], target: number): number[] {\n  return [];\n}\n"
           }
         },
         {
-          "title": "Scan the rest for a match",
-          "explanation": "For each `i`, scan every later index `j`. If `nums[i] + nums[j] === target`, return the pair.",
+          "title": "Loop over the first number",
+          "explanation": "Walk an index `i` across the array. This is the first of the two numbers in each pair.",
+          "code": {
+            "python": "def two_sum(nums, target):\n    for i in range(len(nums)):\n        pass\n    return []\n",
+            "javascript": "function twoSum(nums, target) {\n  for (let i = 0; i < nums.length; i++) {\n  }\n  return [];\n}\n",
+            "typescript": "function twoSum(nums: number[], target: number): number[] {\n  for (let i = 0; i < nums.length; i++) {\n  }\n  return [];\n}\n"
+          }
+        },
+        {
+          "title": "Scan every later number",
+          "explanation": "For each `i`, loop a second index `j` over the elements after it, so every pair is checked exactly once.",
+          "code": {
+            "python": "def two_sum(nums, target):\n    for i in range(len(nums)):\n        for j in range(i + 1, len(nums)):\n            pass\n    return []\n",
+            "javascript": "function twoSum(nums, target) {\n  for (let i = 0; i < nums.length; i++) {\n    for (let j = i + 1; j < nums.length; j++) {\n    }\n  }\n  return [];\n}\n",
+            "typescript": "function twoSum(nums: number[], target: number): number[] {\n  for (let i = 0; i < nums.length; i++) {\n    for (let j = i + 1; j < nums.length; j++) {\n    }\n  }\n  return [];\n}\n"
+          }
+        },
+        {
+          "title": "Return the matching pair",
+          "explanation": "If `nums[i] + nums[j]` equals the target, those indices are the answer.",
           "code": {
             "python": "def two_sum(nums, target):\n    for i in range(len(nums)):\n        for j in range(i + 1, len(nums)):\n            if nums[i] + nums[j] == target:\n                return [i, j]\n    return []\n",
             "javascript": "function twoSum(nums, target) {\n  for (let i = 0; i < nums.length; i++) {\n    for (let j = i + 1; j < nums.length; j++) {\n      if (nums[i] + nums[j] === target) {\n        return [i, j];\n      }\n    }\n  }\n  return [];\n}\n",
@@ -89,17 +107,53 @@
       },
       "steps": [
         {
-          "title": "Track seen values",
-          "explanation": "Create a hash map from value to index. As we iterate we record each number we have seen so far.",
+          "title": "Start from the function shape",
+          "explanation": "Same starting point: signature plus a default `[]` return.",
           "code": {
-            "python": "def two_sum(nums, target):\n    seen = {}\n    for i, n in enumerate(nums):\n        seen[n] = i\n    return []\n",
-            "javascript": "function twoSum(nums, target) {\n  const seen = new Map();\n  for (let i = 0; i < nums.length; i++) {\n    seen.set(nums[i], i);\n  }\n  return [];\n}\n",
-            "typescript": "function twoSum(nums: number[], target: number): number[] {\n  const seen = new Map<number, number>();\n  for (let i = 0; i < nums.length; i++) {\n    seen.set(nums[i], i);\n  }\n  return [];\n}\n"
+            "python": "def two_sum(nums, target):\n    return []\n",
+            "javascript": "function twoSum(nums, target) {\n  return [];\n}\n",
+            "typescript": "function twoSum(nums: number[], target: number): number[] {\n  return [];\n}\n"
           }
         },
         {
-          "title": "Look up the complement first",
-          "explanation": "Before storing the current number, check whether its complement (`target - n`) is already in the map. If so, we have our answer in a single pass.",
+          "title": "Create a lookup map",
+          "explanation": "Use a hash map from a value to the index where we saw it. Lookups in it are O(1).",
+          "code": {
+            "python": "def two_sum(nums, target):\n    seen = {}\n    return []\n",
+            "javascript": "function twoSum(nums, target) {\n  const seen = new Map();\n  return [];\n}\n",
+            "typescript": "function twoSum(nums: number[], target: number): number[] {\n  const seen = new Map<number, number>();\n  return [];\n}\n"
+          }
+        },
+        {
+          "title": "Walk the array once",
+          "explanation": "Visit each value `n` together with its index `i`.",
+          "code": {
+            "python": "def two_sum(nums, target):\n    seen = {}\n    for i, n in enumerate(nums):\n        pass\n    return []\n",
+            "javascript": "function twoSum(nums, target) {\n  const seen = new Map();\n  for (let i = 0; i < nums.length; i++) {\n  }\n  return [];\n}\n",
+            "typescript": "function twoSum(nums: number[], target: number): number[] {\n  const seen = new Map<number, number>();\n  for (let i = 0; i < nums.length; i++) {\n  }\n  return [];\n}\n"
+          }
+        },
+        {
+          "title": "Compute the complement",
+          "explanation": "The partner we need for the current number is `target - n` — the value that would complete the sum.",
+          "code": {
+            "python": "def two_sum(nums, target):\n    seen = {}\n    for i, n in enumerate(nums):\n        complement = target - n\n    return []\n",
+            "javascript": "function twoSum(nums, target) {\n  const seen = new Map();\n  for (let i = 0; i < nums.length; i++) {\n    const complement = target - nums[i];\n  }\n  return [];\n}\n",
+            "typescript": "function twoSum(nums: number[], target: number): number[] {\n  const seen = new Map<number, number>();\n  for (let i = 0; i < nums.length; i++) {\n    const complement = target - nums[i];\n  }\n  return [];\n}\n"
+          }
+        },
+        {
+          "title": "Return when the complement was already seen",
+          "explanation": "If the complement is in the map, we have found both numbers — return its stored index and the current one.",
+          "code": {
+            "python": "def two_sum(nums, target):\n    seen = {}\n    for i, n in enumerate(nums):\n        complement = target - n\n        if complement in seen:\n            return [seen[complement], i]\n    return []\n",
+            "javascript": "function twoSum(nums, target) {\n  const seen = new Map();\n  for (let i = 0; i < nums.length; i++) {\n    const complement = target - nums[i];\n    if (seen.has(complement)) {\n      return [seen.get(complement), i];\n    }\n  }\n  return [];\n}\n",
+            "typescript": "function twoSum(nums: number[], target: number): number[] {\n  const seen = new Map<number, number>();\n  for (let i = 0; i < nums.length; i++) {\n    const complement = target - nums[i];\n    if (seen.has(complement)) {\n      return [seen.get(complement)!, i];\n    }\n  }\n  return [];\n}\n"
+          }
+        },
+        {
+          "title": "Remember the current value",
+          "explanation": "If there was no match, record the current value and its index so a later number can find it.",
           "code": {
             "python": "def two_sum(nums, target):\n    seen = {}\n    for i, n in enumerate(nums):\n        complement = target - n\n        if complement in seen:\n            return [seen[complement], i]\n        seen[n] = i\n    return []\n",
             "javascript": "function twoSum(nums, target) {\n  const seen = new Map();\n  for (let i = 0; i < nums.length; i++) {\n    const complement = target - nums[i];\n    if (seen.has(complement)) {\n      return [seen.get(complement), i];\n    }\n    seen.set(nums[i], i);\n  }\n  return [];\n}\n",

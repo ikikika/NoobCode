@@ -47,17 +47,44 @@
       },
       "steps": [
         {
-          "title": "Build a set of seen values",
-          "explanation": "Keep a hash set of every value we have already encountered.",
+          "title": "Start from the function shape",
+          "explanation": "Begin with the signature and a default `false` return.",
           "code": {
-            "python": "def contains_duplicate(nums):\n    seen = set()\n    for n in nums:\n        seen.add(n)\n    return False\n",
-            "javascript": "function containsDuplicate(nums) {\n  const seen = new Set();\n  for (const n of nums) {\n    seen.add(n);\n  }\n  return false;\n}\n",
-            "typescript": "function containsDuplicate(nums: number[]): boolean {\n  const seen = new Set<number>();\n  for (const n of nums) {\n    seen.add(n);\n  }\n  return false;\n}\n"
+            "python": "def contains_duplicate(nums):\n    return False\n",
+            "javascript": "function containsDuplicate(nums) {\n  return false;\n}\n",
+            "typescript": "function containsDuplicate(nums: number[]): boolean {\n  return false;\n}\n"
+          }
+        },
+        {
+          "title": "Create a set of seen values",
+          "explanation": "A hash set remembers every value we have already encountered, with O(1) membership checks.",
+          "code": {
+            "python": "def contains_duplicate(nums):\n    seen = set()\n    return False\n",
+            "javascript": "function containsDuplicate(nums) {\n  const seen = new Set();\n  return false;\n}\n",
+            "typescript": "function containsDuplicate(nums: number[]): boolean {\n  const seen = new Set<number>();\n  return false;\n}\n"
+          }
+        },
+        {
+          "title": "Walk the array",
+          "explanation": "Look at each value `n` in turn.",
+          "code": {
+            "python": "def contains_duplicate(nums):\n    seen = set()\n    for n in nums:\n        pass\n    return False\n",
+            "javascript": "function containsDuplicate(nums) {\n  const seen = new Set();\n  for (const n of nums) {\n  }\n  return false;\n}\n",
+            "typescript": "function containsDuplicate(nums: number[]): boolean {\n  const seen = new Set<number>();\n  for (const n of nums) {\n  }\n  return false;\n}\n"
           }
         },
         {
           "title": "Return early on a repeat",
-          "explanation": "Before adding a value, check whether it is already in the set. If it is, we found a duplicate and can return immediately.",
+          "explanation": "If the value is already in the set, we have found a duplicate.",
+          "code": {
+            "python": "def contains_duplicate(nums):\n    seen = set()\n    for n in nums:\n        if n in seen:\n            return True\n    return False\n",
+            "javascript": "function containsDuplicate(nums) {\n  const seen = new Set();\n  for (const n of nums) {\n    if (seen.has(n)) {\n      return true;\n    }\n  }\n  return false;\n}\n",
+            "typescript": "function containsDuplicate(nums: number[]): boolean {\n  const seen = new Set<number>();\n  for (const n of nums) {\n    if (seen.has(n)) {\n      return true;\n    }\n  }\n  return false;\n}\n"
+          }
+        },
+        {
+          "title": "Record the value",
+          "explanation": "Otherwise add it to the set so a later occurrence will be caught.",
           "code": {
             "python": "def contains_duplicate(nums):\n    seen = set()\n    for n in nums:\n        if n in seen:\n            return True\n        seen.add(n)\n    return False\n",
             "javascript": "function containsDuplicate(nums) {\n  const seen = new Set();\n  for (const n of nums) {\n    if (seen.has(n)) {\n      return true;\n    }\n    seen.add(n);\n  }\n  return false;\n}\n",
@@ -84,8 +111,17 @@
       },
       "steps": [
         {
+          "title": "Start from the function shape",
+          "explanation": "Begin with the signature and a default `false` return.",
+          "code": {
+            "python": "def contains_duplicate(nums):\n    return False\n",
+            "javascript": "function containsDuplicate(nums) {\n  return false;\n}\n",
+            "typescript": "function containsDuplicate(nums: number[]): boolean {\n  return false;\n}\n"
+          }
+        },
+        {
           "title": "Sort the array",
-          "explanation": "After sorting, any duplicate values sit next to each other, so a single linear scan can find them.",
+          "explanation": "After sorting, any equal values sit next to each other.",
           "code": {
             "python": "def contains_duplicate(nums):\n    nums = sorted(nums)\n    return False\n",
             "javascript": "function containsDuplicate(nums) {\n  nums = [...nums].sort((a, b) => a - b);\n  return false;\n}\n",
@@ -93,8 +129,17 @@
           }
         },
         {
-          "title": "Compare adjacent neighbours",
-          "explanation": "Walk the sorted array and compare each element with the previous one. Equal neighbours mean a duplicate.",
+          "title": "Scan adjacent pairs",
+          "explanation": "Walk from the second element, comparing each value with the one before it.",
+          "code": {
+            "python": "def contains_duplicate(nums):\n    nums = sorted(nums)\n    for i in range(1, len(nums)):\n        pass\n    return False\n",
+            "javascript": "function containsDuplicate(nums) {\n  nums = [...nums].sort((a, b) => a - b);\n  for (let i = 1; i < nums.length; i++) {\n  }\n  return false;\n}\n",
+            "typescript": "function containsDuplicate(nums: number[]): boolean {\n  nums = [...nums].sort((a, b) => a - b);\n  for (let i = 1; i < nums.length; i++) {\n  }\n  return false;\n}\n"
+          }
+        },
+        {
+          "title": "Detect equal neighbours",
+          "explanation": "If a value equals its predecessor, the array contains a duplicate.",
           "code": {
             "python": "def contains_duplicate(nums):\n    nums = sorted(nums)\n    for i in range(1, len(nums)):\n        if nums[i] == nums[i - 1]:\n            return True\n    return False\n",
             "javascript": "function containsDuplicate(nums) {\n  nums = [...nums].sort((a, b) => a - b);\n  for (let i = 1; i < nums.length; i++) {\n    if (nums[i] === nums[i - 1]) {\n      return true;\n    }\n  }\n  return false;\n}\n",

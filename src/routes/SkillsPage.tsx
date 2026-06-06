@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { PATTERNS, PATTERN_LABELS, type PatternId } from '../content/patterns'
-import { useProblemsMeta } from '../content/useProblemsMeta'
+import { builtinMeta } from '../content'
 import { useProgressStore } from '../store/useProgressStore'
 import { dueLabel, isDue } from '../features/review/schedule'
 import {
@@ -61,7 +61,7 @@ export function SkillsPage() {
   const solved = useProgressStore((s) => s.solved)
   const attempts = useProgressStore((s) => s.attempts)
   const schedule = useProgressStore((s) => s.schedule)
-  const problemsMeta = useProblemsMeta()
+  const problemsMeta = builtinMeta
   const now = Date.now()
 
   const slugPatterns = useMemo(() => {

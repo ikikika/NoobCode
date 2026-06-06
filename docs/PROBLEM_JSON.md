@@ -1,26 +1,22 @@
 # Authoring & using problem JSON
 
-NoobCode problems are plain JSON. You can **export** any problem to a `.json`
-file from the problem toolbar, edit it, and **import** it back from the Problems
-page to solve it — no rebuild needed. Built-in problems live in
-`src/content/problems/<slug>.json` and are auto-discovered at build time.
+NoobCode problems are plain JSON files in `src/content/problems/<slug>.json`,
+auto-discovered at build time via `import.meta.glob`. There is no registry to
+edit and no in-app upload — you add problems by putting files in that directory.
 
-This guide documents the JSON format.
+This guide documents the JSON format. For how to break a solution into teaching
+steps, see [`SOLUTION_INSTRUCTIONS.md`](./SOLUTION_INSTRUCTIONS.md).
 
 ---
 
-## Fastest start: export → edit → import
+## Adding a problem
 
-1. Open any problem and click **Export JSON** in the toolbar. You now have a
-   complete, valid example.
-2. Edit it (change the `slug` to something unique, rewrite the description,
-   tests, and code).
-3. On the **Problems** page click **Import JSON** and pick your file. It is
-   validated, added to your browser, and opened.
-
-Imported problems persist in `localStorage` and show an **Imported** badge; use
-the ✕ to remove one. (For a permanent built-in instead, drop the file into
-`src/content/problems/<slug>.json` — see [Built-in problems](#built-in-problems).)
+1. Copy [`templates/problem.template.json`](../templates/problem.template.json)
+   to `src/content/problems/<slug>.json`.
+2. Set `slug` to match the filename (`two-sum.json` → `"two-sum"`) and fill in
+   the rest. (Or run `npm run new:problem -- <slug> "Title"` to generate a stub.)
+3. Run `npm run validate:content` to check it, then restart `npm run dev` so the
+   glob picks it up.
 
 ---
 
@@ -178,19 +174,6 @@ A valid, copy-pasteable problem (`add` returns `a + b`):
 
 ---
 
-## Built-in problems
-
-To ship a problem with the app (instead of importing at runtime):
-
-1. `npm run new:problem -- <slug> "Title"` scaffolds `src/content/problems/<slug>.json`.
-2. Fill in the TODOs (the schema is the same as above).
-3. `npm run validate:content` checks every file parses, includes all three
-   languages, and that each `slug` matches its filename. This also runs in CI.
-
-`import.meta.glob` picks the file up automatically — there is no registry to edit.
-
----
-
 ## Common pitfalls
 
 - **All three languages are required.** Omitting `typescript` (or any language)
@@ -198,8 +181,8 @@ To ship a problem with the app (instead of importing at runtime):
 - **`args` is a list of arguments, not a single value.** A one-argument function
   still needs `"args": [theValue]`.
 - **`expected` comparison is exact and structural.** `[1,0]` ≠ `[0,1]`.
-- **Slugs must be unique.** Importing a slug that matches a built-in is rejected;
-  rename it.
+- **Slugs must be unique and match the filename.** `two-sum.json` must have
+  `"slug": "two-sum"`; `validate:content` enforces this.
 - **TypeScript is executed, not type-checked.** Types are stripped before running,
   and the editor only does syntax highlighting — so a type error won't be
   reported, but a runtime error will.

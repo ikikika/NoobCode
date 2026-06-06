@@ -11,9 +11,9 @@ deterministic review of your approach, and track mastery with spaced repetition.
   loaded lazily); JavaScript runs in a worker; TypeScript is transpiled to JS
   (via sucrase) and runs through the same worker. All execute in Web Workers with
   a timeout watchdog and a Stop button.
-- **Import / export problems** — problems are plain JSON. Export the current
-  problem to a `.json` file, or import a `.json` problem and solve it. Imported
-  problems persist in your browser and appear alongside the built-ins.
+- **JSON-defined problems** — every problem is a plain JSON file in
+  `src/content/problems/`, auto-discovered at build time. Add your own by
+  dropping a file in that directory (see below).
 - **Monaco editor** with custom `light` / `dark` themes and read-only diff views.
 - **Deterministic analysis** — an AST/heuristic engine classifies your approach
   and estimates time/space complexity, then compares it to the optimal solution.
@@ -27,7 +27,15 @@ deterministic review of your approach, and track mastery with spaced repetition.
 
 ## Development
 
-Requires **Node 22.12+** (Vite 8).
+Requires **Node 22.12+** (Vite 8). The repo pins this via `.nvmrc` and
+`package.json` `engines`, so `nvm use` picks the right version. On an older Node
+(e.g. 22.6), `npm run dev` fails with a rolldown "Cannot find native binding"
+error — fix it with:
+
+```bash
+nvm install 22.12 && nvm use
+rm -rf node_modules package-lock.json && npm install
+```
 
 ```bash
 npm install
@@ -71,13 +79,11 @@ Problems are JSON files in `src/content/problems/<slug>.json`, auto-discovered v
 every language (Python, JavaScript, TypeScript) in `functionName`, `starterCode`,
 and every solution step.
 
-1. `npm run new:problem -- <slug> "Title"` scaffolds `src/content/problems/<slug>.json`.
-2. Fill in the TODOs.
-3. `npm run validate:content` checks it against the schema and that the `slug`
-   matches the filename.
+1. Copy [`templates/problem.template.json`](templates/problem.template.json) to
+   `src/content/problems/<slug>.json` (or run `npm run new:problem -- <slug> "Title"`).
+2. Fill it in. Set `slug` to match the filename.
+3. `npm run validate:content` checks it against the schema; restart `npm run dev`.
 
-Users can also **import** a problem JSON at runtime from the Problems page (no
-rebuild needed) and **export** any problem back to JSON from the problem toolbar.
-
-See **[docs/PROBLEM_JSON.md](docs/PROBLEM_JSON.md)** for the full problem JSON
-format, a field reference, and a copy-pasteable example.
+See **[docs/PROBLEM_JSON.md](docs/PROBLEM_JSON.md)** for the full field reference
+and **[docs/SOLUTION_INSTRUCTIONS.md](docs/SOLUTION_INSTRUCTIONS.md)** for how to
+break a solution into incremental steps.

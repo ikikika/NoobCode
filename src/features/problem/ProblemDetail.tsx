@@ -66,17 +66,6 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
     saveCode(problem.slug, language, problem.starterCode[language])
   }
 
-  // Download the problem as JSON so it can be saved or shared and re-imported.
-  const onExport = () => {
-    const blob = new Blob([JSON.stringify(problem, null, 2)], { type: 'application/json' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `${problem.slug}.json`
-    a.click()
-    URL.revokeObjectURL(url)
-  }
-
   const handleRun = async (sampleOnly: boolean) => {
     setRightTab('results')
     const fnName = problem.functionName[language]
@@ -185,13 +174,6 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
               className="rounded-md border border-line px-2.5 py-1 text-xs text-fg-muted hover:text-fg"
             >
               Reset
-            </button>
-            <button
-              onClick={onExport}
-              title="Download this problem as JSON"
-              className="rounded-md border border-line px-2.5 py-1 text-xs text-fg-muted hover:text-fg"
-            >
-              Export JSON
             </button>
             <div className="ml-auto flex items-center gap-2">
               <button
