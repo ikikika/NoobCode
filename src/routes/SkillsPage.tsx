@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { PATTERNS, PATTERN_LABELS, type PatternId } from '../content/patterns'
-import { problemsMeta } from '../content'
+import { useProblemsMeta } from '../content/useProblemsMeta'
 import { useProgressStore } from '../store/useProgressStore'
 import { dueLabel, isDue } from '../features/review/schedule'
 import {
@@ -61,13 +61,14 @@ export function SkillsPage() {
   const solved = useProgressStore((s) => s.solved)
   const attempts = useProgressStore((s) => s.attempts)
   const schedule = useProgressStore((s) => s.schedule)
+  const problemsMeta = useProblemsMeta()
   const now = Date.now()
 
   const slugPatterns = useMemo(() => {
     const map = new Map<string, PatternId[]>()
     for (const p of problemsMeta) map.set(p.slug, p.patterns)
     return map
-  }, [])
+  }, [problemsMeta])
 
   const stats = useMemo<PatternStat[]>(() => {
     return PATTERNS.map((pattern) => {
@@ -84,7 +85,7 @@ export function SkillsPage() {
         related: related.map((p) => ({ slug: p.slug, title: p.title })),
       }
     })
-  }, [attempts, solved, slugPatterns, now])
+  }, [attempts, solved, slugPatterns, problemsMeta, now])
 
   const solvedCount = Object.values(solved).filter(Boolean).length
   const totalRuns = attempts.length

@@ -1,12 +1,13 @@
 import { z } from 'zod'
 import { PATTERNS } from './patterns'
 
-export const languageIdSchema = z.enum(['python', 'javascript'])
+export const languageIdSchema = z.enum(['python', 'javascript', 'typescript'])
 export type LanguageId = z.infer<typeof languageIdSchema>
 
 export const langCodeSchema = z.object({
   python: z.string(),
   javascript: z.string(),
+  typescript: z.string(),
 })
 export type LangCode = z.infer<typeof langCodeSchema>
 
@@ -70,7 +71,11 @@ export const problemSchema = z.object({
   description: z.string(),
   constraints: z.array(z.string()),
   examples: z.array(exampleSchema),
-  functionName: z.object({ python: z.string(), javascript: z.string() }),
+  functionName: z.object({
+    python: z.string(),
+    javascript: z.string(),
+    typescript: z.string(),
+  }),
   starterCode: langCodeSchema,
   tests: z.array(testCaseSchema).min(1),
   solutions: z.array(solutionSchema).min(1),
@@ -86,9 +91,11 @@ export type ProblemMeta = Pick<Problem, 'slug' | 'title' | 'difficulty' | 'tags'
 export const LANGUAGE_LABELS: Record<LanguageId, string> = {
   python: 'Python',
   javascript: 'JavaScript',
+  typescript: 'TypeScript',
 }
 
 export const MONACO_LANGUAGE: Record<LanguageId, string> = {
   python: 'python',
   javascript: 'javascript',
+  typescript: 'typescript',
 }

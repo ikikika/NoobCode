@@ -1,4 +1,5 @@
 import type { PatternId } from '../../content/patterns'
+import type { LanguageId } from '../../content/schema'
 
 export interface CodeFeatures {
   maxLoopDepth: number // 0=none, 1=single, 2+=nested
@@ -30,6 +31,6 @@ export interface AttemptRecord {
   passed: boolean
   approachUsed?: ApproachId
   // Captured so past attempts can be diffed against the current code.
-  language?: 'python' | 'javascript'
+  language?: LanguageId
   code?: string
 }

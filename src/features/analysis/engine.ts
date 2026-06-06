@@ -2,6 +2,7 @@ import type { LanguageId } from '../../content/schema'
 import { getRunner } from '../runner/runnerRegistry'
 import { WorkerLanguageRunner } from '../runner/WorkerLanguageRunner'
 import { analyzeJs } from './js/analyzeJs'
+import { transpileTs } from '../runner/ts/transpileTs'
 import type { CodeFeatures } from './types'
 
 export async function analyzeCode(
@@ -11,6 +12,11 @@ export async function analyzeCode(
 ): Promise<CodeFeatures> {
   if (language === 'javascript') {
     return analyzeJs(userCode, functionName)
+  }
+
+  // TypeScript: strip types, then reuse the JavaScript AST analyzer.
+  if (language === 'typescript') {
+    return analyzeJs(transpileTs(userCode), functionName)
   }
 
   // Python analysis runs inside the existing Pyodide worker, which should

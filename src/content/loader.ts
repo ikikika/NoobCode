@@ -1,23 +1,15 @@
-import { problemRegistry } from './index'
-import { problemSchema, type Problem } from './schema'
+import { builtinProblems } from './index'
+import { useUserProblemsStore } from '../store/useUserProblemsStore'
+import type { Problem } from './schema'
 
-const cache = new Map<string, Problem>()
-
+// Resolve a problem by slug from the built-in set first, then user-imported
+// problems. Async signature is kept so callers (ProblemDetailPage) are unchanged.
 export async function loadProblem(slug: string): Promise<Problem> {
-  const cached = cache.get(slug)
-  if (cached) return cached
+  const builtin = builtinProblems[slug]
+  if (builtin) return builtin
 
-  const importer = problemRegistry[slug]
-  if (!importer) {
-    throw new Error(`Unknown problem slug: "${slug}"`)
-  }
+  const userProblem = useUserProblemsStore.getState().problems[slug]
+  if (userProblem) return userProblem
 
-  const mod = await importer()
-  const result = problemSchema.safeParse(mod.default)
-  if (!result.success) {
-    throw new Error(`Problem "${slug}" failed schema validation:\n${result.error.message}`)
-  }
-
-  cache.set(slug, result.data)
-  return result.data
+  throw new Error(`Unknown problem slug: "${slug}"`)
 }

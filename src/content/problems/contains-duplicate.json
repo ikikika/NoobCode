@@ -1,0 +1,107 @@
+{
+  "slug": "contains-duplicate",
+  "title": "Contains Duplicate",
+  "difficulty": "easy",
+  "tags": ["array", "hash-set", "sorting"],
+  "patterns": ["hash-set", "sorting"],
+  "description": "Given an integer array `nums`, return `true` if any value appears **at\nleast twice** in the array, and return `false` if every element is distinct.",
+  "constraints": ["1 <= nums.length <= 10^5", "-10^9 <= nums[i] <= 10^9"],
+  "examples": [
+    { "input": "nums = [1,2,3,1]", "output": "true", "explanation": "The value 1 appears twice." },
+    { "input": "nums = [1,2,3,4]", "output": "false" },
+    { "input": "nums = [1,1,1,3,3,4,3,2,4,2]", "output": "true" }
+  ],
+  "functionName": {
+    "python": "contains_duplicate",
+    "javascript": "containsDuplicate",
+    "typescript": "containsDuplicate"
+  },
+  "starterCode": {
+    "python": "def contains_duplicate(nums):\n    # Return True if any value appears at least twice.\n    pass\n",
+    "javascript": "function containsDuplicate(nums) {\n  // Return true if any value appears at least twice.\n}\n",
+    "typescript": "function containsDuplicate(nums: number[]): boolean {\n  // Return true if any value appears at least twice.\n  return false;\n}\n"
+  },
+  "tests": [
+    { "name": "has duplicate", "args": [[1, 2, 3, 1]], "expected": true },
+    { "name": "all distinct", "args": [[1, 2, 3, 4]], "expected": false },
+    { "name": "many duplicates", "args": [[1, 1, 1, 3, 3, 4, 3, 2, 4, 2]], "expected": true },
+    { "name": "single element", "args": [[7]], "expected": false, "hidden": true },
+    { "name": "negatives distinct", "args": [[-1, -2, -3]], "expected": false, "hidden": true }
+  ],
+  "solutions": [
+    {
+      "approachName": "Hash Set",
+      "summary": "Track seen values; a repeat means a duplicate exists.",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "technique": {
+        "primaryPattern": "hash-set",
+        "optimal": true,
+        "signature": {
+          "maxLoopDepth": 1,
+          "usesHashStructure": true,
+          "usesSorting": false,
+          "usesRecursion": false,
+          "twoPointer": false
+        }
+      },
+      "steps": [
+        {
+          "title": "Build a set of seen values",
+          "explanation": "Keep a hash set of every value we have already encountered.",
+          "code": {
+            "python": "def contains_duplicate(nums):\n    seen = set()\n    for n in nums:\n        seen.add(n)\n    return False\n",
+            "javascript": "function containsDuplicate(nums) {\n  const seen = new Set();\n  for (const n of nums) {\n    seen.add(n);\n  }\n  return false;\n}\n",
+            "typescript": "function containsDuplicate(nums: number[]): boolean {\n  const seen = new Set<number>();\n  for (const n of nums) {\n    seen.add(n);\n  }\n  return false;\n}\n"
+          }
+        },
+        {
+          "title": "Return early on a repeat",
+          "explanation": "Before adding a value, check whether it is already in the set. If it is, we found a duplicate and can return immediately.",
+          "code": {
+            "python": "def contains_duplicate(nums):\n    seen = set()\n    for n in nums:\n        if n in seen:\n            return True\n        seen.add(n)\n    return False\n",
+            "javascript": "function containsDuplicate(nums) {\n  const seen = new Set();\n  for (const n of nums) {\n    if (seen.has(n)) {\n      return true;\n    }\n    seen.add(n);\n  }\n  return false;\n}\n",
+            "typescript": "function containsDuplicate(nums: number[]): boolean {\n  const seen = new Set<number>();\n  for (const n of nums) {\n    if (seen.has(n)) {\n      return true;\n    }\n    seen.add(n);\n  }\n  return false;\n}\n"
+          }
+        }
+      ]
+    },
+    {
+      "approachName": "Sort and Scan",
+      "summary": "Sort the array; duplicates become adjacent neighbours.",
+      "timeComplexity": "O(n log n)",
+      "spaceComplexity": "O(1)",
+      "technique": {
+        "primaryPattern": "sorting",
+        "optimal": false,
+        "signature": {
+          "maxLoopDepth": 1,
+          "usesHashStructure": false,
+          "usesSorting": true,
+          "usesRecursion": false,
+          "twoPointer": false
+        }
+      },
+      "steps": [
+        {
+          "title": "Sort the array",
+          "explanation": "After sorting, any duplicate values sit next to each other, so a single linear scan can find them.",
+          "code": {
+            "python": "def contains_duplicate(nums):\n    nums = sorted(nums)\n    return False\n",
+            "javascript": "function containsDuplicate(nums) {\n  nums = [...nums].sort((a, b) => a - b);\n  return false;\n}\n",
+            "typescript": "function containsDuplicate(nums: number[]): boolean {\n  nums = [...nums].sort((a, b) => a - b);\n  return false;\n}\n"
+          }
+        },
+        {
+          "title": "Compare adjacent neighbours",
+          "explanation": "Walk the sorted array and compare each element with the previous one. Equal neighbours mean a duplicate.",
+          "code": {
+            "python": "def contains_duplicate(nums):\n    nums = sorted(nums)\n    for i in range(1, len(nums)):\n        if nums[i] == nums[i - 1]:\n            return True\n    return False\n",
+            "javascript": "function containsDuplicate(nums) {\n  nums = [...nums].sort((a, b) => a - b);\n  for (let i = 1; i < nums.length; i++) {\n    if (nums[i] === nums[i - 1]) {\n      return true;\n    }\n  }\n  return false;\n}\n",
+            "typescript": "function containsDuplicate(nums: number[]): boolean {\n  nums = [...nums].sort((a, b) => a - b);\n  for (let i = 1; i < nums.length; i++) {\n    if (nums[i] === nums[i - 1]) {\n      return true;\n    }\n  }\n  return false;\n}\n"
+          }
+        }
+      ]
+    }
+  ]
+}

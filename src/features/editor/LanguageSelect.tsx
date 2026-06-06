@@ -1,7 +1,7 @@
 import type { LanguageId } from '../../content/schema'
 import { LANGUAGE_LABELS } from '../../content/schema'
 
-const LANGUAGES: LanguageId[] = ['python', 'javascript']
+const LANGUAGES: LanguageId[] = ['python', 'javascript', 'typescript']
 
 interface LanguageSelectProps {
   value: LanguageId

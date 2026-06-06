@@ -1,12 +1,11 @@
-/* Scaffold a new problem folder from a template.
+/* Scaffold a new built-in problem as a JSON file.
  *
  *   npm run new:problem -- <slug> ["Title"]
  *
- * Creates src/content/problems/<slug>/index.ts and prints the snippet to add
- * to src/content/index.ts. It deliberately does NOT auto-edit the registry —
- * registering by hand keeps the lazy-import map explicit and reviewable.
+ * Writes src/content/problems/<slug>.json. No registration step is needed —
+ * src/content/index.ts auto-discovers every *.json via import.meta.glob.
  */
-import { mkdirSync, existsSync, writeFileSync } from 'node:fs'
+import { existsSync, writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 
 const slug = process.argv[2]
@@ -26,32 +25,26 @@ const title =
 const fnPy = slug.replace(/-/g, '_')
 const fnJs = slug.replace(/-([a-z])/g, (_, c: string) => c.toUpperCase())
 
-const dir = resolve('src/content/problems', slug)
-const file = resolve(dir, 'index.ts')
+const file = resolve('src/content/problems', `${slug}.json`)
 if (existsSync(file)) {
   console.error(`Refusing to overwrite existing problem: ${file}`)
   process.exit(1)
 }
 
-const template = `import type { ProblemInput } from '../../schema'
-
 const problem = {
-  slug: '${slug}',
-  title: '${title}',
+  slug,
+  title,
   difficulty: 'easy',
   tags: [],
   patterns: ['brute-force'],
-  description: \`TODO: describe the problem in markdown.\`,
+  description: 'TODO: describe the problem in markdown.',
   constraints: ['TODO'],
   examples: [{ input: 'TODO', output: 'TODO' }],
-  functionName: { python: '${fnPy}', javascript: '${fnJs}' },
+  functionName: { python: fnPy, javascript: fnJs, typescript: fnJs },
   starterCode: {
-    python: \`def ${fnPy}(args):
-    pass
-\`,
-    javascript: \`function ${fnJs}(args) {
-}
-\`,
+    python: `def ${fnPy}(args):\n    pass\n`,
+    javascript: `function ${fnJs}(args) {\n}\n`,
+    typescript: `function ${fnJs}(args: unknown): unknown {\n  return null;\n}\n`,
   },
   tests: [{ name: 'example 1', args: [], expected: null }],
   solutions: [
@@ -76,29 +69,18 @@ const problem = {
           title: 'TODO',
           explanation: 'TODO',
           code: {
-            python: \`def ${fnPy}(args):
-    pass
-\`,
-            javascript: \`function ${fnJs}(args) {
-}
-\`,
+            python: `def ${fnPy}(args):\n    pass\n`,
+            javascript: `function ${fnJs}(args) {\n}\n`,
+            typescript: `function ${fnJs}(args: unknown): unknown {\n  return null;\n}\n`,
           },
         },
       ],
     },
   ],
-} satisfies ProblemInput
+}
 
-export default problem
-`
+writeFileSync(file, JSON.stringify(problem, null, 2) + '\n')
 
-mkdirSync(dir, { recursive: true })
-writeFileSync(file, template)
-
-console.log(`Created ${file}\n`)
-console.log('Now register it in src/content/index.ts:')
-console.log(`  problemRegistry: '${slug}': () => import('./problems/${slug}/index'),`)
-console.log(
-  `  problemsMeta:    { slug: '${slug}', title: '${title}', difficulty: 'easy', tags: [], patterns: ['brute-force'] }`,
-)
-console.log('\nThen run: npm run validate:content')
+console.log(`Created ${file}`)
+console.log('It is auto-registered via import.meta.glob. Fill in the TODOs, then run:')
+console.log('  npm run validate:content')

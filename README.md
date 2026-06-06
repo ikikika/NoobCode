@@ -2,14 +2,18 @@
 
 A client-side, LeetCode-style learning platform. Everything runs in the
 browser — no backend, no server — so it deploys to static hosting like GitHub
-Pages. Solve problems in Python (via Pyodide) or JavaScript, get a deterministic
-review of your approach, and track mastery with spaced repetition.
+Pages. Solve problems in Python (via Pyodide), JavaScript, or TypeScript, get a
+deterministic review of your approach, and track mastery with spaced repetition.
 
 ## Features
 
 - **In-browser code execution** — Python runs on Pyodide (self-hosted WASM,
-  loaded lazily); JavaScript runs in a worker. Both execute in Web Workers with
+  loaded lazily); JavaScript runs in a worker; TypeScript is transpiled to JS
+  (via sucrase) and runs through the same worker. All execute in Web Workers with
   a timeout watchdog and a Stop button.
+- **Import / export problems** — problems are plain JSON. Export the current
+  problem to a `.json` file, or import a `.json` problem and solve it. Imported
+  problems persist in your browser and appear alongside the built-ins.
 - **Monaco editor** with custom `light` / `dark` themes and read-only diff views.
 - **Deterministic analysis** — an AST/heuristic engine classifies your approach
   and estimates time/space complexity, then compares it to the optimal solution.
@@ -62,8 +66,15 @@ from your browser to Anthropic — use a scoped key.
 
 ## Adding a problem
 
-1. Create `src/content/problems/<slug>/index.ts` exporting a `ProblemInput`
-   (`satisfies ProblemInput`), with steps providing full code in both languages.
-2. Register it in `src/content/index.ts` (`problemRegistry`, `problemsMeta`).
-3. Run `npm run validate:content` to confirm it passes the schema and that
-   `meta.patterns` matches the problem's `patterns`.
+Problems are JSON files in `src/content/problems/<slug>.json`, auto-discovered via
+`import.meta.glob` — no registration step. Each problem must provide code for
+every language (Python, JavaScript, TypeScript) in `functionName`, `starterCode`,
+and every solution step.
+
+1. `npm run new:problem -- <slug> "Title"` scaffolds `src/content/problems/<slug>.json`.
+2. Fill in the TODOs.
+3. `npm run validate:content` checks it against the schema and that the `slug`
+   matches the filename.
+
+Users can also **import** a problem JSON at runtime from the Problems page (no
+rebuild needed) and **export** any problem back to JSON from the problem toolbar.

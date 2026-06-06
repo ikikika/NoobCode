@@ -1,41 +1,33 @@
-import { problemRegistry, problemsMeta, allSlugs } from '../src/content/index'
+import { readFileSync, readdirSync } from 'node:fs'
+import { resolve, basename } from 'node:path'
 import { problemSchema } from '../src/content/schema'
-import { deepEqual } from '../src/lib/deepEqual'
 
-async function main() {
+// CI gate: every built-in problem JSON must parse against the schema (which now
+// requires code for every language), and its slug must match the filename.
+function main() {
+  const dir = resolve('src/content/problems')
+  const files = readdirSync(dir).filter((f) => f.endsWith('.json'))
   const errors: string[] = []
-  const metaBySlug = new Map(problemsMeta.map((m) => [m.slug, m]))
 
-  for (const slug of allSlugs) {
+  if (files.length === 0) errors.push('No problem JSON files found in src/content/problems')
+
+  for (const file of files) {
+    const expectedSlug = basename(file, '.json')
+    let data: unknown
     try {
-      const mod = await problemRegistry[slug]()
-      const result = problemSchema.safeParse(mod.default)
-      if (!result.success) {
-        errors.push(`[${slug}] schema validation failed:\n${result.error.message}`)
-        continue
-      }
-
-      const problem = result.data
-      if (problem.slug !== slug) {
-        errors.push(`[${slug}] problem.slug "${problem.slug}" does not match folder/registry key`)
-      }
-
-      const meta = metaBySlug.get(slug)
-      if (!meta) {
-        errors.push(`[${slug}] missing entry in problemsMeta`)
-      } else {
-        const metaPatterns = [...meta.patterns].sort()
-        const problemPatterns = [...problem.patterns].sort()
-        if (!deepEqual(metaPatterns, problemPatterns)) {
-          errors.push(
-            `[${slug}] meta.patterns ${JSON.stringify(metaPatterns)} != problem.patterns ${JSON.stringify(problemPatterns)}`,
-          )
-        }
-      }
+      data = JSON.parse(readFileSync(resolve(dir, file), 'utf8'))
     } catch (err) {
-      errors.push(
-        `[${slug}] threw while loading: ${err instanceof Error ? err.message : String(err)}`,
-      )
+      errors.push(`[${file}] invalid JSON: ${err instanceof Error ? err.message : String(err)}`)
+      continue
+    }
+
+    const result = problemSchema.safeParse(data)
+    if (!result.success) {
+      errors.push(`[${file}] schema validation failed:\n${result.error.message}`)
+      continue
+    }
+    if (result.data.slug !== expectedSlug) {
+      errors.push(`[${file}] slug "${result.data.slug}" does not match filename "${expectedSlug}"`)
     }
   }
 
@@ -45,10 +37,7 @@ async function main() {
     process.exit(1)
   }
 
-  console.log(`Content validation passed for ${allSlugs.length} problem(s).`)
+  console.log(`Content validation passed for ${files.length} problem(s).`)
 }
 
-main().catch((err) => {
-  console.error(err)
-  process.exit(1)
-})
+main()
