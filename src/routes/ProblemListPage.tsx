@@ -61,6 +61,11 @@ export function ProblemListPage() {
         />
       </div>
 
+      <p className="mb-4 text-xs text-fg-subtle">
+        Problems are JSON. Export any problem (toolbar) for a ready-made template, then Import it
+        here. Format reference: <span className="font-mono">docs/PROBLEM_JSON.md</span>.
+      </p>
+
       {importError && (
         <div className="mb-4 rounded-md bg-fail-surface p-3 text-sm text-fail">
           <div className="font-semibold">Could not import problem</div>

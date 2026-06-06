@@ -78,3 +78,6 @@ and every solution step.
 
 Users can also **import** a problem JSON at runtime from the Problems page (no
 rebuild needed) and **export** any problem back to JSON from the problem toolbar.
+
+See **[docs/PROBLEM_JSON.md](docs/PROBLEM_JSON.md)** for the full problem JSON
+format, a field reference, and a copy-pasteable example.
