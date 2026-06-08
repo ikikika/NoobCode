@@ -1,0 +1,216 @@
+{
+  "slug": "majority-element",
+  "title": "Majority Element",
+  "difficulty": "easy",
+  "tags": [
+    "array",
+    "greedy",
+    "hash-map"
+  ],
+  "patterns": [
+    "greedy",
+    "hash-map"
+  ],
+  "description": "Given an array `nums` of size `n`, return the majority element — the value\nthat appears more than `n / 2` times. You may assume it always exists.",
+  "constraints": [
+    "1 <= nums.length <= 5 * 10^4",
+    "A majority element always exists."
+  ],
+  "examples": [
+    {
+      "input": "nums = [3,2,3]",
+      "output": "3"
+    },
+    {
+      "input": "nums = [2,2,1,1,1,2,2]",
+      "output": "2"
+    }
+  ],
+  "functionName": {
+    "python": "majority_element",
+    "javascript": "majorityElement",
+    "typescript": "majorityElement"
+  },
+  "starterCode": {
+    "python": "def majority_element(nums):\n    # Return the value appearing more than n/2 times.\n    pass\n",
+    "javascript": "function majorityElement(nums) {\n  // Return the value appearing more than n/2 times.\n}\n",
+    "typescript": "function majorityElement(nums: number[]): number {\n  // Return the value appearing more than n/2 times.\n  return 0;\n}\n"
+  },
+  "tests": [
+    {
+      "name": "short",
+      "args": [
+        [
+          3,
+          2,
+          3
+        ]
+      ],
+      "expected": 3
+    },
+    {
+      "name": "longer",
+      "args": [
+        [
+          2,
+          2,
+          1,
+          1,
+          1,
+          2,
+          2
+        ]
+      ],
+      "expected": 2
+    },
+    {
+      "name": "single",
+      "args": [
+        [
+          1
+        ]
+      ],
+      "expected": 1,
+      "hidden": true
+    },
+    {
+      "name": "front heavy",
+      "args": [
+        [
+          6,
+          6,
+          6,
+          7,
+          7
+        ]
+      ],
+      "expected": 6,
+      "hidden": true
+    },
+    {
+      "name": "all same",
+      "args": [
+        [
+          4,
+          4,
+          4,
+          4
+        ]
+      ],
+      "expected": 4,
+      "hidden": true
+    }
+  ],
+  "solutions": [
+    {
+      "approachName": "Boyer-Moore Voting",
+      "summary": "Maintain a candidate and a counter that cancels out minority votes.",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "technique": {
+        "primaryPattern": "greedy",
+        "optimal": true,
+        "signature": {
+          "maxLoopDepth": 1,
+          "usesHashStructure": false,
+          "usesSorting": false,
+          "usesRecursion": false,
+          "twoPointer": false
+        }
+      },
+      "steps": [
+        {
+          "title": "Start from the function shape",
+          "explanation": "Begin with the signature, returning the first element.",
+          "code": {
+            "python": "def majority_element(nums):\n    return nums[0]\n",
+            "javascript": "function majorityElement(nums) {\n  return nums[0];\n}\n",
+            "typescript": "function majorityElement(nums: number[]): number {\n  return nums[0];\n}\n"
+          }
+        },
+        {
+          "title": "Track a candidate and a count",
+          "explanation": "Start with no candidate and a zero counter.",
+          "code": {
+            "python": "def majority_element(nums):\n    count = 0\n    candidate = nums[0]\n    return candidate\n",
+            "javascript": "function majorityElement(nums) {\n  let count = 0;\n  let candidate = nums[0];\n  return candidate;\n}\n",
+            "typescript": "function majorityElement(nums: number[]): number {\n  let count = 0;\n  let candidate = nums[0];\n  return candidate;\n}\n"
+          }
+        },
+        {
+          "title": "Walk the array",
+          "explanation": "Process each vote in turn.",
+          "code": {
+            "python": "def majority_element(nums):\n    count = 0\n    candidate = nums[0]\n    for n in nums:\n        pass\n    return candidate\n",
+            "javascript": "function majorityElement(nums) {\n  let count = 0;\n  let candidate = nums[0];\n  for (const n of nums) {\n  }\n  return candidate;\n}\n",
+            "typescript": "function majorityElement(nums: number[]): number {\n  let count = 0;\n  let candidate = nums[0];\n  for (const n of nums) {\n  }\n  return candidate;\n}\n"
+          }
+        },
+        {
+          "title": "Pick a new candidate when count hits zero",
+          "explanation": "If the running count is zero, adopt the current value as the candidate.",
+          "code": {
+            "python": "def majority_element(nums):\n    count = 0\n    candidate = nums[0]\n    for n in nums:\n        if count == 0:\n            candidate = n\n    return candidate\n",
+            "javascript": "function majorityElement(nums) {\n  let count = 0;\n  let candidate = nums[0];\n  for (const n of nums) {\n    if (count === 0) {\n      candidate = n;\n    }\n  }\n  return candidate;\n}\n",
+            "typescript": "function majorityElement(nums: number[]): number {\n  let count = 0;\n  let candidate = nums[0];\n  for (const n of nums) {\n    if (count === 0) {\n      candidate = n;\n    }\n  }\n  return candidate;\n}\n"
+          }
+        },
+        {
+          "title": "Count votes for and against",
+          "explanation": "Matching values add to the count; others subtract. The majority survives.",
+          "code": {
+            "python": "def majority_element(nums):\n    count = 0\n    candidate = nums[0]\n    for n in nums:\n        if count == 0:\n            candidate = n\n        if n == candidate:\n            count += 1\n        else:\n            count -= 1\n    return candidate\n",
+            "javascript": "function majorityElement(nums) {\n  let count = 0;\n  let candidate = nums[0];\n  for (const n of nums) {\n    if (count === 0) {\n      candidate = n;\n    }\n    if (n === candidate) {\n      count += 1;\n    } else {\n      count -= 1;\n    }\n  }\n  return candidate;\n}\n",
+            "typescript": "function majorityElement(nums: number[]): number {\n  let count = 0;\n  let candidate = nums[0];\n  for (const n of nums) {\n    if (count === 0) {\n      candidate = n;\n    }\n    if (n === candidate) {\n      count += 1;\n    } else {\n      count -= 1;\n    }\n  }\n  return candidate;\n}\n"
+          }
+        }
+      ]
+    },
+    {
+      "approachName": "Hash Map Counts",
+      "summary": "Count occurrences until one exceeds n/2.",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "technique": {
+        "primaryPattern": "hash-map",
+        "optimal": false,
+        "signature": {
+          "maxLoopDepth": 1,
+          "usesHashStructure": true,
+          "usesSorting": false,
+          "usesRecursion": false,
+          "twoPointer": false
+        }
+      },
+      "steps": [
+        {
+          "title": "Start from the function shape",
+          "explanation": "Begin with the signature, returning the first element.",
+          "code": {
+            "python": "def majority_element(nums):\n    return nums[0]\n",
+            "javascript": "function majorityElement(nums) {\n  return nums[0];\n}\n",
+            "typescript": "function majorityElement(nums: number[]): number {\n  return nums[0];\n}\n"
+          }
+        },
+        {
+          "title": "Create a counts map",
+          "explanation": "Track how many times each value has been seen.",
+          "code": {
+            "python": "def majority_element(nums):\n    counts = {}\n    return nums[0]\n",
+            "javascript": "function majorityElement(nums) {\n  const counts = {};\n  return nums[0];\n}\n",
+            "typescript": "function majorityElement(nums: number[]): number {\n  const counts: Record<number, number> = {};\n  return nums[0];\n}\n"
+          }
+        },
+        {
+          "title": "Tally and check each value",
+          "explanation": "Increment the count; once it passes `n/2`, that value is the majority.",
+          "code": {
+            "python": "def majority_element(nums):\n    counts = {}\n    for n in nums:\n        counts[n] = counts.get(n, 0) + 1\n        if counts[n] > len(nums) // 2:\n            return n\n    return nums[0]\n",
+            "javascript": "function majorityElement(nums) {\n  const counts = {};\n  for (const n of nums) {\n    counts[n] = (counts[n] || 0) + 1;\n    if (counts[n] > Math.floor(nums.length / 2)) {\n      return n;\n    }\n  }\n  return nums[0];\n}\n",
+            "typescript": "function majorityElement(nums: number[]): number {\n  const counts: Record<number, number> = {};\n  for (const n of nums) {\n    counts[n] = (counts[n] || 0) + 1;\n    if (counts[n] > Math.floor(nums.length / 2)) {\n      return n;\n    }\n  }\n  return nums[0];\n}\n"
+          }
+        }
+      ]
+    }
+  ]
+}

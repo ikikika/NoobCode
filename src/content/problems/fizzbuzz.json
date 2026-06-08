@@ -1,0 +1,163 @@
+{
+  "slug": "fizzbuzz",
+  "title": "Fizz Buzz",
+  "difficulty": "easy",
+  "tags": [
+    "math",
+    "string",
+    "simulation"
+  ],
+  "patterns": [
+    "brute-force"
+  ],
+  "description": "Given an integer `n`, return a string array `answer` (1-indexed) where for\neach `i` from 1 to `n`: `\"FizzBuzz\"` if `i` is divisible by 3 and 5, `\"Fizz\"`\nif divisible by 3, `\"Buzz\"` if divisible by 5, otherwise the number as a\nstring.",
+  "constraints": [
+    "1 <= n <= 10^4"
+  ],
+  "examples": [
+    {
+      "input": "n = 3",
+      "output": "[\"1\",\"2\",\"Fizz\"]"
+    },
+    {
+      "input": "n = 5",
+      "output": "[\"1\",\"2\",\"Fizz\",\"4\",\"Buzz\"]"
+    }
+  ],
+  "functionName": {
+    "python": "fizz_buzz",
+    "javascript": "fizzBuzz",
+    "typescript": "fizzBuzz"
+  },
+  "starterCode": {
+    "python": "def fizz_buzz(n):\n    # Return the Fizz Buzz sequence from 1 to n.\n    pass\n",
+    "javascript": "function fizzBuzz(n) {\n  // Return the Fizz Buzz sequence from 1 to n.\n}\n",
+    "typescript": "function fizzBuzz(n: number): string[] {\n  // Return the Fizz Buzz sequence from 1 to n.\n  return [];\n}\n"
+  },
+  "tests": [
+    {
+      "name": "n = 3",
+      "args": [
+        3
+      ],
+      "expected": [
+        "1",
+        "2",
+        "Fizz"
+      ]
+    },
+    {
+      "name": "n = 5",
+      "args": [
+        5
+      ],
+      "expected": [
+        "1",
+        "2",
+        "Fizz",
+        "4",
+        "Buzz"
+      ]
+    },
+    {
+      "name": "n = 15",
+      "args": [
+        15
+      ],
+      "expected": [
+        "1",
+        "2",
+        "Fizz",
+        "4",
+        "Buzz",
+        "Fizz",
+        "7",
+        "8",
+        "Fizz",
+        "Buzz",
+        "11",
+        "Fizz",
+        "13",
+        "14",
+        "FizzBuzz"
+      ],
+      "hidden": true
+    },
+    {
+      "name": "n = 1",
+      "args": [
+        1
+      ],
+      "expected": [
+        "1"
+      ],
+      "hidden": true
+    }
+  ],
+  "solutions": [
+    {
+      "approachName": "Simulate Each Number",
+      "summary": "Walk 1..n and pick the right label by divisibility.",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "technique": {
+        "primaryPattern": "brute-force",
+        "optimal": true,
+        "signature": {
+          "maxLoopDepth": 1,
+          "usesHashStructure": false,
+          "usesSorting": false,
+          "usesRecursion": false,
+          "twoPointer": false
+        }
+      },
+      "steps": [
+        {
+          "title": "Start from the function shape",
+          "explanation": "Begin with the signature and a default empty list.",
+          "code": {
+            "python": "def fizz_buzz(n):\n    return []\n",
+            "javascript": "function fizzBuzz(n) {\n  return [];\n}\n",
+            "typescript": "function fizzBuzz(n: number): string[] {\n  return [];\n}\n"
+          }
+        },
+        {
+          "title": "Collect into a result list",
+          "explanation": "Build the answer in a list and return it.",
+          "code": {
+            "python": "def fizz_buzz(n):\n    result = []\n    return result\n",
+            "javascript": "function fizzBuzz(n) {\n  const result = [];\n  return result;\n}\n",
+            "typescript": "function fizzBuzz(n: number): string[] {\n  const result: string[] = [];\n  return result;\n}\n"
+          }
+        },
+        {
+          "title": "Loop from 1 to n",
+          "explanation": "Visit every number in the inclusive range.",
+          "code": {
+            "python": "def fizz_buzz(n):\n    result = []\n    for i in range(1, n + 1):\n        pass\n    return result\n",
+            "javascript": "function fizzBuzz(n) {\n  const result = [];\n  for (let i = 1; i <= n; i++) {\n  }\n  return result;\n}\n",
+            "typescript": "function fizzBuzz(n: number): string[] {\n  const result: string[] = [];\n  for (let i = 1; i <= n; i++) {\n  }\n  return result;\n}\n"
+          }
+        },
+        {
+          "title": "Handle the FizzBuzz / number cases",
+          "explanation": "Multiples of both 3 and 5 are `\"FizzBuzz\"`; everything else is the number for now.",
+          "code": {
+            "python": "def fizz_buzz(n):\n    result = []\n    for i in range(1, n + 1):\n        if i % 15 == 0:\n            result.append(\"FizzBuzz\")\n        else:\n            result.append(str(i))\n    return result\n",
+            "javascript": "function fizzBuzz(n) {\n  const result = [];\n  for (let i = 1; i <= n; i++) {\n    if (i % 15 === 0) {\n      result.push(\"FizzBuzz\");\n    } else {\n      result.push(String(i));\n    }\n  }\n  return result;\n}\n",
+            "typescript": "function fizzBuzz(n: number): string[] {\n  const result: string[] = [];\n  for (let i = 1; i <= n; i++) {\n    if (i % 15 === 0) {\n      result.push(\"FizzBuzz\");\n    } else {\n      result.push(String(i));\n    }\n  }\n  return result;\n}\n"
+          }
+        },
+        {
+          "title": "Add the Fizz and Buzz cases",
+          "explanation": "Insert the divisible-by-3 and divisible-by-5 checks before the number fallback.",
+          "code": {
+            "python": "def fizz_buzz(n):\n    result = []\n    for i in range(1, n + 1):\n        if i % 15 == 0:\n            result.append(\"FizzBuzz\")\n        elif i % 3 == 0:\n            result.append(\"Fizz\")\n        elif i % 5 == 0:\n            result.append(\"Buzz\")\n        else:\n            result.append(str(i))\n    return result\n",
+            "javascript": "function fizzBuzz(n) {\n  const result = [];\n  for (let i = 1; i <= n; i++) {\n    if (i % 15 === 0) {\n      result.push(\"FizzBuzz\");\n    } else if (i % 3 === 0) {\n      result.push(\"Fizz\");\n    } else if (i % 5 === 0) {\n      result.push(\"Buzz\");\n    } else {\n      result.push(String(i));\n    }\n  }\n  return result;\n}\n",
+            "typescript": "function fizzBuzz(n: number): string[] {\n  const result: string[] = [];\n  for (let i = 1; i <= n; i++) {\n    if (i % 15 === 0) {\n      result.push(\"FizzBuzz\");\n    } else if (i % 3 === 0) {\n      result.push(\"Fizz\");\n    } else if (i % 5 === 0) {\n      result.push(\"Buzz\");\n    } else {\n      result.push(String(i));\n    }\n  }\n  return result;\n}\n"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,227 @@
+{
+  "slug": "contains-nearby-duplicate",
+  "title": "Contains Duplicate II",
+  "difficulty": "easy",
+  "tags": [
+    "array",
+    "hash-map",
+    "sliding-window"
+  ],
+  "patterns": [
+    "hash-map",
+    "sliding-window"
+  ],
+  "description": "Given an integer array `nums` and an integer `k`, return `true` if there are\ntwo distinct indices `i` and `j` such that `nums[i] == nums[j]` and\n`abs(i - j) <= k`.",
+  "constraints": [
+    "1 <= nums.length <= 10^5",
+    "-10^9 <= nums[i] <= 10^9",
+    "0 <= k <= 10^5"
+  ],
+  "examples": [
+    {
+      "input": "nums = [1,2,3,1], k = 3",
+      "output": "true"
+    },
+    {
+      "input": "nums = [1,2,3,1,2,3], k = 2",
+      "output": "false"
+    }
+  ],
+  "functionName": {
+    "python": "contains_nearby_duplicate",
+    "javascript": "containsNearbyDuplicate",
+    "typescript": "containsNearbyDuplicate"
+  },
+  "starterCode": {
+    "python": "def contains_nearby_duplicate(nums, k):\n    # Return True if equal values exist within k indices.\n    pass\n",
+    "javascript": "function containsNearbyDuplicate(nums, k) {\n  // Return true if equal values exist within k indices.\n}\n",
+    "typescript": "function containsNearbyDuplicate(nums: number[], k: number): boolean {\n  // Return true if equal values exist within k indices.\n  return false;\n}\n"
+  },
+  "tests": [
+    {
+      "name": "within range",
+      "args": [
+        [
+          1,
+          2,
+          3,
+          1
+        ],
+        3
+      ],
+      "expected": true
+    },
+    {
+      "name": "adjacent",
+      "args": [
+        [
+          1,
+          0,
+          1,
+          1
+        ],
+        1
+      ],
+      "expected": true
+    },
+    {
+      "name": "too far apart",
+      "args": [
+        [
+          1,
+          2,
+          3,
+          1,
+          2,
+          3
+        ],
+        2
+      ],
+      "expected": false
+    },
+    {
+      "name": "single element",
+      "args": [
+        [
+          1
+        ],
+        1
+      ],
+      "expected": false,
+      "hidden": true
+    },
+    {
+      "name": "k covers all",
+      "args": [
+        [
+          99,
+          99
+        ],
+        2
+      ],
+      "expected": true,
+      "hidden": true
+    }
+  ],
+  "solutions": [
+    {
+      "approachName": "Last-Seen Index Map",
+      "summary": "Remember each value’s most recent index and check the gap.",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "technique": {
+        "primaryPattern": "hash-map",
+        "optimal": true,
+        "signature": {
+          "maxLoopDepth": 1,
+          "usesHashStructure": true,
+          "usesSorting": false,
+          "usesRecursion": false,
+          "twoPointer": false
+        }
+      },
+      "steps": [
+        {
+          "title": "Start from the function shape",
+          "explanation": "Begin with the signature and a default `false` return.",
+          "code": {
+            "python": "def contains_nearby_duplicate(nums, k):\n    return False\n",
+            "javascript": "function containsNearbyDuplicate(nums, k) {\n  return false;\n}\n",
+            "typescript": "function containsNearbyDuplicate(nums: number[], k: number): boolean {\n  return false;\n}\n"
+          }
+        },
+        {
+          "title": "Map each value to its last index",
+          "explanation": "`last[value]` holds the most recent position we saw that value.",
+          "code": {
+            "python": "def contains_nearby_duplicate(nums, k):\n    last = {}\n    return False\n",
+            "javascript": "function containsNearbyDuplicate(nums, k) {\n  const last = {};\n  return false;\n}\n",
+            "typescript": "function containsNearbyDuplicate(nums: number[], k: number): boolean {\n  const last: Record<number, number> = {};\n  return false;\n}\n"
+          }
+        },
+        {
+          "title": "Walk the array with indices",
+          "explanation": "Process each value together with its index `i`.",
+          "code": {
+            "python": "def contains_nearby_duplicate(nums, k):\n    last = {}\n    for i, n in enumerate(nums):\n        pass\n    return False\n",
+            "javascript": "function containsNearbyDuplicate(nums, k) {\n  const last = {};\n  for (let i = 0; i < nums.length; i++) {\n    const n = nums[i];\n  }\n  return false;\n}\n",
+            "typescript": "function containsNearbyDuplicate(nums: number[], k: number): boolean {\n  const last: Record<number, number> = {};\n  for (let i = 0; i < nums.length; i++) {\n    const n = nums[i];\n  }\n  return false;\n}\n"
+          }
+        },
+        {
+          "title": "Check the gap to the last occurrence",
+          "explanation": "If we have seen the value within `k` indices, we found a nearby duplicate.",
+          "code": {
+            "python": "def contains_nearby_duplicate(nums, k):\n    last = {}\n    for i, n in enumerate(nums):\n        if n in last and i - last[n] <= k:\n            return True\n    return False\n",
+            "javascript": "function containsNearbyDuplicate(nums, k) {\n  const last = {};\n  for (let i = 0; i < nums.length; i++) {\n    const n = nums[i];\n    if (last[n] !== undefined && i - last[n] <= k) {\n      return true;\n    }\n  }\n  return false;\n}\n",
+            "typescript": "function containsNearbyDuplicate(nums: number[], k: number): boolean {\n  const last: Record<number, number> = {};\n  for (let i = 0; i < nums.length; i++) {\n    const n = nums[i];\n    if (last[n] !== undefined && i - last[n] <= k) {\n      return true;\n    }\n  }\n  return false;\n}\n"
+          }
+        },
+        {
+          "title": "Record the current index",
+          "explanation": "Otherwise update the value’s latest index and continue.",
+          "code": {
+            "python": "def contains_nearby_duplicate(nums, k):\n    last = {}\n    for i, n in enumerate(nums):\n        if n in last and i - last[n] <= k:\n            return True\n        last[n] = i\n    return False\n",
+            "javascript": "function containsNearbyDuplicate(nums, k) {\n  const last = {};\n  for (let i = 0; i < nums.length; i++) {\n    const n = nums[i];\n    if (last[n] !== undefined && i - last[n] <= k) {\n      return true;\n    }\n    last[n] = i;\n  }\n  return false;\n}\n",
+            "typescript": "function containsNearbyDuplicate(nums: number[], k: number): boolean {\n  const last: Record<number, number> = {};\n  for (let i = 0; i < nums.length; i++) {\n    const n = nums[i];\n    if (last[n] !== undefined && i - last[n] <= k) {\n      return true;\n    }\n    last[n] = i;\n  }\n  return false;\n}\n"
+          }
+        }
+      ]
+    },
+    {
+      "approachName": "Sliding Window Set",
+      "summary": "Keep a set of the last k values; a hit inside it is a nearby duplicate.",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(k)",
+      "technique": {
+        "primaryPattern": "sliding-window",
+        "optimal": false,
+        "signature": {
+          "maxLoopDepth": 1,
+          "usesHashStructure": true,
+          "usesSorting": false,
+          "usesRecursion": false,
+          "twoPointer": false
+        }
+      },
+      "steps": [
+        {
+          "title": "Start from the function shape",
+          "explanation": "Begin with the signature and a default `false` return.",
+          "code": {
+            "python": "def contains_nearby_duplicate(nums, k):\n    return False\n",
+            "javascript": "function containsNearbyDuplicate(nums, k) {\n  return false;\n}\n",
+            "typescript": "function containsNearbyDuplicate(nums: number[], k: number): boolean {\n  return false;\n}\n"
+          }
+        },
+        {
+          "title": "Hold a window of recent values",
+          "explanation": "The set will contain at most the last `k` values.",
+          "code": {
+            "python": "def contains_nearby_duplicate(nums, k):\n    window = set()\n    return False\n",
+            "javascript": "function containsNearbyDuplicate(nums, k) {\n  const window = new Set();\n  return false;\n}\n",
+            "typescript": "function containsNearbyDuplicate(nums: number[], k: number): boolean {\n  const window = new Set<number>();\n  return false;\n}\n"
+          }
+        },
+        {
+          "title": "Drop values that fell out of the window",
+          "explanation": "Once the index exceeds `k`, remove the value that is now too far back.",
+          "code": {
+            "python": "def contains_nearby_duplicate(nums, k):\n    window = set()\n    for i in range(len(nums)):\n        if i > k:\n            window.discard(nums[i - k - 1])\n    return False\n",
+            "javascript": "function containsNearbyDuplicate(nums, k) {\n  const window = new Set();\n  for (let i = 0; i < nums.length; i++) {\n    if (i > k) {\n      window.delete(nums[i - k - 1]);\n    }\n  }\n  return false;\n}\n",
+            "typescript": "function containsNearbyDuplicate(nums: number[], k: number): boolean {\n  const window = new Set<number>();\n  for (let i = 0; i < nums.length; i++) {\n    if (i > k) {\n      window.delete(nums[i - k - 1]);\n    }\n  }\n  return false;\n}\n"
+          }
+        },
+        {
+          "title": "Check then add the current value",
+          "explanation": "If the value is already in the window it is a nearby duplicate; otherwise add it.",
+          "code": {
+            "python": "def contains_nearby_duplicate(nums, k):\n    window = set()\n    for i in range(len(nums)):\n        if i > k:\n            window.discard(nums[i - k - 1])\n        if nums[i] in window:\n            return True\n        window.add(nums[i])\n    return False\n",
+            "javascript": "function containsNearbyDuplicate(nums, k) {\n  const window = new Set();\n  for (let i = 0; i < nums.length; i++) {\n    if (i > k) {\n      window.delete(nums[i - k - 1]);\n    }\n    if (window.has(nums[i])) {\n      return true;\n    }\n    window.add(nums[i]);\n  }\n  return false;\n}\n",
+            "typescript": "function containsNearbyDuplicate(nums: number[], k: number): boolean {\n  const window = new Set<number>();\n  for (let i = 0; i < nums.length; i++) {\n    if (i > k) {\n      window.delete(nums[i - k - 1]);\n    }\n    if (window.has(nums[i])) {\n      return true;\n    }\n    window.add(nums[i]);\n  }\n  return false;\n}\n"
+          }
+        }
+      ]
+    }
+  ]
+}
