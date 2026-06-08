@@ -1,0 +1,225 @@
+{
+  "slug": "binary-search",
+  "title": "Binary Search",
+  "difficulty": "easy",
+  "tags": [
+    "array",
+    "binary-search"
+  ],
+  "patterns": [
+    "binary-search"
+  ],
+  "description": "Given a sorted (ascending) array of distinct integers `nums` and a `target`,\nreturn the index of `target` if it exists, otherwise return `-1`. Aim for\n`O(log n)` time.",
+  "constraints": [
+    "1 <= nums.length <= 10^4",
+    "`nums` is sorted in ascending order.",
+    "-10^4 <= nums[i], target <= 10^4"
+  ],
+  "examples": [
+    {
+      "input": "nums = [-1,0,3,5,9,12], target = 9",
+      "output": "4"
+    },
+    {
+      "input": "nums = [-1,0,3,5,9,12], target = 2",
+      "output": "-1"
+    }
+  ],
+  "functionName": {
+    "python": "search",
+    "javascript": "search",
+    "typescript": "search"
+  },
+  "starterCode": {
+    "python": "def search(nums, target):\n    # Return the index of target, or -1 if absent.\n    pass\n",
+    "javascript": "function search(nums, target) {\n  // Return the index of target, or -1 if absent.\n}\n",
+    "typescript": "function search(nums: number[], target: number): number {\n  // Return the index of target, or -1 if absent.\n  return -1;\n}\n"
+  },
+  "tests": [
+    {
+      "name": "found",
+      "args": [
+        [
+          -1,
+          0,
+          3,
+          5,
+          9,
+          12
+        ],
+        9
+      ],
+      "expected": 4
+    },
+    {
+      "name": "absent",
+      "args": [
+        [
+          -1,
+          0,
+          3,
+          5,
+          9,
+          12
+        ],
+        2
+      ],
+      "expected": -1
+    },
+    {
+      "name": "single hit",
+      "args": [
+        [
+          5
+        ],
+        5
+      ],
+      "expected": 0,
+      "hidden": true
+    },
+    {
+      "name": "single miss",
+      "args": [
+        [
+          5
+        ],
+        -5
+      ],
+      "expected": -1,
+      "hidden": true
+    },
+    {
+      "name": "last element",
+      "args": [
+        [
+          2,
+          5
+        ],
+        5
+      ],
+      "expected": 1,
+      "hidden": true
+    }
+  ],
+  "solutions": [
+    {
+      "approachName": "Binary Search",
+      "summary": "Halve the search range each step by comparing with the middle.",
+      "timeComplexity": "O(log n)",
+      "spaceComplexity": "O(1)",
+      "technique": {
+        "primaryPattern": "binary-search",
+        "optimal": true,
+        "signature": {
+          "maxLoopDepth": 1,
+          "usesHashStructure": false,
+          "usesSorting": false,
+          "usesRecursion": false,
+          "twoPointer": false
+        }
+      },
+      "steps": [
+        {
+          "title": "Start from the function shape",
+          "explanation": "Begin with the signature and a default `-1` return.",
+          "code": {
+            "python": "def search(nums, target):\n    return -1\n",
+            "javascript": "function search(nums, target) {\n  return -1;\n}\n",
+            "typescript": "function search(nums: number[], target: number): number {\n  return -1;\n}\n"
+          }
+        },
+        {
+          "title": "Bound the search range",
+          "explanation": "`left` and `right` mark the inclusive range still to examine.",
+          "code": {
+            "python": "def search(nums, target):\n    left = 0\n    right = len(nums) - 1\n    return -1\n",
+            "javascript": "function search(nums, target) {\n  let left = 0;\n  let right = nums.length - 1;\n  return -1;\n}\n",
+            "typescript": "function search(nums: number[], target: number): number {\n  let left = 0;\n  let right = nums.length - 1;\n  return -1;\n}\n"
+          }
+        },
+        {
+          "title": "Loop while the range is valid",
+          "explanation": "Each iteration inspects the middle of the current range.",
+          "code": {
+            "python": "def search(nums, target):\n    left = 0\n    right = len(nums) - 1\n    while left <= right:\n        mid = (left + right) // 2\n    return -1\n",
+            "javascript": "function search(nums, target) {\n  let left = 0;\n  let right = nums.length - 1;\n  while (left <= right) {\n    const mid = Math.floor((left + right) / 2);\n  }\n  return -1;\n}\n",
+            "typescript": "function search(nums: number[], target: number): number {\n  let left = 0;\n  let right = nums.length - 1;\n  while (left <= right) {\n    const mid = Math.floor((left + right) / 2);\n  }\n  return -1;\n}\n"
+          }
+        },
+        {
+          "title": "Return on a hit",
+          "explanation": "If the middle value is the target, we are done.",
+          "code": {
+            "python": "def search(nums, target):\n    left = 0\n    right = len(nums) - 1\n    while left <= right:\n        mid = (left + right) // 2\n        if nums[mid] == target:\n            return mid\n    return -1\n",
+            "javascript": "function search(nums, target) {\n  let left = 0;\n  let right = nums.length - 1;\n  while (left <= right) {\n    const mid = Math.floor((left + right) / 2);\n    if (nums[mid] === target) {\n      return mid;\n    }\n  }\n  return -1;\n}\n",
+            "typescript": "function search(nums: number[], target: number): number {\n  let left = 0;\n  let right = nums.length - 1;\n  while (left <= right) {\n    const mid = Math.floor((left + right) / 2);\n    if (nums[mid] === target) {\n      return mid;\n    }\n  }\n  return -1;\n}\n"
+          }
+        },
+        {
+          "title": "Search the right half",
+          "explanation": "If the middle is too small, the target must be to its right.",
+          "code": {
+            "python": "def search(nums, target):\n    left = 0\n    right = len(nums) - 1\n    while left <= right:\n        mid = (left + right) // 2\n        if nums[mid] == target:\n            return mid\n        elif nums[mid] < target:\n            left = mid + 1\n    return -1\n",
+            "javascript": "function search(nums, target) {\n  let left = 0;\n  let right = nums.length - 1;\n  while (left <= right) {\n    const mid = Math.floor((left + right) / 2);\n    if (nums[mid] === target) {\n      return mid;\n    } else if (nums[mid] < target) {\n      left = mid + 1;\n    }\n  }\n  return -1;\n}\n",
+            "typescript": "function search(nums: number[], target: number): number {\n  let left = 0;\n  let right = nums.length - 1;\n  while (left <= right) {\n    const mid = Math.floor((left + right) / 2);\n    if (nums[mid] === target) {\n      return mid;\n    } else if (nums[mid] < target) {\n      left = mid + 1;\n    }\n  }\n  return -1;\n}\n"
+          }
+        },
+        {
+          "title": "Search the left half",
+          "explanation": "Otherwise the middle is too big, so discard it and everything to its right.",
+          "code": {
+            "python": "def search(nums, target):\n    left = 0\n    right = len(nums) - 1\n    while left <= right:\n        mid = (left + right) // 2\n        if nums[mid] == target:\n            return mid\n        elif nums[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return -1\n",
+            "javascript": "function search(nums, target) {\n  let left = 0;\n  let right = nums.length - 1;\n  while (left <= right) {\n    const mid = Math.floor((left + right) / 2);\n    if (nums[mid] === target) {\n      return mid;\n    } else if (nums[mid] < target) {\n      left = mid + 1;\n    } else {\n      right = mid - 1;\n    }\n  }\n  return -1;\n}\n",
+            "typescript": "function search(nums: number[], target: number): number {\n  let left = 0;\n  let right = nums.length - 1;\n  while (left <= right) {\n    const mid = Math.floor((left + right) / 2);\n    if (nums[mid] === target) {\n      return mid;\n    } else if (nums[mid] < target) {\n      left = mid + 1;\n    } else {\n      right = mid - 1;\n    }\n  }\n  return -1;\n}\n"
+          }
+        }
+      ]
+    },
+    {
+      "approachName": "Linear Scan",
+      "summary": "Check each element in order — simple but O(n).",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "technique": {
+        "primaryPattern": "brute-force",
+        "optimal": false,
+        "signature": {
+          "maxLoopDepth": 1,
+          "usesHashStructure": false,
+          "usesSorting": false,
+          "usesRecursion": false,
+          "twoPointer": false
+        }
+      },
+      "steps": [
+        {
+          "title": "Start from the function shape",
+          "explanation": "Begin with the signature and a default `-1` return.",
+          "code": {
+            "python": "def search(nums, target):\n    return -1\n",
+            "javascript": "function search(nums, target) {\n  return -1;\n}\n",
+            "typescript": "function search(nums: number[], target: number): number {\n  return -1;\n}\n"
+          }
+        },
+        {
+          "title": "Loop over every index",
+          "explanation": "Visit each position in the array.",
+          "code": {
+            "python": "def search(nums, target):\n    for i in range(len(nums)):\n        pass\n    return -1\n",
+            "javascript": "function search(nums, target) {\n  for (let i = 0; i < nums.length; i++) {\n  }\n  return -1;\n}\n",
+            "typescript": "function search(nums: number[], target: number): number {\n  for (let i = 0; i < nums.length; i++) {\n  }\n  return -1;\n}\n"
+          }
+        },
+        {
+          "title": "Return the matching index",
+          "explanation": "As soon as a value equals the target, return its index.",
+          "code": {
+            "python": "def search(nums, target):\n    for i in range(len(nums)):\n        if nums[i] == target:\n            return i\n    return -1\n",
+            "javascript": "function search(nums, target) {\n  for (let i = 0; i < nums.length; i++) {\n    if (nums[i] === target) {\n      return i;\n    }\n  }\n  return -1;\n}\n",
+            "typescript": "function search(nums: number[], target: number): number {\n  for (let i = 0; i < nums.length; i++) {\n    if (nums[i] === target) {\n      return i;\n    }\n  }\n  return -1;\n}\n"
+          }
+        }
+      ]
+    }
+  ]
+}

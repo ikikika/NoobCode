@@ -1,0 +1,191 @@
+{
+  "slug": "valid-palindrome",
+  "title": "Valid Palindrome",
+  "difficulty": "easy",
+  "tags": [
+    "string",
+    "two-pointers"
+  ],
+  "patterns": [
+    "two-pointers",
+    "brute-force"
+  ],
+  "description": "A phrase is a **palindrome** if, after lowercasing and removing all\nnon-alphanumeric characters, it reads the same forward and backward. Given a\nstring `s`, return `true` if it is a palindrome.",
+  "constraints": [
+    "1 <= s.length <= 2 * 10^5",
+    "`s` consists of printable ASCII characters."
+  ],
+  "examples": [
+    {
+      "input": "s = \"A man, a plan, a canal: Panama\"",
+      "output": "true",
+      "explanation": "\"amanaplanacanalpanama\" reads the same both ways."
+    },
+    {
+      "input": "s = \"race a car\"",
+      "output": "false"
+    }
+  ],
+  "functionName": {
+    "python": "is_palindrome",
+    "javascript": "isPalindrome",
+    "typescript": "isPalindrome"
+  },
+  "starterCode": {
+    "python": "def is_palindrome(s):\n    # Return True if s is a palindrome (alphanumeric, case-insensitive).\n    pass\n",
+    "javascript": "function isPalindrome(s) {\n  // Return true if s is a palindrome (alphanumeric, case-insensitive).\n}\n",
+    "typescript": "function isPalindrome(s: string): boolean {\n  // Return true if s is a palindrome (alphanumeric, case-insensitive).\n  return false;\n}\n"
+  },
+  "tests": [
+    {
+      "name": "classic phrase",
+      "args": [
+        "A man, a plan, a canal: Panama"
+      ],
+      "expected": true
+    },
+    {
+      "name": "not a palindrome",
+      "args": [
+        "race a car"
+      ],
+      "expected": false
+    },
+    {
+      "name": "only punctuation",
+      "args": [
+        " "
+      ],
+      "expected": true,
+      "hidden": true
+    },
+    {
+      "name": "mixed case fail",
+      "args": [
+        "0P"
+      ],
+      "expected": false,
+      "hidden": true
+    },
+    {
+      "name": "underscore ignored",
+      "args": [
+        "ab_a"
+      ],
+      "expected": true,
+      "hidden": true
+    }
+  ],
+  "solutions": [
+    {
+      "approachName": "Two Pointers",
+      "summary": "Walk inward from both ends, skipping non-alphanumeric characters.",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "technique": {
+        "primaryPattern": "two-pointers",
+        "optimal": true,
+        "signature": {
+          "maxLoopDepth": 1,
+          "usesHashStructure": false,
+          "usesSorting": false,
+          "usesRecursion": false,
+          "twoPointer": true
+        }
+      },
+      "steps": [
+        {
+          "title": "Start from the function shape",
+          "explanation": "Begin with the signature and a default `true` return.",
+          "code": {
+            "python": "def is_palindrome(s):\n    return True\n",
+            "javascript": "function isPalindrome(s) {\n  return true;\n}\n",
+            "typescript": "function isPalindrome(s: string): boolean {\n  return true;\n}\n"
+          }
+        },
+        {
+          "title": "Place a pointer at each end",
+          "explanation": "`left` starts at the front and `right` at the back.",
+          "code": {
+            "python": "def is_palindrome(s):\n    left = 0\n    right = len(s) - 1\n    return True\n",
+            "javascript": "function isPalindrome(s) {\n  let left = 0;\n  let right = s.length - 1;\n  return true;\n}\n",
+            "typescript": "function isPalindrome(s: string): boolean {\n  let left = 0;\n  let right = s.length - 1;\n  return true;\n}\n"
+          }
+        },
+        {
+          "title": "Skip non-alphanumeric characters",
+          "explanation": "Move the pointers past anything that is not a letter or digit.",
+          "code": {
+            "python": "def is_palindrome(s):\n    left = 0\n    right = len(s) - 1\n    while left < right:\n        if not s[left].isalnum():\n            left += 1\n        elif not s[right].isalnum():\n            right -= 1\n    return True\n",
+            "javascript": "function isPalindrome(s) {\n  let left = 0;\n  let right = s.length - 1;\n  while (left < right) {\n    if (!/[a-z0-9]/i.test(s[left])) {\n      left++;\n    } else if (!/[a-z0-9]/i.test(s[right])) {\n      right--;\n    }\n  }\n  return true;\n}\n",
+            "typescript": "function isPalindrome(s: string): boolean {\n  let left = 0;\n  let right = s.length - 1;\n  while (left < right) {\n    if (!/[a-z0-9]/i.test(s[left])) {\n      left++;\n    } else if (!/[a-z0-9]/i.test(s[right])) {\n      right--;\n    }\n  }\n  return true;\n}\n"
+          }
+        },
+        {
+          "title": "Compare the two characters",
+          "explanation": "When both sides are alphanumeric, a case-insensitive mismatch means it is not a palindrome.",
+          "code": {
+            "python": "def is_palindrome(s):\n    left = 0\n    right = len(s) - 1\n    while left < right:\n        if not s[left].isalnum():\n            left += 1\n        elif not s[right].isalnum():\n            right -= 1\n        elif s[left].lower() != s[right].lower():\n            return False\n    return True\n",
+            "javascript": "function isPalindrome(s) {\n  let left = 0;\n  let right = s.length - 1;\n  while (left < right) {\n    if (!/[a-z0-9]/i.test(s[left])) {\n      left++;\n    } else if (!/[a-z0-9]/i.test(s[right])) {\n      right--;\n    } else if (s[left].toLowerCase() !== s[right].toLowerCase()) {\n      return false;\n    }\n  }\n  return true;\n}\n",
+            "typescript": "function isPalindrome(s: string): boolean {\n  let left = 0;\n  let right = s.length - 1;\n  while (left < right) {\n    if (!/[a-z0-9]/i.test(s[left])) {\n      left++;\n    } else if (!/[a-z0-9]/i.test(s[right])) {\n      right--;\n    } else if (s[left].toLowerCase() !== s[right].toLowerCase()) {\n      return false;\n    }\n  }\n  return true;\n}\n"
+          }
+        },
+        {
+          "title": "Step both pointers inward",
+          "explanation": "On a match, advance both ends toward the middle.",
+          "code": {
+            "python": "def is_palindrome(s):\n    left = 0\n    right = len(s) - 1\n    while left < right:\n        if not s[left].isalnum():\n            left += 1\n        elif not s[right].isalnum():\n            right -= 1\n        elif s[left].lower() != s[right].lower():\n            return False\n        else:\n            left += 1\n            right -= 1\n    return True\n",
+            "javascript": "function isPalindrome(s) {\n  let left = 0;\n  let right = s.length - 1;\n  while (left < right) {\n    if (!/[a-z0-9]/i.test(s[left])) {\n      left++;\n    } else if (!/[a-z0-9]/i.test(s[right])) {\n      right--;\n    } else if (s[left].toLowerCase() !== s[right].toLowerCase()) {\n      return false;\n    } else {\n      left++;\n      right--;\n    }\n  }\n  return true;\n}\n",
+            "typescript": "function isPalindrome(s: string): boolean {\n  let left = 0;\n  let right = s.length - 1;\n  while (left < right) {\n    if (!/[a-z0-9]/i.test(s[left])) {\n      left++;\n    } else if (!/[a-z0-9]/i.test(s[right])) {\n      right--;\n    } else if (s[left].toLowerCase() !== s[right].toLowerCase()) {\n      return false;\n    } else {\n      left++;\n      right--;\n    }\n  }\n  return true;\n}\n"
+          }
+        }
+      ]
+    },
+    {
+      "approachName": "Clean and Reverse",
+      "summary": "Strip the string down, then compare it with its reverse.",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "technique": {
+        "primaryPattern": "brute-force",
+        "optimal": false,
+        "signature": {
+          "maxLoopDepth": 1,
+          "usesHashStructure": false,
+          "usesSorting": false,
+          "usesRecursion": false,
+          "twoPointer": false
+        }
+      },
+      "steps": [
+        {
+          "title": "Start from the function shape",
+          "explanation": "Begin with the signature and a default `true` return.",
+          "code": {
+            "python": "def is_palindrome(s):\n    return True\n",
+            "javascript": "function isPalindrome(s) {\n  return true;\n}\n",
+            "typescript": "function isPalindrome(s: string): boolean {\n  return true;\n}\n"
+          }
+        },
+        {
+          "title": "Keep only lowercase alphanumerics",
+          "explanation": "Filter out everything else so we compare just the meaningful characters.",
+          "code": {
+            "python": "def is_palindrome(s):\n    cleaned = [c.lower() for c in s if c.isalnum()]\n    return True\n",
+            "javascript": "function isPalindrome(s) {\n  const cleaned = s.toLowerCase().replace(/[^a-z0-9]/g, '');\n  return true;\n}\n",
+            "typescript": "function isPalindrome(s: string): boolean {\n  const cleaned = s.toLowerCase().replace(/[^a-z0-9]/g, '');\n  return true;\n}\n"
+          }
+        },
+        {
+          "title": "Compare with the reverse",
+          "explanation": "A palindrome equals itself read backward.",
+          "code": {
+            "python": "def is_palindrome(s):\n    cleaned = [c.lower() for c in s if c.isalnum()]\n    return cleaned == cleaned[::-1]\n",
+            "javascript": "function isPalindrome(s) {\n  const cleaned = s.toLowerCase().replace(/[^a-z0-9]/g, '');\n  return cleaned === [...cleaned].reverse().join('');\n}\n",
+            "typescript": "function isPalindrome(s: string): boolean {\n  const cleaned = s.toLowerCase().replace(/[^a-z0-9]/g, '');\n  return cleaned === [...cleaned].reverse().join('');\n}\n"
+          }
+        }
+      ]
+    }
+  ]
+}
