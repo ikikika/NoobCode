@@ -4,26 +4,27 @@
  *
  * Writes src/content/problems/<slug>.json. No registration step is needed —
  * src/content/index.ts auto-discovers every *.json via import.meta.glob.
+ *
+ * The skeleton itself is built by the shared, isomorphic helpers in
+ * src/content/newProblem.ts (also used by the in-app "New problem" form and the
+ * Vite dev-server plugin), so all three paths emit identical files.
  */
 import { existsSync, writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
+import {
+  buildProblemSkeleton,
+  isValidSlug,
+  serializeProblem,
+} from '../src/content/newProblem'
 
 const slug = process.argv[2]
-if (!slug || !/^[a-z0-9-]+$/.test(slug)) {
+if (!slug || !isValidSlug(slug)) {
   console.error('Usage: npm run new:problem -- <slug> ["Title"]')
   console.error('  <slug> must be lowercase, digits, and hyphens only.')
   process.exit(1)
 }
 
-const title =
-  process.argv[3] ??
-  slug
-    .split('-')
-    .map((w) => w[0].toUpperCase() + w.slice(1))
-    .join(' ')
-
-const fnPy = slug.replace(/-/g, '_')
-const fnJs = slug.replace(/-([a-z])/g, (_, c: string) => c.toUpperCase())
+const title = process.argv[3]
 
 const file = resolve('src/content/problems', `${slug}.json`)
 if (existsSync(file)) {
@@ -31,55 +32,7 @@ if (existsSync(file)) {
   process.exit(1)
 }
 
-const problem = {
-  slug,
-  title,
-  difficulty: 'easy',
-  tags: [],
-  patterns: ['brute-force'],
-  description: 'TODO: describe the problem in markdown.',
-  constraints: ['TODO'],
-  examples: [{ input: 'TODO', output: 'TODO' }],
-  functionName: { python: fnPy, javascript: fnJs, typescript: fnJs },
-  starterCode: {
-    python: `def ${fnPy}(args):\n    pass\n`,
-    javascript: `function ${fnJs}(args) {\n}\n`,
-    typescript: `function ${fnJs}(args: unknown): unknown {\n  return null;\n}\n`,
-  },
-  tests: [{ name: 'example 1', args: [], expected: null }],
-  solutions: [
-    {
-      approachName: 'TODO',
-      summary: 'TODO',
-      timeComplexity: 'O(n)',
-      spaceComplexity: 'O(1)',
-      technique: {
-        primaryPattern: 'brute-force',
-        optimal: true,
-        signature: {
-          maxLoopDepth: 1,
-          usesHashStructure: false,
-          usesSorting: false,
-          usesRecursion: false,
-          twoPointer: false,
-        },
-      },
-      steps: [
-        {
-          title: 'TODO',
-          explanation: 'TODO',
-          code: {
-            python: `def ${fnPy}(args):\n    pass\n`,
-            javascript: `function ${fnJs}(args) {\n}\n`,
-            typescript: `function ${fnJs}(args: unknown): unknown {\n  return null;\n}\n`,
-          },
-        },
-      ],
-    },
-  ],
-}
-
-writeFileSync(file, JSON.stringify(problem, null, 2) + '\n')
+writeFileSync(file, serializeProblem(buildProblemSkeleton({ slug, title })))
 
 console.log(`Created ${file}`)
 console.log('It is auto-registered via import.meta.glob. Fill in the TODOs, then run:')

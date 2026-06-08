@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react'
 import { createHashRouter, Navigate, RouterProvider } from 'react-router-dom'
 import { Layout } from './components/Layout'
 import { ProblemListPage } from './routes/ProblemListPage'
+import { CreateProblemPage } from './routes/CreateProblemPage'
 import { SkillsPage } from './routes/SkillsPage'
 import { Spinner } from './components/Spinner'
 
@@ -35,6 +36,7 @@ const router = createHashRouter([
         ),
       },
       { path: 'skills', element: <SkillsPage /> },
+      { path: 'new', element: <CreateProblemPage /> },
       { path: '*', element: <Navigate to="/" replace /> },
     ],
   },

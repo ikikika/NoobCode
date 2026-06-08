@@ -79,8 +79,12 @@ Problems are JSON files in `src/content/problems/<slug>.json`, auto-discovered v
 every language (Python, JavaScript, TypeScript) in `functionName`, `starterCode`,
 and every solution step.
 
-1. Copy [`templates/problem.template.json`](templates/problem.template.json) to
-   `src/content/problems/<slug>.json` (or run `npm run new:problem -- <slug> "Title"`).
+1. Create the file. Any of:
+   - Copy [`templates/problem.template.json`](templates/problem.template.json) to
+     `src/content/problems/<slug>.json`, or
+   - run `npm run new:problem -- <slug> "Title"`, or
+   - open **New** in the app — during `npm run dev` it writes the skeleton file
+     for you; on the hosted site it downloads it to drop in.
 2. Fill it in. Set `slug` to match the filename.
 3. `npm run validate:content` checks it against the schema; restart `npm run dev`.
 

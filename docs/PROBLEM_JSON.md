@@ -14,7 +14,9 @@ steps, see [`SOLUTION_INSTRUCTIONS.md`](./SOLUTION_INSTRUCTIONS.md).
 1. Copy [`templates/problem.template.json`](../templates/problem.template.json)
    to `src/content/problems/<slug>.json`.
 2. Set `slug` to match the filename (`two-sum.json` → `"two-sum"`) and fill in
-   the rest. (Or run `npm run new:problem -- <slug> "Title"` to generate a stub.)
+   the rest. (Or generate the stub with `npm run new:problem -- <slug> "Title"`,
+   or via the **New** page in the app — in `dev` it writes the file; on the
+   hosted site it downloads it.)
 3. Run `npm run validate:content` to check it, then restart `npm run dev` so the
    glob picks it up.
 

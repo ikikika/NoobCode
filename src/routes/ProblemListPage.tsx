@@ -17,7 +17,15 @@ export function ProblemListPage() {
 
   return (
     <div className="mx-auto h-full max-w-3xl overflow-auto px-4 py-6">
-      <h1 className="mb-4 text-2xl font-bold text-fg">Problems</h1>
+      <div className="mb-4 flex items-center gap-3">
+        <h1 className="text-2xl font-bold text-fg">Problems</h1>
+        <Link
+          to="/new"
+          className="ml-auto rounded-md border border-line px-2.5 py-1 text-xs font-medium text-fg-muted hover:text-fg"
+        >
+          + New
+        </Link>
+      </div>
 
       {dueCount > 0 && (
         <Link

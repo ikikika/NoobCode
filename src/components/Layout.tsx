@@ -25,6 +25,9 @@ export function Layout() {
           <NavLink to="/skills" className={navClass}>
             Skills
           </NavLink>
+          <NavLink to="/new" className={navClass}>
+            New
+          </NavLink>
         </nav>
         <div className="ml-auto flex items-center gap-1">
           <button
