@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 
 function readInitialDark(): boolean {
-  if (typeof document === 'undefined') return true
+  if (typeof document === 'undefined') return false
   return document.documentElement.classList.contains('dark')
 }
 

@@ -11,6 +11,7 @@ import {
   type MasteryLevel,
 } from '../features/skills/mastery'
 import type { AttemptRecord } from '../features/analysis/types'
+import { MethodReference } from '../features/skills/MethodReference'
 
 const MASTERY_STYLES: Record<MasteryLevel, string> = {
   unseen: 'bg-surface-sunken text-fg-subtle',
@@ -50,31 +51,28 @@ function ProgressBar({ value, max, tone }: { value: number; max: number; tone: s
   )
 }
 
-function PatternCard({ stat }: { stat: PatternStat }) {
+function PatternRow({ stat }: { stat: PatternStat }) {
   const pct = stat.total === 0 ? 0 : Math.round((stat.solved / stat.total) * 100)
   return (
-    <div className="flex flex-col gap-2.5 rounded-lg border border-line bg-surface-raised p-3">
-      <div className="flex items-center justify-between gap-2">
-        <span className="flex items-center gap-2 text-sm font-semibold text-fg">
-          <span className={`h-2 w-2 shrink-0 rounded-full ${MASTERY_DOT[stat.mastery]}`} />
-          {PATTERN_LABELS[stat.pattern]}
-        </span>
-        <span
-          className={`rounded-full px-2 py-0.5 text-xs font-medium ${MASTERY_STYLES[stat.mastery]}`}
-        >
-          {MASTERY_LABELS[stat.mastery]}
-        </span>
-      </div>
-      <div>
-        <div className="mb-1 flex items-center justify-between text-xs text-fg-subtle">
-          <span>
-            {stat.solved}/{stat.total} solved
+    <div className="flex flex-col gap-3 rounded-lg border border-line bg-surface-raised p-3 sm:flex-row sm:items-center sm:gap-4">
+      <div className="sm:w-60 sm:shrink-0">
+        <div className="flex items-center justify-between gap-2">
+          <span className="flex items-center gap-2 text-sm font-semibold text-fg">
+            <span className={`h-2 w-2 shrink-0 rounded-full ${MASTERY_DOT[stat.mastery]}`} />
+            {PATTERN_LABELS[stat.pattern]}
           </span>
-          <span>{pct}%</span>
+          <span
+            className={`rounded-full px-2 py-0.5 text-xs font-medium ${MASTERY_STYLES[stat.mastery]}`}
+          >
+            {MASTERY_LABELS[stat.mastery]}
+          </span>
+        </div>
+        <div className="mt-1.5 mb-1 text-xs text-fg-subtle">
+          {stat.solved}/{stat.total} solved · {pct}%
         </div>
         <ProgressBar value={stat.solved} max={stat.total} tone="bg-accent" />
       </div>
-      <div className="flex flex-wrap gap-1.5">
+      <div className="flex flex-wrap gap-1.5 sm:flex-1">
         {stat.related.map((p) => (
           <Link
             key={p.slug}
@@ -189,9 +187,9 @@ export function SkillsPage() {
           <p className="mb-2 text-xs text-fg-subtle">
             The patterns you’ve attempted but haven’t mastered yet — worth another pass.
           </p>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+          <div className="flex flex-col gap-2">
             {focusAreas.map((stat) => (
-              <PatternCard key={stat.pattern} stat={stat} />
+              <PatternRow key={stat.pattern} stat={stat} />
             ))}
           </div>
         </section>
@@ -202,9 +200,9 @@ export function SkillsPage() {
           <h2 className="text-sm font-semibold text-fg">All patterns</h2>
           <span className="text-xs text-fg-subtle">({coveredStats.length})</span>
         </div>
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="flex flex-col gap-2">
           {coveredStats.map((stat) => (
-            <PatternCard key={stat.pattern} stat={stat} />
+            <PatternRow key={stat.pattern} stat={stat} />
           ))}
         </div>
         {uncovered.length > 0 && (
@@ -213,6 +211,15 @@ export function SkillsPage() {
             {uncovered.map((s) => PATTERN_LABELS[s.pattern]).join(', ')}.
           </p>
         )}
+      </section>
+
+      <section className="mt-6">
+        <h2 className="mb-2 text-sm font-semibold text-fg">Method reference</h2>
+        <p className="mb-2 text-xs text-fg-subtle">
+          Common methods for a data structure in each language, with a check for the ones you’ve
+          already used in a past submission.
+        </p>
+        <MethodReference />
       </section>
     </div>
   )
