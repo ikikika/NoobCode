@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { AttemptRecord } from '../analysis/types'
-import { METHOD_REFERENCE, buildCorpus, isMethodUsed } from './methodReference'
+import { METHOD_REFERENCE, buildCorpus, isMethodUsed } from './methodCatalog'
 
 const dictGroup = METHOD_REFERENCE.python.find((g) => g.id === 'dict')!
 const items = dictGroup.methods.find((m) => m.name === '.items()')!

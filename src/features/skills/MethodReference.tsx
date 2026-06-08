@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { LANGUAGE_LABELS, type LanguageId } from '../../content/schema'
 import { useProgressStore } from '../../store/useProgressStore'
-import { METHOD_REFERENCE, buildCorpus, isMethodUsed } from './methodReference'
+import { METHOD_REFERENCE, buildCorpus, isMethodUsed } from './methodCatalog'
 
 const LANGUAGES: LanguageId[] = ['python', 'javascript', 'typescript']
 
