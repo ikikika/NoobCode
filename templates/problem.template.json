@@ -1,0 +1,77 @@
+{
+  "slug": "problem-template",
+  "title": "Problem Template",
+  "difficulty": "easy",
+  "tags": ["array"],
+  "patterns": ["brute-force"],
+  "description": "Copy this file to `src/content/problems/<slug>.json`, rename the `slug`\nto match the filename, and replace the contents. This sample sums an array.\n\nSee `docs/PROBLEM_JSON.md` for the field reference and\n`docs/SOLUTION_INSTRUCTIONS.md` for how to break a solution into steps.",
+  "constraints": ["0 <= nums.length <= 10^4"],
+  "examples": [{ "input": "nums = [1,2,3]", "output": "6" }],
+  "functionName": { "python": "sum_array", "javascript": "sumArray", "typescript": "sumArray" },
+  "starterCode": {
+    "python": "def sum_array(nums):\n    # Return the sum of all numbers.\n    pass\n",
+    "javascript": "function sumArray(nums) {\n  // Return the sum of all numbers.\n}\n",
+    "typescript": "function sumArray(nums: number[]): number {\n  // Return the sum of all numbers.\n  return 0;\n}\n"
+  },
+  "tests": [
+    { "name": "basic", "args": [[1, 2, 3]], "expected": 6 },
+    { "name": "empty", "args": [[]], "expected": 0, "hidden": true }
+  ],
+  "solutions": [
+    {
+      "approachName": "Accumulate",
+      "summary": "Add each number to a running total.",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "technique": {
+        "primaryPattern": "brute-force",
+        "optimal": true,
+        "signature": {
+          "maxLoopDepth": 1,
+          "usesHashStructure": false,
+          "usesSorting": false,
+          "usesRecursion": false,
+          "twoPointer": false
+        }
+      },
+      "steps": [
+        {
+          "title": "Start from the function shape",
+          "explanation": "Signature plus a default return.",
+          "code": {
+            "python": "def sum_array(nums):\n    return 0\n",
+            "javascript": "function sumArray(nums) {\n  return 0;\n}\n",
+            "typescript": "function sumArray(nums: number[]): number {\n  return 0;\n}\n"
+          }
+        },
+        {
+          "title": "Add a running total",
+          "explanation": "Hold the sum so far in a variable, and return it.",
+          "code": {
+            "python": "def sum_array(nums):\n    total = 0\n    return total\n",
+            "javascript": "function sumArray(nums) {\n  let total = 0;\n  return total;\n}\n",
+            "typescript": "function sumArray(nums: number[]): number {\n  let total = 0;\n  return total;\n}\n"
+          }
+        },
+        {
+          "title": "Loop over the numbers",
+          "explanation": "Visit each value in the array.",
+          "code": {
+            "python": "def sum_array(nums):\n    total = 0\n    for n in nums:\n        pass\n    return total\n",
+            "javascript": "function sumArray(nums) {\n  let total = 0;\n  for (const n of nums) {\n  }\n  return total;\n}\n",
+            "typescript": "function sumArray(nums: number[]): number {\n  let total = 0;\n  for (const n of nums) {\n  }\n  return total;\n}\n"
+          }
+        },
+        {
+          "title": "Accumulate each value",
+          "explanation": "Add the current number to the running total.",
+          "code": {
+            "python": "def sum_array(nums):\n    total = 0\n    for n in nums:\n        total += n\n    return total\n",
+            "javascript": "function sumArray(nums) {\n  let total = 0;\n  for (const n of nums) {\n    total += n;\n  }\n  return total;\n}\n",
+            "typescript": "function sumArray(nums: number[]): number {\n  let total = 0;\n  for (const n of nums) {\n    total += n;\n  }\n  return total;\n}\n"
+          }
+        }
+      ]
+    }
+  ]
+}

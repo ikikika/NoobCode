@@ -1,0 +1,171 @@
+{
+  "slug": "move-zeroes",
+  "title": "Move Zeroes",
+  "difficulty": "easy",
+  "tags": [
+    "array",
+    "two-pointers"
+  ],
+  "patterns": [
+    "two-pointers"
+  ],
+  "description": "Given an integer array `nums`, move all `0`s to the end while keeping the\nrelative order of the non-zero elements. Return the modified array.",
+  "constraints": [
+    "1 <= nums.length <= 10^4",
+    "-2^31 <= nums[i] <= 2^31 - 1"
+  ],
+  "examples": [
+    {
+      "input": "nums = [0,1,0,3,12]",
+      "output": "[1,3,12,0,0]"
+    },
+    {
+      "input": "nums = [0]",
+      "output": "[0]"
+    }
+  ],
+  "functionName": {
+    "python": "move_zeroes",
+    "javascript": "moveZeroes",
+    "typescript": "moveZeroes"
+  },
+  "starterCode": {
+    "python": "def move_zeroes(nums):\n    # Move zeroes to the end in place; return nums.\n    pass\n",
+    "javascript": "function moveZeroes(nums) {\n  // Move zeroes to the end in place; return nums.\n}\n",
+    "typescript": "function moveZeroes(nums: number[]): number[] {\n  // Move zeroes to the end in place; return nums.\n  return nums;\n}\n"
+  },
+  "tests": [
+    {
+      "name": "mixed",
+      "args": [
+        [
+          0,
+          1,
+          0,
+          3,
+          12
+        ]
+      ],
+      "expected": [
+        1,
+        3,
+        12,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "single zero",
+      "args": [
+        [
+          0
+        ]
+      ],
+      "expected": [
+        0
+      ]
+    },
+    {
+      "name": "one swap",
+      "args": [
+        [
+          1,
+          0
+        ]
+      ],
+      "expected": [
+        1,
+        0
+      ]
+    },
+    {
+      "name": "leading zeroes",
+      "args": [
+        [
+          0,
+          0,
+          1
+        ]
+      ],
+      "expected": [
+        1,
+        0,
+        0
+      ],
+      "hidden": true
+    },
+    {
+      "name": "no zeroes",
+      "args": [
+        [
+          1,
+          2,
+          3
+        ]
+      ],
+      "expected": [
+        1,
+        2,
+        3
+      ],
+      "hidden": true
+    }
+  ],
+  "solutions": [
+    {
+      "approachName": "Two Pointers (swap)",
+      "summary": "A write pointer collects non-zeros at the front; zeros fall to the back.",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "technique": {
+        "primaryPattern": "two-pointers",
+        "optimal": true,
+        "signature": {
+          "maxLoopDepth": 1,
+          "usesHashStructure": false,
+          "usesSorting": false,
+          "usesRecursion": false,
+          "twoPointer": true
+        }
+      },
+      "steps": [
+        {
+          "title": "Start from the function shape",
+          "explanation": "Begin with the signature, returning `nums` unchanged.",
+          "code": {
+            "python": "def move_zeroes(nums):\n    return nums\n",
+            "javascript": "function moveZeroes(nums) {\n  return nums;\n}\n",
+            "typescript": "function moveZeroes(nums: number[]): number[] {\n  return nums;\n}\n"
+          }
+        },
+        {
+          "title": "Add a write pointer",
+          "explanation": "`left` marks where the next non-zero value should go.",
+          "code": {
+            "python": "def move_zeroes(nums):\n    left = 0\n    return nums\n",
+            "javascript": "function moveZeroes(nums) {\n  let left = 0;\n  return nums;\n}\n",
+            "typescript": "function moveZeroes(nums: number[]): number[] {\n  let left = 0;\n  return nums;\n}\n"
+          }
+        },
+        {
+          "title": "Scan with a read pointer",
+          "explanation": "`right` walks across every element.",
+          "code": {
+            "python": "def move_zeroes(nums):\n    left = 0\n    for right in range(len(nums)):\n        pass\n    return nums\n",
+            "javascript": "function moveZeroes(nums) {\n  let left = 0;\n  for (let right = 0; right < nums.length; right++) {\n  }\n  return nums;\n}\n",
+            "typescript": "function moveZeroes(nums: number[]): number[] {\n  let left = 0;\n  for (let right = 0; right < nums.length; right++) {\n  }\n  return nums;\n}\n"
+          }
+        },
+        {
+          "title": "Swap non-zeros forward",
+          "explanation": "On a non-zero, swap it into the write slot and advance `left`.",
+          "code": {
+            "python": "def move_zeroes(nums):\n    left = 0\n    for right in range(len(nums)):\n        if nums[right] != 0:\n            nums[left], nums[right] = nums[right], nums[left]\n            left += 1\n    return nums\n",
+            "javascript": "function moveZeroes(nums) {\n  let left = 0;\n  for (let right = 0; right < nums.length; right++) {\n    if (nums[right] !== 0) {\n      const tmp = nums[left];\n      nums[left] = nums[right];\n      nums[right] = tmp;\n      left++;\n    }\n  }\n  return nums;\n}\n",
+            "typescript": "function moveZeroes(nums: number[]): number[] {\n  let left = 0;\n  for (let right = 0; right < nums.length; right++) {\n    if (nums[right] !== 0) {\n      const tmp = nums[left];\n      nums[left] = nums[right];\n      nums[right] = tmp;\n      left++;\n    }\n  }\n  return nums;\n}\n"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,195 @@
+{
+  "slug": "valid-anagram",
+  "title": "Valid Anagram",
+  "difficulty": "easy",
+  "tags": [
+    "string",
+    "hash-map",
+    "sorting"
+  ],
+  "patterns": [
+    "hash-map",
+    "sorting"
+  ],
+  "description": "Given two strings `s` and `t`, return `true` if `t` is an **anagram** of\n`s`, and `false` otherwise. An anagram uses all the original letters exactly\nonce.",
+  "constraints": [
+    "1 <= s.length, t.length <= 5 * 10^4",
+    "`s` and `t` consist of lowercase English letters."
+  ],
+  "examples": [
+    {
+      "input": "s = \"anagram\", t = \"nagaram\"",
+      "output": "true"
+    },
+    {
+      "input": "s = \"rat\", t = \"car\"",
+      "output": "false"
+    }
+  ],
+  "functionName": {
+    "python": "is_anagram",
+    "javascript": "isAnagram",
+    "typescript": "isAnagram"
+  },
+  "starterCode": {
+    "python": "def is_anagram(s, t):\n    # Return True if t is an anagram of s.\n    pass\n",
+    "javascript": "function isAnagram(s, t) {\n  // Return true if t is an anagram of s.\n}\n",
+    "typescript": "function isAnagram(s: string, t: string): boolean {\n  // Return true if t is an anagram of s.\n  return false;\n}\n"
+  },
+  "tests": [
+    {
+      "name": "anagram",
+      "args": [
+        "anagram",
+        "nagaram"
+      ],
+      "expected": true
+    },
+    {
+      "name": "not anagram",
+      "args": [
+        "rat",
+        "car"
+      ],
+      "expected": false
+    },
+    {
+      "name": "swapped",
+      "args": [
+        "ab",
+        "ba"
+      ],
+      "expected": true
+    },
+    {
+      "name": "different length",
+      "args": [
+        "a",
+        "ab"
+      ],
+      "expected": false,
+      "hidden": true
+    },
+    {
+      "name": "both empty",
+      "args": [
+        "",
+        ""
+      ],
+      "expected": true,
+      "hidden": true
+    }
+  ],
+  "solutions": [
+    {
+      "approachName": "Character Counts",
+      "summary": "Count letters in s, then cancel them out with t.",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "technique": {
+        "primaryPattern": "hash-map",
+        "optimal": true,
+        "signature": {
+          "maxLoopDepth": 1,
+          "usesHashStructure": true,
+          "usesSorting": false,
+          "usesRecursion": false,
+          "twoPointer": false
+        }
+      },
+      "steps": [
+        {
+          "title": "Start from the function shape",
+          "explanation": "Begin with the signature and a default `false` return.",
+          "code": {
+            "python": "def is_anagram(s, t):\n    return False\n",
+            "javascript": "function isAnagram(s, t) {\n  return false;\n}\n",
+            "typescript": "function isAnagram(s: string, t: string): boolean {\n  return false;\n}\n"
+          }
+        },
+        {
+          "title": "Reject mismatched lengths",
+          "explanation": "Two strings of different lengths can never be anagrams.",
+          "code": {
+            "python": "def is_anagram(s, t):\n    if len(s) != len(t):\n        return False\n    return True\n",
+            "javascript": "function isAnagram(s, t) {\n  if (s.length !== t.length) {\n    return false;\n  }\n  return true;\n}\n",
+            "typescript": "function isAnagram(s: string, t: string): boolean {\n  if (s.length !== t.length) {\n    return false;\n  }\n  return true;\n}\n"
+          }
+        },
+        {
+          "title": "Count letters in s",
+          "explanation": "Tally how many times each character appears in `s`.",
+          "code": {
+            "python": "def is_anagram(s, t):\n    if len(s) != len(t):\n        return False\n    counts = {}\n    for ch in s:\n        counts[ch] = counts.get(ch, 0) + 1\n    return True\n",
+            "javascript": "function isAnagram(s, t) {\n  if (s.length !== t.length) {\n    return false;\n  }\n  const counts = {};\n  for (const ch of s) {\n    counts[ch] = (counts[ch] || 0) + 1;\n  }\n  return true;\n}\n",
+            "typescript": "function isAnagram(s: string, t: string): boolean {\n  if (s.length !== t.length) {\n    return false;\n  }\n  const counts: Record<string, number> = {};\n  for (const ch of s) {\n    counts[ch] = (counts[ch] || 0) + 1;\n  }\n  return true;\n}\n"
+          }
+        },
+        {
+          "title": "Walk through t",
+          "explanation": "Look at each character of `t` to spend the tallies built from `s`.",
+          "code": {
+            "python": "def is_anagram(s, t):\n    if len(s) != len(t):\n        return False\n    counts = {}\n    for ch in s:\n        counts[ch] = counts.get(ch, 0) + 1\n    for ch in t:\n        pass\n    return True\n",
+            "javascript": "function isAnagram(s, t) {\n  if (s.length !== t.length) {\n    return false;\n  }\n  const counts = {};\n  for (const ch of s) {\n    counts[ch] = (counts[ch] || 0) + 1;\n  }\n  for (const ch of t) {\n  }\n  return true;\n}\n",
+            "typescript": "function isAnagram(s: string, t: string): boolean {\n  if (s.length !== t.length) {\n    return false;\n  }\n  const counts: Record<string, number> = {};\n  for (const ch of s) {\n    counts[ch] = (counts[ch] || 0) + 1;\n  }\n  for (const ch of t) {\n  }\n  return true;\n}\n"
+          }
+        },
+        {
+          "title": "Cancel out each letter",
+          "explanation": "If a letter is missing or already used up, `t` is not an anagram; otherwise decrement its count.",
+          "code": {
+            "python": "def is_anagram(s, t):\n    if len(s) != len(t):\n        return False\n    counts = {}\n    for ch in s:\n        counts[ch] = counts.get(ch, 0) + 1\n    for ch in t:\n        if counts.get(ch, 0) == 0:\n            return False\n        counts[ch] -= 1\n    return True\n",
+            "javascript": "function isAnagram(s, t) {\n  if (s.length !== t.length) {\n    return false;\n  }\n  const counts = {};\n  for (const ch of s) {\n    counts[ch] = (counts[ch] || 0) + 1;\n  }\n  for (const ch of t) {\n    if (!counts[ch]) {\n      return false;\n    }\n    counts[ch] -= 1;\n  }\n  return true;\n}\n",
+            "typescript": "function isAnagram(s: string, t: string): boolean {\n  if (s.length !== t.length) {\n    return false;\n  }\n  const counts: Record<string, number> = {};\n  for (const ch of s) {\n    counts[ch] = (counts[ch] || 0) + 1;\n  }\n  for (const ch of t) {\n    if (!counts[ch]) {\n      return false;\n    }\n    counts[ch] -= 1;\n  }\n  return true;\n}\n"
+          }
+        }
+      ]
+    },
+    {
+      "approachName": "Sort and Compare",
+      "summary": "Anagrams are equal once their letters are sorted.",
+      "timeComplexity": "O(n log n)",
+      "spaceComplexity": "O(n)",
+      "technique": {
+        "primaryPattern": "sorting",
+        "optimal": false,
+        "signature": {
+          "maxLoopDepth": 0,
+          "usesHashStructure": false,
+          "usesSorting": true,
+          "usesRecursion": false,
+          "twoPointer": false
+        }
+      },
+      "steps": [
+        {
+          "title": "Start from the function shape",
+          "explanation": "Begin with the signature and a default `false` return.",
+          "code": {
+            "python": "def is_anagram(s, t):\n    return False\n",
+            "javascript": "function isAnagram(s, t) {\n  return false;\n}\n",
+            "typescript": "function isAnagram(s: string, t: string): boolean {\n  return false;\n}\n"
+          }
+        },
+        {
+          "title": "Sort both strings",
+          "explanation": "Sorting the characters puts anagrams into the same order.",
+          "code": {
+            "python": "def is_anagram(s, t):\n    sorted_s = sorted(s)\n    sorted_t = sorted(t)\n    return False\n",
+            "javascript": "function isAnagram(s, t) {\n  const sortedS = [...s].sort().join('');\n  const sortedT = [...t].sort().join('');\n  return false;\n}\n",
+            "typescript": "function isAnagram(s: string, t: string): boolean {\n  const sortedS = [...s].sort().join('');\n  const sortedT = [...t].sort().join('');\n  return false;\n}\n"
+          }
+        },
+        {
+          "title": "Compare the sorted forms",
+          "explanation": "If the sorted characters match, the strings are anagrams.",
+          "code": {
+            "python": "def is_anagram(s, t):\n    sorted_s = sorted(s)\n    sorted_t = sorted(t)\n    return sorted_s == sorted_t\n",
+            "javascript": "function isAnagram(s, t) {\n  const sortedS = [...s].sort().join('');\n  const sortedT = [...t].sort().join('');\n  return sortedS === sortedT;\n}\n",
+            "typescript": "function isAnagram(s: string, t: string): boolean {\n  const sortedS = [...s].sort().join('');\n  const sortedT = [...t].sort().join('');\n  return sortedS === sortedT;\n}\n"
+          }
+        }
+      ]
+    }
+  ]
+}

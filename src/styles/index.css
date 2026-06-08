@@ -1,0 +1,111 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+
+/* Dark is the default theme; .dark class is applied by the FOUC script. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Classic LeetCode palette — signature orange accent (#ffa116), neutral grays,
+   and the iconic Easy/Medium/Hard difficulty colors. */
+
+/* Light palette */
+:root {
+  --color-surface: #ffffff;
+  --color-surface-raised: #fafafa;
+  --color-surface-sunken: #f0f1f4;
+  --color-fg: #262626;
+  --color-fg-muted: #5c5f66;
+  --color-fg-subtle: #9aa0a6;
+  --color-line: #e2e4e8;
+  --color-accent: #ffa116;
+  --color-accent-hover: #e8900c;
+  --color-accent-contrast: #1a1a1a;
+  --color-diff-added: #2c9b5b;
+  --color-diff-added-surface: #e4f5ec;
+  --color-diff-removed: #d62f3f;
+  --color-diff-removed-surface: #fde7ea;
+  --color-pass: #2c9b5b;
+  --color-pass-surface: #e4f5ec;
+  --color-fail: #d62f3f;
+  --color-fail-surface: #fde7ea;
+  --color-easy: #00a392;
+  --color-easy-surface: #e1f4f1;
+  --color-medium: #bf8700;
+  --color-medium-surface: #faf0d2;
+  --color-hard: #e0344a;
+  --color-hard-surface: #fce4e8;
+}
+
+/* Dark palette */
+.dark {
+  --color-surface: #1a1a1a;
+  --color-surface-raised: #282828;
+  --color-surface-sunken: #0f0f0f;
+  --color-fg: #eff1f6;
+  --color-fg-muted: #b3b3b3;
+  --color-fg-subtle: #808080;
+  --color-line: #3e3e3e;
+  --color-accent: #ffa116;
+  --color-accent-hover: #ffb13d;
+  --color-accent-contrast: #1a1a1a;
+  --color-diff-added: #3fb950;
+  --color-diff-added-surface: #122b18;
+  --color-diff-removed: #f85149;
+  --color-diff-removed-surface: #2a1214;
+  --color-pass: #3fb950;
+  --color-pass-surface: #122b18;
+  --color-fail: #f85149;
+  --color-fail-surface: #2a1214;
+  --color-easy: #00b8a3;
+  --color-easy-surface: #11302c;
+  --color-medium: #ffc01e;
+  --color-medium-surface: #332a0f;
+  --color-hard: #ff4d6a;
+  --color-hard-surface: #331a1f;
+}
+
+/* Map CSS variables to Tailwind color utilities (text-fg, bg-surface, etc.) */
+@theme inline {
+  --color-surface: var(--color-surface);
+  --color-surface-raised: var(--color-surface-raised);
+  --color-surface-sunken: var(--color-surface-sunken);
+  --color-fg: var(--color-fg);
+  --color-fg-muted: var(--color-fg-muted);
+  --color-fg-subtle: var(--color-fg-subtle);
+  --color-line: var(--color-line);
+  --color-accent: var(--color-accent);
+  --color-accent-hover: var(--color-accent-hover);
+  --color-accent-contrast: var(--color-accent-contrast);
+  --color-diff-added: var(--color-diff-added);
+  --color-diff-added-surface: var(--color-diff-added-surface);
+  --color-diff-removed: var(--color-diff-removed);
+  --color-diff-removed-surface: var(--color-diff-removed-surface);
+  --color-pass: var(--color-pass);
+  --color-pass-surface: var(--color-pass-surface);
+  --color-fail: var(--color-fail);
+  --color-fail-surface: var(--color-fail-surface);
+  --color-easy: var(--color-easy);
+  --color-easy-surface: var(--color-easy-surface);
+  --color-medium: var(--color-medium);
+  --color-medium-surface: var(--color-medium-surface);
+  --color-hard: var(--color-hard);
+  --color-hard-surface: var(--color-hard-surface);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-surface);
+  color: var(--color-fg);
+  font-family:
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+}

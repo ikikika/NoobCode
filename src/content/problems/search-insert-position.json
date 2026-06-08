@@ -1,0 +1,216 @@
+{
+  "slug": "search-insert-position",
+  "title": "Search Insert Position",
+  "difficulty": "easy",
+  "tags": [
+    "array",
+    "binary-search"
+  ],
+  "patterns": [
+    "binary-search"
+  ],
+  "description": "Given a sorted array of distinct integers `nums` and a `target`, return the\nindex if the target is found. If not, return the index where it would be\ninserted to keep the array sorted. Aim for `O(log n)`.",
+  "constraints": [
+    "1 <= nums.length <= 10^4",
+    "`nums` is sorted in ascending order.",
+    "-10^4 <= nums[i], target <= 10^4"
+  ],
+  "examples": [
+    {
+      "input": "nums = [1,3,5,6], target = 5",
+      "output": "2"
+    },
+    {
+      "input": "nums = [1,3,5,6], target = 2",
+      "output": "1"
+    }
+  ],
+  "functionName": {
+    "python": "search_insert",
+    "javascript": "searchInsert",
+    "typescript": "searchInsert"
+  },
+  "starterCode": {
+    "python": "def search_insert(nums, target):\n    # Return the index of target, or where it would be inserted.\n    pass\n",
+    "javascript": "function searchInsert(nums, target) {\n  // Return the index of target, or where it would be inserted.\n}\n",
+    "typescript": "function searchInsert(nums: number[], target: number): number {\n  // Return the index of target, or where it would be inserted.\n  return 0;\n}\n"
+  },
+  "tests": [
+    {
+      "name": "found",
+      "args": [
+        [
+          1,
+          3,
+          5,
+          6
+        ],
+        5
+      ],
+      "expected": 2
+    },
+    {
+      "name": "insert middle",
+      "args": [
+        [
+          1,
+          3,
+          5,
+          6
+        ],
+        2
+      ],
+      "expected": 1
+    },
+    {
+      "name": "insert end",
+      "args": [
+        [
+          1,
+          3,
+          5,
+          6
+        ],
+        7
+      ],
+      "expected": 4
+    },
+    {
+      "name": "insert front",
+      "args": [
+        [
+          1,
+          3,
+          5,
+          6
+        ],
+        0
+      ],
+      "expected": 0,
+      "hidden": true
+    },
+    {
+      "name": "single",
+      "args": [
+        [
+          1
+        ],
+        0
+      ],
+      "expected": 0,
+      "hidden": true
+    }
+  ],
+  "solutions": [
+    {
+      "approachName": "Binary Search",
+      "summary": "Binary search; the failed search converges on the insertion point.",
+      "timeComplexity": "O(log n)",
+      "spaceComplexity": "O(1)",
+      "technique": {
+        "primaryPattern": "binary-search",
+        "optimal": true,
+        "signature": {
+          "maxLoopDepth": 1,
+          "usesHashStructure": false,
+          "usesSorting": false,
+          "usesRecursion": false,
+          "twoPointer": false
+        }
+      },
+      "steps": [
+        {
+          "title": "Start from the function shape",
+          "explanation": "Begin with the signature and a default `0` return.",
+          "code": {
+            "python": "def search_insert(nums, target):\n    return 0\n",
+            "javascript": "function searchInsert(nums, target) {\n  return 0;\n}\n",
+            "typescript": "function searchInsert(nums: number[], target: number): number {\n  return 0;\n}\n"
+          }
+        },
+        {
+          "title": "Bound the search range",
+          "explanation": "`left`/`right` enclose the range; `left` is also the eventual insert point.",
+          "code": {
+            "python": "def search_insert(nums, target):\n    left = 0\n    right = len(nums) - 1\n    return left\n",
+            "javascript": "function searchInsert(nums, target) {\n  let left = 0;\n  let right = nums.length - 1;\n  return left;\n}\n",
+            "typescript": "function searchInsert(nums: number[], target: number): number {\n  let left = 0;\n  let right = nums.length - 1;\n  return left;\n}\n"
+          }
+        },
+        {
+          "title": "Loop while the range is valid",
+          "explanation": "Inspect the middle of the current range each step.",
+          "code": {
+            "python": "def search_insert(nums, target):\n    left = 0\n    right = len(nums) - 1\n    while left <= right:\n        mid = (left + right) // 2\n    return left\n",
+            "javascript": "function searchInsert(nums, target) {\n  let left = 0;\n  let right = nums.length - 1;\n  while (left <= right) {\n    const mid = Math.floor((left + right) / 2);\n  }\n  return left;\n}\n",
+            "typescript": "function searchInsert(nums: number[], target: number): number {\n  let left = 0;\n  let right = nums.length - 1;\n  while (left <= right) {\n    const mid = Math.floor((left + right) / 2);\n  }\n  return left;\n}\n"
+          }
+        },
+        {
+          "title": "Return on an exact hit",
+          "explanation": "If the middle equals the target, that index is the answer.",
+          "code": {
+            "python": "def search_insert(nums, target):\n    left = 0\n    right = len(nums) - 1\n    while left <= right:\n        mid = (left + right) // 2\n        if nums[mid] == target:\n            return mid\n    return left\n",
+            "javascript": "function searchInsert(nums, target) {\n  let left = 0;\n  let right = nums.length - 1;\n  while (left <= right) {\n    const mid = Math.floor((left + right) / 2);\n    if (nums[mid] === target) {\n      return mid;\n    }\n  }\n  return left;\n}\n",
+            "typescript": "function searchInsert(nums: number[], target: number): number {\n  let left = 0;\n  let right = nums.length - 1;\n  while (left <= right) {\n    const mid = Math.floor((left + right) / 2);\n    if (nums[mid] === target) {\n      return mid;\n    }\n  }\n  return left;\n}\n"
+          }
+        },
+        {
+          "title": "Move past smaller values",
+          "explanation": "If the middle is below the target, search the right half.",
+          "code": {
+            "python": "def search_insert(nums, target):\n    left = 0\n    right = len(nums) - 1\n    while left <= right:\n        mid = (left + right) // 2\n        if nums[mid] == target:\n            return mid\n        elif nums[mid] < target:\n            left = mid + 1\n    return left\n",
+            "javascript": "function searchInsert(nums, target) {\n  let left = 0;\n  let right = nums.length - 1;\n  while (left <= right) {\n    const mid = Math.floor((left + right) / 2);\n    if (nums[mid] === target) {\n      return mid;\n    } else if (nums[mid] < target) {\n      left = mid + 1;\n    }\n  }\n  return left;\n}\n",
+            "typescript": "function searchInsert(nums: number[], target: number): number {\n  let left = 0;\n  let right = nums.length - 1;\n  while (left <= right) {\n    const mid = Math.floor((left + right) / 2);\n    if (nums[mid] === target) {\n      return mid;\n    } else if (nums[mid] < target) {\n      left = mid + 1;\n    }\n  }\n  return left;\n}\n"
+          }
+        },
+        {
+          "title": "Discard larger values",
+          "explanation": "Otherwise search the left half. When the loop ends, `left` is the insert point.",
+          "code": {
+            "python": "def search_insert(nums, target):\n    left = 0\n    right = len(nums) - 1\n    while left <= right:\n        mid = (left + right) // 2\n        if nums[mid] == target:\n            return mid\n        elif nums[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return left\n",
+            "javascript": "function searchInsert(nums, target) {\n  let left = 0;\n  let right = nums.length - 1;\n  while (left <= right) {\n    const mid = Math.floor((left + right) / 2);\n    if (nums[mid] === target) {\n      return mid;\n    } else if (nums[mid] < target) {\n      left = mid + 1;\n    } else {\n      right = mid - 1;\n    }\n  }\n  return left;\n}\n",
+            "typescript": "function searchInsert(nums: number[], target: number): number {\n  let left = 0;\n  let right = nums.length - 1;\n  while (left <= right) {\n    const mid = Math.floor((left + right) / 2);\n    if (nums[mid] === target) {\n      return mid;\n    } else if (nums[mid] < target) {\n      left = mid + 1;\n    } else {\n      right = mid - 1;\n    }\n  }\n  return left;\n}\n"
+          }
+        }
+      ]
+    },
+    {
+      "approachName": "Linear Scan",
+      "summary": "Return the first index whose value is at least the target.",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "technique": {
+        "primaryPattern": "brute-force",
+        "optimal": false,
+        "signature": {
+          "maxLoopDepth": 1,
+          "usesHashStructure": false,
+          "usesSorting": false,
+          "usesRecursion": false,
+          "twoPointer": false
+        }
+      },
+      "steps": [
+        {
+          "title": "Start from the function shape",
+          "explanation": "Begin with the signature and a default `0` return.",
+          "code": {
+            "python": "def search_insert(nums, target):\n    return 0\n",
+            "javascript": "function searchInsert(nums, target) {\n  return 0;\n}\n",
+            "typescript": "function searchInsert(nums: number[], target: number): number {\n  return 0;\n}\n"
+          }
+        },
+        {
+          "title": "Scan for the first big-enough value",
+          "explanation": "The first index with `nums[i] >= target` is where it belongs.",
+          "code": {
+            "python": "def search_insert(nums, target):\n    for i in range(len(nums)):\n        if nums[i] >= target:\n            return i\n    return len(nums)\n",
+            "javascript": "function searchInsert(nums, target) {\n  for (let i = 0; i < nums.length; i++) {\n    if (nums[i] >= target) {\n      return i;\n    }\n  }\n  return nums.length;\n}\n",
+            "typescript": "function searchInsert(nums: number[], target: number): number {\n  for (let i = 0; i < nums.length; i++) {\n    if (nums[i] >= target) {\n      return i;\n    }\n  }\n  return nums.length;\n}\n"
+          }
+        }
+      ]
+    }
+  ]
+}

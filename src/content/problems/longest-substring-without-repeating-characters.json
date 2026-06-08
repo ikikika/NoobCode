@@ -1,0 +1,217 @@
+{
+  "slug": "longest-substring-without-repeating-characters",
+  "title": "Longest Substring Without Repeating Characters",
+  "difficulty": "medium",
+  "tags": [
+    "string",
+    "sliding-window",
+    "hash-map"
+  ],
+  "patterns": [
+    "sliding-window",
+    "hash-map"
+  ],
+  "description": "Given a string `s`, find the length of the longest substring that contains no\nrepeating characters.",
+  "constraints": [
+    "0 <= s.length <= 5 * 10^4",
+    "`s` consists of English letters, digits, symbols and spaces."
+  ],
+  "examples": [
+    {
+      "input": "s = \"abcabcbb\"",
+      "output": "3",
+      "explanation": "The answer is \"abc\"."
+    },
+    {
+      "input": "s = \"bbbbb\"",
+      "output": "1"
+    }
+  ],
+  "functionName": {
+    "python": "length_of_longest_substring",
+    "javascript": "lengthOfLongestSubstring",
+    "typescript": "lengthOfLongestSubstring"
+  },
+  "starterCode": {
+    "python": "def length_of_longest_substring(s):\n    # Return the length of the longest substring with all distinct characters.\n    pass\n",
+    "javascript": "function lengthOfLongestSubstring(s) {\n  // Return the length of the longest substring with all distinct characters.\n}\n",
+    "typescript": "function lengthOfLongestSubstring(s: string): number {\n  // Return the length of the longest substring with all distinct characters.\n  return 0;\n}\n"
+  },
+  "tests": [
+    {
+      "name": "abcabcbb",
+      "args": [
+        "abcabcbb"
+      ],
+      "expected": 3
+    },
+    {
+      "name": "all same",
+      "args": [
+        "bbbbb"
+      ],
+      "expected": 1
+    },
+    {
+      "name": "pwwkew",
+      "args": [
+        "pwwkew"
+      ],
+      "expected": 3
+    },
+    {
+      "name": "empty",
+      "args": [
+        ""
+      ],
+      "expected": 0,
+      "hidden": true
+    },
+    {
+      "name": "two distinct",
+      "args": [
+        "au"
+      ],
+      "expected": 2,
+      "hidden": true
+    },
+    {
+      "name": "tricky reset",
+      "args": [
+        "dvdf"
+      ],
+      "expected": 3,
+      "hidden": true
+    }
+  ],
+  "solutions": [
+    {
+      "approachName": "Sliding Window",
+      "summary": "Grow a window, jumping the left edge past any repeat.",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "technique": {
+        "primaryPattern": "sliding-window",
+        "optimal": true,
+        "signature": {
+          "maxLoopDepth": 1,
+          "usesHashStructure": true,
+          "usesSorting": false,
+          "usesRecursion": false,
+          "twoPointer": true
+        }
+      },
+      "steps": [
+        {
+          "title": "Start from the function shape",
+          "explanation": "Begin with the signature and a default `0` return.",
+          "code": {
+            "python": "def length_of_longest_substring(s):\n    return 0\n",
+            "javascript": "function lengthOfLongestSubstring(s) {\n  return 0;\n}\n",
+            "typescript": "function lengthOfLongestSubstring(s: string): number {\n  return 0;\n}\n"
+          }
+        },
+        {
+          "title": "Track last-seen index, window start, and best",
+          "explanation": "`seen` maps a character to its latest index; `left` is the window start.",
+          "code": {
+            "python": "def length_of_longest_substring(s):\n    seen = {}\n    left = 0\n    best = 0\n    return best\n",
+            "javascript": "function lengthOfLongestSubstring(s) {\n  const seen = {};\n  let left = 0;\n  let best = 0;\n  return best;\n}\n",
+            "typescript": "function lengthOfLongestSubstring(s: string): number {\n  const seen: Record<string, number> = {};\n  let left = 0;\n  let best = 0;\n  return best;\n}\n"
+          }
+        },
+        {
+          "title": "Expand the window to the right",
+          "explanation": "Move the right edge across the string one character at a time.",
+          "code": {
+            "python": "def length_of_longest_substring(s):\n    seen = {}\n    left = 0\n    best = 0\n    for right in range(len(s)):\n        pass\n    return best\n",
+            "javascript": "function lengthOfLongestSubstring(s) {\n  const seen = {};\n  let left = 0;\n  let best = 0;\n  for (let right = 0; right < s.length; right++) {\n  }\n  return best;\n}\n",
+            "typescript": "function lengthOfLongestSubstring(s: string): number {\n  const seen: Record<string, number> = {};\n  let left = 0;\n  let best = 0;\n  for (let right = 0; right < s.length; right++) {\n  }\n  return best;\n}\n"
+          }
+        },
+        {
+          "title": "Jump the left edge past a repeat",
+          "explanation": "If the current character was seen inside the window, move `left` just past it.",
+          "code": {
+            "python": "def length_of_longest_substring(s):\n    seen = {}\n    left = 0\n    best = 0\n    for right in range(len(s)):\n        ch = s[right]\n        if ch in seen and seen[ch] >= left:\n            left = seen[ch] + 1\n    return best\n",
+            "javascript": "function lengthOfLongestSubstring(s) {\n  const seen = {};\n  let left = 0;\n  let best = 0;\n  for (let right = 0; right < s.length; right++) {\n    const ch = s[right];\n    if (seen[ch] !== undefined && seen[ch] >= left) {\n      left = seen[ch] + 1;\n    }\n  }\n  return best;\n}\n",
+            "typescript": "function lengthOfLongestSubstring(s: string): number {\n  const seen: Record<string, number> = {};\n  let left = 0;\n  let best = 0;\n  for (let right = 0; right < s.length; right++) {\n    const ch = s[right];\n    if (seen[ch] !== undefined && seen[ch] >= left) {\n      left = seen[ch] + 1;\n    }\n  }\n  return best;\n}\n"
+          }
+        },
+        {
+          "title": "Record the character and update best",
+          "explanation": "Store this character’s index and keep the largest window width seen.",
+          "code": {
+            "python": "def length_of_longest_substring(s):\n    seen = {}\n    left = 0\n    best = 0\n    for right in range(len(s)):\n        ch = s[right]\n        if ch in seen and seen[ch] >= left:\n            left = seen[ch] + 1\n        seen[ch] = right\n        best = max(best, right - left + 1)\n    return best\n",
+            "javascript": "function lengthOfLongestSubstring(s) {\n  const seen = {};\n  let left = 0;\n  let best = 0;\n  for (let right = 0; right < s.length; right++) {\n    const ch = s[right];\n    if (seen[ch] !== undefined && seen[ch] >= left) {\n      left = seen[ch] + 1;\n    }\n    seen[ch] = right;\n    best = Math.max(best, right - left + 1);\n  }\n  return best;\n}\n",
+            "typescript": "function lengthOfLongestSubstring(s: string): number {\n  const seen: Record<string, number> = {};\n  let left = 0;\n  let best = 0;\n  for (let right = 0; right < s.length; right++) {\n    const ch = s[right];\n    if (seen[ch] !== undefined && seen[ch] >= left) {\n      left = seen[ch] + 1;\n    }\n    seen[ch] = right;\n    best = Math.max(best, right - left + 1);\n  }\n  return best;\n}\n"
+          }
+        }
+      ]
+    },
+    {
+      "approachName": "Brute Force (every start)",
+      "summary": "From each start, extend until a repeat appears.",
+      "timeComplexity": "O(n^2)",
+      "spaceComplexity": "O(n)",
+      "technique": {
+        "primaryPattern": "brute-force",
+        "optimal": false,
+        "signature": {
+          "maxLoopDepth": 2,
+          "usesHashStructure": true,
+          "usesSorting": false,
+          "usesRecursion": false,
+          "twoPointer": false
+        }
+      },
+      "steps": [
+        {
+          "title": "Start from the function shape",
+          "explanation": "Begin with the signature and a default `0` return.",
+          "code": {
+            "python": "def length_of_longest_substring(s):\n    return 0\n",
+            "javascript": "function lengthOfLongestSubstring(s) {\n  return 0;\n}\n",
+            "typescript": "function lengthOfLongestSubstring(s: string): number {\n  return 0;\n}\n"
+          }
+        },
+        {
+          "title": "Track the best length",
+          "explanation": "Hold the longest distinct run found so far.",
+          "code": {
+            "python": "def length_of_longest_substring(s):\n    best = 0\n    return best\n",
+            "javascript": "function lengthOfLongestSubstring(s) {\n  let best = 0;\n  return best;\n}\n",
+            "typescript": "function lengthOfLongestSubstring(s: string): number {\n  let best = 0;\n  return best;\n}\n"
+          }
+        },
+        {
+          "title": "Pick each start with a fresh set",
+          "explanation": "For every start index, remember the characters seen since.",
+          "code": {
+            "python": "def length_of_longest_substring(s):\n    best = 0\n    for i in range(len(s)):\n        seen = set()\n    return best\n",
+            "javascript": "function lengthOfLongestSubstring(s) {\n  let best = 0;\n  for (let i = 0; i < s.length; i++) {\n    const seen = new Set();\n  }\n  return best;\n}\n",
+            "typescript": "function lengthOfLongestSubstring(s: string): number {\n  let best = 0;\n  for (let i = 0; i < s.length; i++) {\n    const seen = new Set<string>();\n  }\n  return best;\n}\n"
+          }
+        },
+        {
+          "title": "Extend until a repeat",
+          "explanation": "Grow to the right and stop as soon as a character repeats.",
+          "code": {
+            "python": "def length_of_longest_substring(s):\n    best = 0\n    for i in range(len(s)):\n        seen = set()\n        for j in range(i, len(s)):\n            if s[j] in seen:\n                break\n    return best\n",
+            "javascript": "function lengthOfLongestSubstring(s) {\n  let best = 0;\n  for (let i = 0; i < s.length; i++) {\n    const seen = new Set();\n    for (let j = i; j < s.length; j++) {\n      if (seen.has(s[j])) {\n        break;\n      }\n    }\n  }\n  return best;\n}\n",
+            "typescript": "function lengthOfLongestSubstring(s: string): number {\n  let best = 0;\n  for (let i = 0; i < s.length; i++) {\n    const seen = new Set<string>();\n    for (let j = i; j < s.length; j++) {\n      if (seen.has(s[j])) {\n        break;\n      }\n    }\n  }\n  return best;\n}\n"
+          }
+        },
+        {
+          "title": "Record the character and best length",
+          "explanation": "Add the character and update the best run for this start.",
+          "code": {
+            "python": "def length_of_longest_substring(s):\n    best = 0\n    for i in range(len(s)):\n        seen = set()\n        for j in range(i, len(s)):\n            if s[j] in seen:\n                break\n            seen.add(s[j])\n            best = max(best, j - i + 1)\n    return best\n",
+            "javascript": "function lengthOfLongestSubstring(s) {\n  let best = 0;\n  for (let i = 0; i < s.length; i++) {\n    const seen = new Set();\n    for (let j = i; j < s.length; j++) {\n      if (seen.has(s[j])) {\n        break;\n      }\n      seen.add(s[j]);\n      best = Math.max(best, j - i + 1);\n    }\n  }\n  return best;\n}\n",
+            "typescript": "function lengthOfLongestSubstring(s: string): number {\n  let best = 0;\n  for (let i = 0; i < s.length; i++) {\n    const seen = new Set<string>();\n    for (let j = i; j < s.length; j++) {\n      if (seen.has(s[j])) {\n        break;\n      }\n      seen.add(s[j]);\n      best = Math.max(best, j - i + 1);\n    }\n  }\n  return best;\n}\n"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,180 @@
+{
+  "slug": "reverse-string",
+  "title": "Reverse String",
+  "difficulty": "easy",
+  "tags": [
+    "string",
+    "two-pointers"
+  ],
+  "patterns": [
+    "two-pointers",
+    "brute-force"
+  ],
+  "description": "Given a string `s`, return the string reversed. Try to do it by swapping\ncharacters from both ends toward the middle.",
+  "constraints": [
+    "0 <= s.length <= 10^5"
+  ],
+  "examples": [
+    {
+      "input": "s = \"hello\"",
+      "output": "\"olleh\""
+    },
+    {
+      "input": "s = \"abcd\"",
+      "output": "\"dcba\""
+    }
+  ],
+  "functionName": {
+    "python": "reverse_string",
+    "javascript": "reverseString",
+    "typescript": "reverseString"
+  },
+  "starterCode": {
+    "python": "def reverse_string(s):\n    # Return s reversed.\n    pass\n",
+    "javascript": "function reverseString(s) {\n  // Return s reversed.\n}\n",
+    "typescript": "function reverseString(s: string): string {\n  // Return s reversed.\n  return \"\";\n}\n"
+  },
+  "tests": [
+    {
+      "name": "word",
+      "args": [
+        "hello"
+      ],
+      "expected": "olleh"
+    },
+    {
+      "name": "even length",
+      "args": [
+        "abcd"
+      ],
+      "expected": "dcba"
+    },
+    {
+      "name": "single char",
+      "args": [
+        "a"
+      ],
+      "expected": "a",
+      "hidden": true
+    },
+    {
+      "name": "empty",
+      "args": [
+        ""
+      ],
+      "expected": "",
+      "hidden": true
+    },
+    {
+      "name": "palindrome",
+      "args": [
+        "racecar"
+      ],
+      "expected": "racecar",
+      "hidden": true
+    }
+  ],
+  "solutions": [
+    {
+      "approachName": "Two Pointers",
+      "summary": "Swap the outermost characters and move inward.",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "technique": {
+        "primaryPattern": "two-pointers",
+        "optimal": true,
+        "signature": {
+          "maxLoopDepth": 1,
+          "usesHashStructure": false,
+          "usesSorting": false,
+          "usesRecursion": false,
+          "twoPointer": true
+        }
+      },
+      "steps": [
+        {
+          "title": "Start from the function shape",
+          "explanation": "Begin with the signature and a default empty string.",
+          "code": {
+            "python": "def reverse_string(s):\n    return \"\"\n",
+            "javascript": "function reverseString(s) {\n  return \"\";\n}\n",
+            "typescript": "function reverseString(s: string): string {\n  return \"\";\n}\n"
+          }
+        },
+        {
+          "title": "Work on a list of characters",
+          "explanation": "Strings are immutable, so swap inside a character list and join at the end.",
+          "code": {
+            "python": "def reverse_string(s):\n    chars = list(s)\n    return \"\".join(chars)\n",
+            "javascript": "function reverseString(s) {\n  const chars = [...s];\n  return chars.join('');\n}\n",
+            "typescript": "function reverseString(s: string): string {\n  const chars = [...s];\n  return chars.join('');\n}\n"
+          }
+        },
+        {
+          "title": "Place a pointer at each end",
+          "explanation": "`left` starts at the front, `right` at the back.",
+          "code": {
+            "python": "def reverse_string(s):\n    chars = list(s)\n    left = 0\n    right = len(chars) - 1\n    return \"\".join(chars)\n",
+            "javascript": "function reverseString(s) {\n  const chars = [...s];\n  let left = 0;\n  let right = chars.length - 1;\n  return chars.join('');\n}\n",
+            "typescript": "function reverseString(s: string): string {\n  const chars = [...s];\n  let left = 0;\n  let right = chars.length - 1;\n  return chars.join('');\n}\n"
+          }
+        },
+        {
+          "title": "Swap inward until they meet",
+          "explanation": "Exchange the two characters, then step both pointers toward the middle.",
+          "code": {
+            "python": "def reverse_string(s):\n    chars = list(s)\n    left = 0\n    right = len(chars) - 1\n    while left < right:\n        chars[left], chars[right] = chars[right], chars[left]\n        left += 1\n        right -= 1\n    return \"\".join(chars)\n",
+            "javascript": "function reverseString(s) {\n  const chars = [...s];\n  let left = 0;\n  let right = chars.length - 1;\n  while (left < right) {\n    const tmp = chars[left];\n    chars[left] = chars[right];\n    chars[right] = tmp;\n    left++;\n    right--;\n  }\n  return chars.join('');\n}\n",
+            "typescript": "function reverseString(s: string): string {\n  const chars = [...s];\n  let left = 0;\n  let right = chars.length - 1;\n  while (left < right) {\n    const tmp = chars[left];\n    chars[left] = chars[right];\n    chars[right] = tmp;\n    left++;\n    right--;\n  }\n  return chars.join('');\n}\n"
+          }
+        }
+      ]
+    },
+    {
+      "approachName": "Built-in Reverse",
+      "summary": "Use the language’s reverse for a one-liner.",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "technique": {
+        "primaryPattern": "brute-force",
+        "optimal": false,
+        "signature": {
+          "maxLoopDepth": 0,
+          "usesHashStructure": false,
+          "usesSorting": false,
+          "usesRecursion": false,
+          "twoPointer": false
+        }
+      },
+      "steps": [
+        {
+          "title": "Start from the function shape",
+          "explanation": "Begin with the signature and a default empty string.",
+          "code": {
+            "python": "def reverse_string(s):\n    return \"\"\n",
+            "javascript": "function reverseString(s) {\n  return \"\";\n}\n",
+            "typescript": "function reverseString(s: string): string {\n  return \"\";\n}\n"
+          }
+        },
+        {
+          "title": "Split into characters",
+          "explanation": "Get the characters so we can reverse them.",
+          "code": {
+            "python": "def reverse_string(s):\n    chars = list(s)\n    return \"\"\n",
+            "javascript": "function reverseString(s) {\n  const chars = [...s];\n  return \"\";\n}\n",
+            "typescript": "function reverseString(s: string): string {\n  const chars = [...s];\n  return \"\";\n}\n"
+          }
+        },
+        {
+          "title": "Reverse and join",
+          "explanation": "Reverse the characters in place and rejoin into a string.",
+          "code": {
+            "python": "def reverse_string(s):\n    chars = list(s)\n    chars.reverse()\n    return \"\".join(chars)\n",
+            "javascript": "function reverseString(s) {\n  const chars = [...s];\n  chars.reverse();\n  return chars.join('');\n}\n",
+            "typescript": "function reverseString(s: string): string {\n  const chars = [...s];\n  chars.reverse();\n  return chars.join('');\n}\n"
+          }
+        }
+      ]
+    }
+  ]
+}
