@@ -19,36 +19,73 @@ const MASTERY_STYLES: Record<MasteryLevel, string> = {
   mastered: 'bg-pass-surface text-pass',
 }
 
+const MASTERY_DOT: Record<MasteryLevel, string> = {
+  unseen: 'bg-fg-subtle/40',
+  weak: 'bg-fail',
+  learning: 'bg-amber-500',
+  mastered: 'bg-pass',
+}
+
+interface RelatedProblem {
+  slug: string
+  title: string
+  solved: boolean
+}
+
 interface PatternStat {
   pattern: PatternId
   mastery: MasteryLevel
   solved: number
   total: number
   attempted: boolean
-  related: { slug: string; title: string }[]
+  related: RelatedProblem[]
+}
+
+function ProgressBar({ value, max, tone }: { value: number; max: number; tone: string }) {
+  const pct = max === 0 ? 0 : Math.round((value / max) * 100)
+  return (
+    <div className="h-1.5 w-full overflow-hidden rounded-full bg-surface-sunken">
+      <div className={`h-full rounded-full ${tone} transition-[width]`} style={{ width: `${pct}%` }} />
+    </div>
+  )
 }
 
 function PatternCard({ stat }: { stat: PatternStat }) {
+  const pct = stat.total === 0 ? 0 : Math.round((stat.solved / stat.total) * 100)
   return (
-    <div className="flex flex-col gap-2 rounded-lg border border-line bg-surface-raised p-3">
+    <div className="flex flex-col gap-2.5 rounded-lg border border-line bg-surface-raised p-3">
       <div className="flex items-center justify-between gap-2">
-        <span className="text-sm font-semibold text-fg">{PATTERN_LABELS[stat.pattern]}</span>
+        <span className="flex items-center gap-2 text-sm font-semibold text-fg">
+          <span className={`h-2 w-2 shrink-0 rounded-full ${MASTERY_DOT[stat.mastery]}`} />
+          {PATTERN_LABELS[stat.pattern]}
+        </span>
         <span
           className={`rounded-full px-2 py-0.5 text-xs font-medium ${MASTERY_STYLES[stat.mastery]}`}
         >
           {MASTERY_LABELS[stat.mastery]}
         </span>
       </div>
-      <div className="text-xs text-fg-subtle">
-        {stat.solved}/{stat.total} solved
+      <div>
+        <div className="mb-1 flex items-center justify-between text-xs text-fg-subtle">
+          <span>
+            {stat.solved}/{stat.total} solved
+          </span>
+          <span>{pct}%</span>
+        </div>
+        <ProgressBar value={stat.solved} max={stat.total} tone="bg-accent" />
       </div>
       <div className="flex flex-wrap gap-1.5">
         {stat.related.map((p) => (
           <Link
             key={p.slug}
             to={`/problems/${p.slug}`}
-            className="rounded-full bg-surface-sunken px-2 py-0.5 text-xs text-fg-muted hover:text-accent"
+            className={`flex items-center gap-1 rounded-full px-2 py-0.5 text-xs ${
+              p.solved
+                ? 'bg-pass-surface text-pass'
+                : 'bg-surface-sunken text-fg-muted hover:text-accent'
+            }`}
           >
+            {p.solved && <span aria-hidden>✓</span>}
             {p.title}
           </Link>
         ))}
@@ -82,21 +119,24 @@ export function SkillsPage() {
         solved: related.filter((p) => solved[p.slug]).length,
         total: related.length,
         attempted: patternAttempts.length > 0,
-        related: related.map((p) => ({ slug: p.slug, title: p.title })),
+        related: related.map((p) => ({ slug: p.slug, title: p.title, solved: !!solved[p.slug] })),
       }
     })
   }, [attempts, solved, slugPatterns, problemsMeta, now])
 
   const solvedCount = Object.values(solved).filter(Boolean).length
   const totalRuns = attempts.length
-  const patternsExplored = stats.filter((s) => s.attempted).length
+  const coveredStats = stats.filter((s) => s.total > 0)
+  const uncovered = stats.filter((s) => s.total === 0)
+  const patternsExplored = coveredStats.filter((s) => s.attempted).length
+  const masteredCount = coveredStats.filter((s) => s.mastery === 'mastered').length
 
   const dueProblems = problemsMeta.filter((p) => isDue(schedule[p.slug], now))
 
   const focusAreas = useMemo(
     () =>
       stats
-        .filter((s) => s.attempted)
+        .filter((s) => s.attempted && s.mastery !== 'mastered')
         .sort((a, b) => MASTERY_ORDER[a.mastery] - MASTERY_ORDER[b.mastery])
         .slice(0, 3),
     [stats],
@@ -106,10 +146,20 @@ export function SkillsPage() {
     <div className="mx-auto h-full max-w-5xl overflow-auto px-4 py-6">
       <h1 className="mb-4 text-2xl font-bold text-fg">Skills</h1>
 
-      <div className="mb-6 grid grid-cols-3 gap-3">
-        <Stat label="Problems solved" value={`${solvedCount}/${problemsMeta.length}`} />
-        <Stat label="Total runs" value={String(totalRuns)} />
-        <Stat label="Patterns explored" value={`${patternsExplored}/${PATTERNS.length}`} />
+      <div className="mb-6 rounded-lg border border-line bg-surface-raised p-4">
+        <div className="mb-1 flex items-baseline justify-between">
+          <span className="text-sm font-semibold text-fg">Overall progress</span>
+          <span className="text-xs text-fg-muted">
+            {solvedCount} of {problemsMeta.length} problems solved
+          </span>
+        </div>
+        <ProgressBar value={solvedCount} max={problemsMeta.length} tone="bg-accent" />
+        <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <Stat label="Problems solved" value={`${solvedCount}/${problemsMeta.length}`} />
+          <Stat label="Patterns mastered" value={`${masteredCount}/${coveredStats.length}`} />
+          <Stat label="Patterns explored" value={`${patternsExplored}/${coveredStats.length}`} />
+          <Stat label="Total runs" value={String(totalRuns)} />
+        </div>
       </div>
 
       {dueProblems.length > 0 && (
@@ -136,6 +186,9 @@ export function SkillsPage() {
       {focusAreas.length > 0 && (
         <section className="mb-6">
           <h2 className="mb-2 text-sm font-semibold text-fg">Focus areas</h2>
+          <p className="mb-2 text-xs text-fg-subtle">
+            The patterns you’ve attempted but haven’t mastered yet — worth another pass.
+          </p>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
             {focusAreas.map((stat) => (
               <PatternCard key={stat.pattern} stat={stat} />
@@ -145,12 +198,21 @@ export function SkillsPage() {
       )}
 
       <section>
-        <h2 className="mb-2 text-sm font-semibold text-fg">All patterns</h2>
+        <div className="mb-2 flex items-center gap-2">
+          <h2 className="text-sm font-semibold text-fg">All patterns</h2>
+          <span className="text-xs text-fg-subtle">({coveredStats.length})</span>
+        </div>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {stats.map((stat) => (
+          {coveredStats.map((stat) => (
             <PatternCard key={stat.pattern} stat={stat} />
           ))}
         </div>
+        {uncovered.length > 0 && (
+          <p className="mt-3 text-xs text-fg-subtle">
+            Not yet covered by any problem:{' '}
+            {uncovered.map((s) => PATTERN_LABELS[s.pattern]).join(', ')}.
+          </p>
+        )}
       </section>
     </div>
   )
@@ -158,7 +220,7 @@ export function SkillsPage() {
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-lg border border-line bg-surface-raised p-3">
+    <div className="rounded-lg border border-line bg-surface p-3">
       <div className="text-xs text-fg-subtle">{label}</div>
       <div className="text-xl font-bold text-fg">{value}</div>
     </div>
