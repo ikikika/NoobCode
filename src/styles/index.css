@@ -4,48 +4,63 @@
 /* Dark is the default theme; .dark class is applied by the FOUC script. */
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Classic LeetCode palette — signature orange accent (#ffa116), neutral grays,
+   and the iconic Easy/Medium/Hard difficulty colors. */
+
 /* Light palette */
 :root {
   --color-surface: #ffffff;
-  --color-surface-raised: #f7f8fa;
-  --color-surface-sunken: #eceef2;
-  --color-fg: #1a1c20;
-  --color-fg-muted: #51555c;
-  --color-fg-subtle: #898f99;
-  --color-line: #d8dce2;
-  --color-accent: #2f6df6;
-  --color-accent-hover: #1f5be0;
-  --color-accent-contrast: #ffffff;
-  --color-diff-added: #1a7f37;
-  --color-diff-added-surface: #e6f6ea;
-  --color-diff-removed: #cf222e;
-  --color-diff-removed-surface: #ffebe9;
-  --color-pass: #1a7f37;
-  --color-pass-surface: #e6f6ea;
-  --color-fail: #cf222e;
-  --color-fail-surface: #ffebe9;
+  --color-surface-raised: #fafafa;
+  --color-surface-sunken: #f0f1f4;
+  --color-fg: #262626;
+  --color-fg-muted: #5c5f66;
+  --color-fg-subtle: #9aa0a6;
+  --color-line: #e2e4e8;
+  --color-accent: #ffa116;
+  --color-accent-hover: #e8900c;
+  --color-accent-contrast: #1a1a1a;
+  --color-diff-added: #2c9b5b;
+  --color-diff-added-surface: #e4f5ec;
+  --color-diff-removed: #d62f3f;
+  --color-diff-removed-surface: #fde7ea;
+  --color-pass: #2c9b5b;
+  --color-pass-surface: #e4f5ec;
+  --color-fail: #d62f3f;
+  --color-fail-surface: #fde7ea;
+  --color-easy: #00a392;
+  --color-easy-surface: #e1f4f1;
+  --color-medium: #bf8700;
+  --color-medium-surface: #faf0d2;
+  --color-hard: #e0344a;
+  --color-hard-surface: #fce4e8;
 }
 
 /* Dark palette */
 .dark {
-  --color-surface: #0f1115;
-  --color-surface-raised: #181b21;
-  --color-surface-sunken: #0a0c0f;
-  --color-fg: #e6e8ec;
-  --color-fg-muted: #a3a9b4;
-  --color-fg-subtle: #6b717c;
-  --color-line: #272b33;
-  --color-accent: #5b8cff;
-  --color-accent-hover: #7aa2ff;
-  --color-accent-contrast: #0f1115;
+  --color-surface: #1a1a1a;
+  --color-surface-raised: #282828;
+  --color-surface-sunken: #0f0f0f;
+  --color-fg: #eff1f6;
+  --color-fg-muted: #b3b3b3;
+  --color-fg-subtle: #808080;
+  --color-line: #3e3e3e;
+  --color-accent: #ffa116;
+  --color-accent-hover: #ffb13d;
+  --color-accent-contrast: #1a1a1a;
   --color-diff-added: #3fb950;
-  --color-diff-added-surface: #0f2916;
+  --color-diff-added-surface: #122b18;
   --color-diff-removed: #f85149;
-  --color-diff-removed-surface: #2a1213;
+  --color-diff-removed-surface: #2a1214;
   --color-pass: #3fb950;
-  --color-pass-surface: #0f2916;
+  --color-pass-surface: #122b18;
   --color-fail: #f85149;
-  --color-fail-surface: #2a1213;
+  --color-fail-surface: #2a1214;
+  --color-easy: #00b8a3;
+  --color-easy-surface: #11302c;
+  --color-medium: #ffc01e;
+  --color-medium-surface: #332a0f;
+  --color-hard: #ff4d6a;
+  --color-hard-surface: #331a1f;
 }
 
 /* Map CSS variables to Tailwind color utilities (text-fg, bg-surface, etc.) */
@@ -68,6 +83,12 @@
   --color-pass-surface: var(--color-pass-surface);
   --color-fail: var(--color-fail);
   --color-fail-surface: var(--color-fail-surface);
+  --color-easy: var(--color-easy);
+  --color-easy-surface: var(--color-easy-surface);
+  --color-medium: var(--color-medium);
+  --color-medium-surface: var(--color-medium-surface);
+  --color-hard: var(--color-hard);
+  --color-hard-surface: var(--color-hard-surface);
 }
 
 html,

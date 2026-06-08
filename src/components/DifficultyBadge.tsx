@@ -1,9 +1,9 @@
 import type { Difficulty } from '../content/schema'
 
 const STYLES: Record<Difficulty, string> = {
-  easy: 'bg-pass-surface text-pass',
-  medium: 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-400',
-  hard: 'bg-fail-surface text-fail',
+  easy: 'bg-easy-surface text-easy',
+  medium: 'bg-medium-surface text-medium',
+  hard: 'bg-hard-surface text-hard',
 }
 
 const LABELS: Record<Difficulty, string> = {
