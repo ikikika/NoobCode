@@ -5,7 +5,7 @@
  *  - /assets/*   → cache-first (content-hashed by Vite, so safe to cache forever)
  *  - navigations → network-first with cached-shell fallback (avoids stale HTML)
  */
-const VERSION = 'v1'
+const VERSION = 'v2'
 const SHELL_CACHE = `noobcode-shell-${VERSION}`
 const ASSET_CACHE = `noobcode-assets-${VERSION}`
 const PYODIDE_CACHE = 'noobcode-pyodide' // unversioned: pinned to a Pyodide release
