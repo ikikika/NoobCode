@@ -5,6 +5,7 @@ import { ProblemListPage } from './routes/ProblemListPage'
 import { CreateProblemPage } from './routes/CreateProblemPage'
 import { SkillsPage } from './routes/SkillsPage'
 import { Spinner } from './components/Spinner'
+import { ErrorBoundary } from './components/ErrorBoundary'
 
 // The problem detail page pulls in Monaco — load it lazily so the list and
 // skills pages stay small and Monaco only downloads when a problem is opened.
@@ -30,9 +31,11 @@ const router = createHashRouter([
       {
         path: 'problems/:slug',
         element: (
-          <Suspense fallback={<DetailFallback />}>
-            <ProblemDetailPage />
-          </Suspense>
+          <ErrorBoundary>
+            <Suspense fallback={<DetailFallback />}>
+              <ProblemDetailPage />
+            </Suspense>
+          </ErrorBoundary>
         ),
       },
       { path: 'skills', element: <SkillsPage /> },

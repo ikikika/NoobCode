@@ -197,6 +197,9 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
                   className="flex items-center gap-1.5 rounded-md bg-accent px-3 py-1 text-xs font-medium text-accent-contrast hover:bg-accent-hover"
                 >
                   Run All
+                  <kbd className="rounded border border-accent-contrast/40 px-1 text-[10px] font-normal opacity-80">
+                    ⌘⏎
+                  </kbd>
                 </button>
               )}
             </div>

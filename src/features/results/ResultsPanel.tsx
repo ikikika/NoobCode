@@ -51,6 +51,8 @@ export function ResultsPanel({ status, result, loadingMessage }: ResultsPanelPro
   return (
     <div className="flex h-full flex-col overflow-auto p-4">
       <div
+        role="status"
+        aria-live="polite"
         className={`mb-3 flex items-center justify-between rounded-md px-3 py-2 text-sm font-semibold ${
           result.passed ? 'bg-pass-surface text-pass' : 'bg-fail-surface text-fail'
         }`}

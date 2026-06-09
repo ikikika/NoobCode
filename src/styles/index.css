@@ -1,66 +1,66 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 
-/* Dark is the default theme; .dark class is applied by the FOUC script. */
+/* Light (cream) is the default theme; .dark (warm espresso) is applied by the
+   FOUC script when the user opts in. */
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Classic LeetCode palette — signature orange accent (#ffa116), neutral grays,
-   and the iconic Easy/Medium/Hard difficulty colors. */
+/* Cream theme — warm off-white surfaces, caramel/terracotta accent. */
 
-/* Light palette */
+/* Light palette (cream) */
 :root {
-  --color-surface: #ffffff;
-  --color-surface-raised: #fafafa;
-  --color-surface-sunken: #f0f1f4;
-  --color-fg: #262626;
-  --color-fg-muted: #5c5f66;
-  --color-fg-subtle: #9aa0a6;
-  --color-line: #e2e4e8;
-  --color-accent: #ffa116;
-  --color-accent-hover: #e8900c;
-  --color-accent-contrast: #1a1a1a;
-  --color-diff-added: #2c9b5b;
-  --color-diff-added-surface: #e4f5ec;
-  --color-diff-removed: #d62f3f;
-  --color-diff-removed-surface: #fde7ea;
-  --color-pass: #2c9b5b;
-  --color-pass-surface: #e4f5ec;
-  --color-fail: #d62f3f;
-  --color-fail-surface: #fde7ea;
-  --color-easy: #00a392;
-  --color-easy-surface: #e1f4f1;
-  --color-medium: #bf8700;
-  --color-medium-surface: #faf0d2;
-  --color-hard: #e0344a;
-  --color-hard-surface: #fce4e8;
+  --color-surface: #faf4e6;
+  --color-surface-raised: #fffdf5;
+  --color-surface-sunken: #efe6cf;
+  --color-fg: #3b352a;
+  --color-fg-muted: #6f6553;
+  --color-fg-subtle: #9c8f76;
+  --color-line: #e4d8bd;
+  --color-accent: #c2703d;
+  --color-accent-hover: #a85c2e;
+  --color-accent-contrast: #fffdf5;
+  --color-diff-added: #4a7c3f;
+  --color-diff-added-surface: #e9efd6;
+  --color-diff-removed: #b5402f;
+  --color-diff-removed-surface: #f6e2dc;
+  --color-pass: #4a7c3f;
+  --color-pass-surface: #e9efd6;
+  --color-fail: #b5402f;
+  --color-fail-surface: #f6e2dc;
+  --color-easy: #2f7d5e;
+  --color-easy-surface: #e3efe2;
+  --color-medium: #b07d1a;
+  --color-medium-surface: #f6ecd2;
+  --color-hard: #b5402f;
+  --color-hard-surface: #f6e2dc;
 }
 
-/* Dark palette */
+/* Dark palette (warm espresso) */
 .dark {
-  --color-surface: #1a1a1a;
-  --color-surface-raised: #282828;
-  --color-surface-sunken: #0f0f0f;
-  --color-fg: #eff1f6;
-  --color-fg-muted: #b3b3b3;
-  --color-fg-subtle: #808080;
-  --color-line: #3e3e3e;
-  --color-accent: #ffa116;
-  --color-accent-hover: #ffb13d;
-  --color-accent-contrast: #1a1a1a;
-  --color-diff-added: #3fb950;
-  --color-diff-added-surface: #122b18;
-  --color-diff-removed: #f85149;
-  --color-diff-removed-surface: #2a1214;
-  --color-pass: #3fb950;
-  --color-pass-surface: #122b18;
-  --color-fail: #f85149;
-  --color-fail-surface: #2a1214;
-  --color-easy: #00b8a3;
-  --color-easy-surface: #11302c;
-  --color-medium: #ffc01e;
-  --color-medium-surface: #332a0f;
-  --color-hard: #ff4d6a;
-  --color-hard-surface: #331a1f;
+  --color-surface: #211c16;
+  --color-surface-raised: #2c261e;
+  --color-surface-sunken: #1a1611;
+  --color-fg: #f0e6d2;
+  --color-fg-muted: #b8ac95;
+  --color-fg-subtle: #877c66;
+  --color-line: #3e362b;
+  --color-accent: #d98a4e;
+  --color-accent-hover: #e89d63;
+  --color-accent-contrast: #211c16;
+  --color-diff-added: #6db564;
+  --color-diff-added-surface: #1f2a18;
+  --color-diff-removed: #e08160;
+  --color-diff-removed-surface: #2e1c16;
+  --color-pass: #6db564;
+  --color-pass-surface: #1f2a18;
+  --color-fail: #e08160;
+  --color-fail-surface: #2e1c16;
+  --color-easy: #5fb98f;
+  --color-easy-surface: #182a22;
+  --color-medium: #e0b85e;
+  --color-medium-surface: #2e2614;
+  --color-hard: #e08160;
+  --color-hard-surface: #2e1a16;
 }
 
 /* Map CSS variables to Tailwind color utilities (text-fg, bg-surface, etc.) */
