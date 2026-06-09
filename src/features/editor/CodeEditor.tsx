@@ -12,13 +12,13 @@ interface CodeEditorProps {
 }
 
 export function CodeEditor({ value, language, onChange }: CodeEditorProps) {
-  const isDark = useTheme((s) => s.isDark)
+  const theme = useTheme((s) => s.theme)
 
   return (
     <Editor
       height="100%"
       language={MONACO_LANGUAGE[language]}
-      theme={monacoThemeName(isDark)}
+      theme={monacoThemeName(theme)}
       value={value}
       onChange={(v) => onChange(v ?? '')}
       loading={<Spinner size={24} />}

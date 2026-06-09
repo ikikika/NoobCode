@@ -1,0 +1,133 @@
+{
+  "slug": "ransom-note",
+  "title": "Ransom Note",
+  "difficulty": "easy",
+  "tags": [
+    "string",
+    "hash-map"
+  ],
+  "patterns": [
+    "hash-map"
+  ],
+  "description": "Given two strings `ransomNote` and `magazine`, return `true` if `ransomNote`\ncan be constructed using the letters from `magazine`. Each letter in `magazine`\ncan be used **at most once**.",
+  "constraints": [
+    "1 <= ransomNote.length, magazine.length <= 10^5",
+    "Both consist of lowercase English letters."
+  ],
+  "examples": [
+    {
+      "input": "ransomNote = \"a\", magazine = \"b\"",
+      "output": "false"
+    },
+    {
+      "input": "ransomNote = \"aa\", magazine = \"aab\"",
+      "output": "true"
+    },
+    {
+      "input": "ransomNote = \"aa\", magazine = \"ab\"",
+      "output": "false"
+    }
+  ],
+  "functionName": {
+    "python": "can_construct",
+    "javascript": "canConstruct",
+    "typescript": "canConstruct"
+  },
+  "starterCode": {
+    "python": "def can_construct(ransom_note, magazine):\n    # Return True if ransom_note can be built from magazine.\n    pass\n",
+    "javascript": "function canConstruct(ransomNote, magazine) {\n  // Return true if ransomNote can be built from magazine.\n}\n",
+    "typescript": "function canConstruct(ransomNote: string, magazine: string): boolean {\n  // Return true if ransomNote can be built from magazine.\n  return false;\n}\n"
+  },
+  "tests": [
+    {
+      "name": "missing letter",
+      "args": [
+        "a",
+        "b"
+      ],
+      "expected": false
+    },
+    {
+      "name": "enough letters",
+      "args": [
+        "aa",
+        "aab"
+      ],
+      "expected": true
+    },
+    {
+      "name": "not enough",
+      "args": [
+        "aa",
+        "ab"
+      ],
+      "expected": false
+    },
+    {
+      "name": "exact",
+      "args": [
+        "abc",
+        "cba"
+      ],
+      "expected": true,
+      "hidden": true
+    },
+    {
+      "name": "extra in magazine",
+      "args": [
+        "bg",
+        "efjbdfbdgfjhhaiigfhbaejahgfbbgbjagbddfgdiaigdadhcfcj"
+      ],
+      "expected": true,
+      "hidden": true
+    }
+  ],
+  "solutions": [
+    {
+      "approachName": "Letter Counts",
+      "summary": "Count magazine letters, then spend them against the note.",
+      "timeComplexity": "O(n + m)",
+      "spaceComplexity": "O(1)",
+      "technique": {
+        "primaryPattern": "hash-map",
+        "optimal": true,
+        "signature": {
+          "maxLoopDepth": 1,
+          "usesHashStructure": true,
+          "usesSorting": false,
+          "usesRecursion": false,
+          "twoPointer": false
+        }
+      },
+      "steps": [
+        {
+          "title": "Start from the function shape",
+          "explanation": "Signature plus a default `False` return.",
+          "code": {
+            "python": "def can_construct(ransom_note, magazine):\n    return False\n",
+            "javascript": "function canConstruct(ransomNote, magazine) {\n  return false;\n}\n",
+            "typescript": "function canConstruct(ransomNote: string, magazine: string): boolean {\n  return false;\n}\n"
+          }
+        },
+        {
+          "title": "Count the magazine letters",
+          "explanation": "Build a map of how many of each letter the magazine offers.",
+          "code": {
+            "python": "def can_construct(ransom_note, magazine):\n    have = {}\n    for c in magazine:\n        have[c] = have.get(c, 0) + 1\n    return True\n",
+            "javascript": "function canConstruct(ransomNote, magazine) {\n  const have = {};\n  for (const c of magazine) {\n    have[c] = (have[c] || 0) + 1;\n  }\n  return true;\n}\n",
+            "typescript": "function canConstruct(ransomNote: string, magazine: string): boolean {\n  const have: Record<string, number> = {};\n  for (const c of magazine) {\n    have[c] = (have[c] || 0) + 1;\n  }\n  return true;\n}\n"
+          }
+        },
+        {
+          "title": "Spend a letter per note character",
+          "explanation": "For each character of the note, decrement its count; if none remain, building is impossible.",
+          "code": {
+            "python": "def can_construct(ransom_note, magazine):\n    have = {}\n    for c in magazine:\n        have[c] = have.get(c, 0) + 1\n    for c in ransom_note:\n        if have.get(c, 0) == 0:\n            return False\n        have[c] -= 1\n    return True\n",
+            "javascript": "function canConstruct(ransomNote, magazine) {\n  const have = {};\n  for (const c of magazine) {\n    have[c] = (have[c] || 0) + 1;\n  }\n  for (const c of ransomNote) {\n    if (!have[c]) {\n      return false;\n    }\n    have[c]--;\n  }\n  return true;\n}\n",
+            "typescript": "function canConstruct(ransomNote: string, magazine: string): boolean {\n  const have: Record<string, number> = {};\n  for (const c of magazine) {\n    have[c] = (have[c] || 0) + 1;\n  }\n  for (const c of ransomNote) {\n    if (!have[c]) {\n      return false;\n    }\n    have[c]--;\n  }\n  return true;\n}\n"
+          }
+        }
+      ]
+    }
+  ]
+}

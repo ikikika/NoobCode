@@ -1,0 +1,143 @@
+{
+  "slug": "longest-common-prefix",
+  "title": "Longest Common Prefix",
+  "difficulty": "easy",
+  "tags": [
+    "string"
+  ],
+  "patterns": [
+    "brute-force"
+  ],
+  "description": "Write a function to find the longest common prefix string amongst an array of\nstrings `strs`. If there is no common prefix, return an empty string `\"\"`.",
+  "constraints": [
+    "1 <= strs.length <= 200",
+    "0 <= strs[i].length <= 200",
+    "strs[i] consists of lowercase English letters."
+  ],
+  "examples": [
+    {
+      "input": "strs = [\"flower\",\"flow\",\"flight\"]",
+      "output": "\"fl\""
+    },
+    {
+      "input": "strs = [\"dog\",\"racecar\",\"car\"]",
+      "output": "\"\"",
+      "explanation": "No common prefix."
+    }
+  ],
+  "functionName": {
+    "python": "longest_common_prefix",
+    "javascript": "longestCommonPrefix",
+    "typescript": "longestCommonPrefix"
+  },
+  "starterCode": {
+    "python": "def longest_common_prefix(strs):\n    # Return the longest common prefix.\n    pass\n",
+    "javascript": "function longestCommonPrefix(strs) {\n  // Return the longest common prefix.\n}\n",
+    "typescript": "function longestCommonPrefix(strs: string[]): string {\n  // Return the longest common prefix.\n  return \"\";\n}\n"
+  },
+  "tests": [
+    {
+      "name": "shared fl",
+      "args": [
+        [
+          "flower",
+          "flow",
+          "flight"
+        ]
+      ],
+      "expected": "fl"
+    },
+    {
+      "name": "no prefix",
+      "args": [
+        [
+          "dog",
+          "racecar",
+          "car"
+        ]
+      ],
+      "expected": ""
+    },
+    {
+      "name": "single",
+      "args": [
+        [
+          "alone"
+        ]
+      ],
+      "expected": "alone",
+      "hidden": true
+    },
+    {
+      "name": "full match",
+      "args": [
+        [
+          "abc",
+          "abc",
+          "abc"
+        ]
+      ],
+      "expected": "abc",
+      "hidden": true
+    },
+    {
+      "name": "empty member",
+      "args": [
+        [
+          "",
+          "b"
+        ]
+      ],
+      "expected": "",
+      "hidden": true
+    }
+  ],
+  "solutions": [
+    {
+      "approachName": "Shrink the Prefix",
+      "summary": "Start with the first word and trim it until it prefixes every string.",
+      "timeComplexity": "O(n · m)",
+      "spaceComplexity": "O(1)",
+      "technique": {
+        "primaryPattern": "brute-force",
+        "optimal": true,
+        "signature": {
+          "maxLoopDepth": 2,
+          "usesHashStructure": false,
+          "usesSorting": false,
+          "usesRecursion": false,
+          "twoPointer": false
+        }
+      },
+      "steps": [
+        {
+          "title": "Start from the function shape",
+          "explanation": "Signature plus a default `\"\"` return.",
+          "code": {
+            "python": "def longest_common_prefix(strs):\n    return \"\"\n",
+            "javascript": "function longestCommonPrefix(strs) {\n  return \"\";\n}\n",
+            "typescript": "function longestCommonPrefix(strs: string[]): string {\n  return \"\";\n}\n"
+          }
+        },
+        {
+          "title": "Guess the first word as the prefix",
+          "explanation": "The answer can be no longer than the first string, so start there.",
+          "code": {
+            "python": "def longest_common_prefix(strs):\n    prefix = strs[0]\n    return prefix\n",
+            "javascript": "function longestCommonPrefix(strs) {\n  let prefix = strs[0];\n  return prefix;\n}\n",
+            "typescript": "function longestCommonPrefix(strs: string[]): string {\n  let prefix = strs[0];\n  return prefix;\n}\n"
+          }
+        },
+        {
+          "title": "Trim until every word matches",
+          "explanation": "For each later word, chop the last character off `prefix` until the word starts with it.",
+          "code": {
+            "python": "def longest_common_prefix(strs):\n    prefix = strs[0]\n    for s in strs[1:]:\n        while not s.startswith(prefix):\n            prefix = prefix[:-1]\n            if prefix == \"\":\n                return \"\"\n    return prefix\n",
+            "javascript": "function longestCommonPrefix(strs) {\n  let prefix = strs[0];\n  for (let i = 1; i < strs.length; i++) {\n    while (!strs[i].startsWith(prefix)) {\n      prefix = prefix.slice(0, -1);\n      if (prefix === \"\") {\n        return \"\";\n      }\n    }\n  }\n  return prefix;\n}\n",
+            "typescript": "function longestCommonPrefix(strs: string[]): string {\n  let prefix = strs[0];\n  for (let i = 1; i < strs.length; i++) {\n    while (!strs[i].startsWith(prefix)) {\n      prefix = prefix.slice(0, -1);\n      if (prefix === \"\") {\n        return \"\";\n      }\n    }\n  }\n  return prefix;\n}\n"
+          }
+        }
+      ]
+    }
+  ]
+}

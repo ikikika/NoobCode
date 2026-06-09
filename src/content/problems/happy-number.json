@@ -1,0 +1,124 @@
+{
+  "slug": "happy-number",
+  "title": "Happy Number",
+  "difficulty": "easy",
+  "tags": [
+    "math",
+    "hash-set"
+  ],
+  "patterns": [
+    "hash-set"
+  ],
+  "description": "A **happy number** is defined by this process: replace the number with the sum\nof the squares of its digits, and repeat until the number equals `1` (happy) or\nit loops endlessly in a cycle that never reaches `1`.\n\nGiven `n`, return `true` if it is a happy number, and `false` otherwise.",
+  "constraints": [
+    "1 <= n <= 2^31 - 1"
+  ],
+  "examples": [
+    {
+      "input": "n = 19",
+      "output": "true",
+      "explanation": "1²+9²=82, 8²+2²=68, 6²+8²=100, 1²+0²+0²=1."
+    },
+    {
+      "input": "n = 2",
+      "output": "false"
+    }
+  ],
+  "functionName": {
+    "python": "is_happy",
+    "javascript": "isHappy",
+    "typescript": "isHappy"
+  },
+  "starterCode": {
+    "python": "def is_happy(n):\n    # Return True if n is a happy number.\n    pass\n",
+    "javascript": "function isHappy(n) {\n  // Return true if n is a happy number.\n}\n",
+    "typescript": "function isHappy(n: number): boolean {\n  // Return true if n is a happy number.\n  return false;\n}\n"
+  },
+  "tests": [
+    {
+      "name": "happy",
+      "args": [
+        19
+      ],
+      "expected": true
+    },
+    {
+      "name": "not happy",
+      "args": [
+        2
+      ],
+      "expected": false
+    },
+    {
+      "name": "one",
+      "args": [
+        1
+      ],
+      "expected": true
+    },
+    {
+      "name": "seven",
+      "args": [
+        7
+      ],
+      "expected": true,
+      "hidden": true
+    },
+    {
+      "name": "cycle",
+      "args": [
+        4
+      ],
+      "expected": false,
+      "hidden": true
+    }
+  ],
+  "solutions": [
+    {
+      "approachName": "Cycle Detection with a Set",
+      "summary": "Track seen values; if one repeats before reaching 1, it loops forever.",
+      "timeComplexity": "O(log n) per step",
+      "spaceComplexity": "O(log n)",
+      "technique": {
+        "primaryPattern": "hash-set",
+        "optimal": true,
+        "signature": {
+          "maxLoopDepth": 2,
+          "usesHashStructure": true,
+          "usesSorting": false,
+          "usesRecursion": false,
+          "twoPointer": false
+        }
+      },
+      "steps": [
+        {
+          "title": "Start from the function shape",
+          "explanation": "Signature plus a default `False` return.",
+          "code": {
+            "python": "def is_happy(n):\n    return False\n",
+            "javascript": "function isHappy(n) {\n  return false;\n}\n",
+            "typescript": "function isHappy(n: number): boolean {\n  return false;\n}\n"
+          }
+        },
+        {
+          "title": "Loop until 1 or a repeat",
+          "explanation": "Remember every number we have seen; stop when we hit `1` or revisit a value.",
+          "code": {
+            "python": "def is_happy(n):\n    seen = set()\n    while n != 1 and n not in seen:\n        seen.add(n)\n    return n == 1\n",
+            "javascript": "function isHappy(n) {\n  const seen = new Set();\n  while (n !== 1 && !seen.has(n)) {\n    seen.add(n);\n  }\n  return n === 1;\n}\n",
+            "typescript": "function isHappy(n: number): boolean {\n  const seen = new Set<number>();\n  while (n !== 1 && !seen.has(n)) {\n    seen.add(n);\n  }\n  return n === 1;\n}\n"
+          }
+        },
+        {
+          "title": "Replace n with its digit-square sum",
+          "explanation": "Peel off each digit, square it, and accumulate the total as the next `n`.",
+          "code": {
+            "python": "def is_happy(n):\n    seen = set()\n    while n != 1 and n not in seen:\n        seen.add(n)\n        total = 0\n        while n > 0:\n            d = n % 10\n            total += d * d\n            n //= 10\n        n = total\n    return n == 1\n",
+            "javascript": "function isHappy(n) {\n  const seen = new Set();\n  while (n !== 1 && !seen.has(n)) {\n    seen.add(n);\n    let total = 0;\n    while (n > 0) {\n      const d = n % 10;\n      total += d * d;\n      n = Math.floor(n / 10);\n    }\n    n = total;\n  }\n  return n === 1;\n}\n",
+            "typescript": "function isHappy(n: number): boolean {\n  const seen = new Set<number>();\n  while (n !== 1 && !seen.has(n)) {\n    seen.add(n);\n    let total = 0;\n    while (n > 0) {\n      const d = n % 10;\n      total += d * d;\n      n = Math.floor(n / 10);\n    }\n    n = total;\n  }\n  return n === 1;\n}\n"
+          }
+        }
+      ]
+    }
+  ]
+}

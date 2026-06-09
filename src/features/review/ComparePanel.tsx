@@ -12,7 +12,7 @@ interface ComparePanelProps {
 }
 
 export function ComparePanel({ problem, language }: ComparePanelProps) {
-  const isDark = useTheme((s) => s.isDark)
+  const theme = useTheme((s) => s.theme)
   const diffLayout = useUiPrefs((s) => s.diffLayout)
   const userCode =
     useProgressStore((s) => s.getCode(problem.slug, language)) || problem.starterCode[language]
@@ -30,7 +30,7 @@ export function ComparePanel({ problem, language }: ComparePanelProps) {
         <DiffEditor
           height="100%"
           language={MONACO_LANGUAGE[language]}
-          theme={monacoThemeName(isDark)}
+          theme={monacoThemeName(theme)}
           original={referenceCode}
           modified={userCode}
           options={{

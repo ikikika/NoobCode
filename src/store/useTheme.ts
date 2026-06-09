@@ -1,36 +1,40 @@
 import { create } from 'zustand'
+import { DEFAULT_THEME, THEME_STORAGE_KEY, isThemeId, type ThemeId } from '../lib/themes'
 
-function readInitialDark(): boolean {
-  if (typeof document === 'undefined') return false
-  return document.documentElement.classList.contains('dark')
-}
-
-function applyTheme(dark: boolean) {
+function readInitialTheme(): ThemeId {
   if (typeof document !== 'undefined') {
-    document.documentElement.classList[dark ? 'add' : 'remove']('dark')
+    const attr = document.documentElement.dataset.theme
+    if (isThemeId(attr)) return attr
   }
   try {
-    localStorage.setItem('theme', dark ? 'dark' : 'light')
+    const stored = localStorage.getItem(THEME_STORAGE_KEY)
+    if (isThemeId(stored)) return stored
+  } catch {
+    // ignore storage failures (private mode, etc.)
+  }
+  return DEFAULT_THEME
+}
+
+function applyTheme(theme: ThemeId) {
+  if (typeof document !== 'undefined') {
+    document.documentElement.dataset.theme = theme
+  }
+  try {
+    localStorage.setItem(THEME_STORAGE_KEY, theme)
   } catch {
     // ignore storage failures (private mode, etc.)
   }
 }
 
 interface ThemeState {
-  isDark: boolean
-  toggleTheme: () => void
-  setTheme: (dark: boolean) => void
+  theme: ThemeId
+  setTheme: (theme: ThemeId) => void
 }
 
-export const useTheme = create<ThemeState>((set, get) => ({
-  isDark: readInitialDark(),
-  toggleTheme: () => {
-    const next = !get().isDark
-    applyTheme(next)
-    set({ isDark: next })
-  },
-  setTheme: (dark) => {
-    applyTheme(dark)
-    set({ isDark: dark })
+export const useTheme = create<ThemeState>((set) => ({
+  theme: readInitialTheme(),
+  setTheme: (theme) => {
+    applyTheme(theme)
+    set({ theme })
   },
 }))

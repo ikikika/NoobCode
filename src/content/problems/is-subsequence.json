@@ -1,0 +1,135 @@
+{
+  "slug": "is-subsequence",
+  "title": "Is Subsequence",
+  "difficulty": "easy",
+  "tags": [
+    "string",
+    "two-pointers"
+  ],
+  "patterns": [
+    "two-pointers"
+  ],
+  "description": "Given two strings `s` and `t`, return `true` if `s` is a **subsequence** of\n`t`, and `false` otherwise.\n\nA subsequence is formed by deleting some (possibly zero) characters from `t`\nwithout changing the order of the remaining characters.",
+  "constraints": [
+    "0 <= s.length <= 100",
+    "0 <= t.length <= 10^4",
+    "s and t consist only of lowercase letters."
+  ],
+  "examples": [
+    {
+      "input": "s = \"abc\", t = \"ahbgdc\"",
+      "output": "true"
+    },
+    {
+      "input": "s = \"axc\", t = \"ahbgdc\"",
+      "output": "false"
+    },
+    {
+      "input": "s = \"\", t = \"ahbgdc\"",
+      "output": "true",
+      "explanation": "The empty string is a subsequence of anything."
+    }
+  ],
+  "functionName": {
+    "python": "is_subsequence",
+    "javascript": "isSubsequence",
+    "typescript": "isSubsequence"
+  },
+  "starterCode": {
+    "python": "def is_subsequence(s, t):\n    # Return True if s is a subsequence of t.\n    pass\n",
+    "javascript": "function isSubsequence(s, t) {\n  // Return true if s is a subsequence of t.\n}\n",
+    "typescript": "function isSubsequence(s: string, t: string): boolean {\n  // Return true if s is a subsequence of t.\n  return false;\n}\n"
+  },
+  "tests": [
+    {
+      "name": "is a subsequence",
+      "args": [
+        "abc",
+        "ahbgdc"
+      ],
+      "expected": true
+    },
+    {
+      "name": "not a subsequence",
+      "args": [
+        "axc",
+        "ahbgdc"
+      ],
+      "expected": false
+    },
+    {
+      "name": "empty s",
+      "args": [
+        "",
+        "ahbgdc"
+      ],
+      "expected": true
+    },
+    {
+      "name": "empty t",
+      "args": [
+        "a",
+        ""
+      ],
+      "expected": false,
+      "hidden": true
+    },
+    {
+      "name": "equal",
+      "args": [
+        "abc",
+        "abc"
+      ],
+      "expected": true,
+      "hidden": true
+    }
+  ],
+  "solutions": [
+    {
+      "approachName": "Two Pointers",
+      "summary": "Advance through `s` only when its current char matches the scan of `t`.",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "technique": {
+        "primaryPattern": "two-pointers",
+        "optimal": true,
+        "signature": {
+          "maxLoopDepth": 1,
+          "usesHashStructure": false,
+          "usesSorting": false,
+          "usesRecursion": false,
+          "twoPointer": true
+        }
+      },
+      "steps": [
+        {
+          "title": "Start from the function shape",
+          "explanation": "Signature plus a default `False` return.",
+          "code": {
+            "python": "def is_subsequence(s, t):\n    return False\n",
+            "javascript": "function isSubsequence(s, t) {\n  return false;\n}\n",
+            "typescript": "function isSubsequence(s: string, t: string): boolean {\n  return false;\n}\n"
+          }
+        },
+        {
+          "title": "Track progress through s",
+          "explanation": "Keep an index `i` into `s` — it counts how many characters of `s` we have matched so far.",
+          "code": {
+            "python": "def is_subsequence(s, t):\n    i = 0\n    return i == len(s)\n",
+            "javascript": "function isSubsequence(s, t) {\n  let i = 0;\n  return i === s.length;\n}\n",
+            "typescript": "function isSubsequence(s: string, t: string): boolean {\n  let i = 0;\n  return i === s.length;\n}\n"
+          }
+        },
+        {
+          "title": "Scan t and advance on a match",
+          "explanation": "Walk every character `c` of `t`; whenever it equals `s[i]`, move `i` forward. If `i` reaches the end, all of `s` was found in order.",
+          "code": {
+            "python": "def is_subsequence(s, t):\n    i = 0\n    for c in t:\n        if i < len(s) and s[i] == c:\n            i += 1\n    return i == len(s)\n",
+            "javascript": "function isSubsequence(s, t) {\n  let i = 0;\n  for (const c of t) {\n    if (i < s.length && s[i] === c) {\n      i++;\n    }\n  }\n  return i === s.length;\n}\n",
+            "typescript": "function isSubsequence(s: string, t: string): boolean {\n  let i = 0;\n  for (const c of t) {\n    if (i < s.length && s[i] === c) {\n      i++;\n    }\n  }\n  return i === s.length;\n}\n"
+          }
+        }
+      ]
+    }
+  ]
+}

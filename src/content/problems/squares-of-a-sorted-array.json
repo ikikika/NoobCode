@@ -1,0 +1,165 @@
+{
+  "slug": "squares-of-a-sorted-array",
+  "title": "Squares of a Sorted Array",
+  "difficulty": "easy",
+  "tags": [
+    "array",
+    "two-pointers"
+  ],
+  "patterns": [
+    "two-pointers",
+    "sorting"
+  ],
+  "description": "Given an integer array `nums` sorted in non-decreasing order, return an array\nof the **squares of each number**, also sorted in non-decreasing order.",
+  "constraints": [
+    "1 <= nums.length <= 10^4",
+    "-10^4 <= nums[i] <= 10^4",
+    "nums is sorted in non-decreasing order"
+  ],
+  "examples": [
+    {
+      "input": "nums = [-4,-1,0,3,10]",
+      "output": "[0,1,9,16,100]",
+      "explanation": "Squaring gives [16,1,0,9,100]; sorted it is [0,1,9,16,100]."
+    },
+    {
+      "input": "nums = [-7,-3,2,3,11]",
+      "output": "[4,9,9,49,121]"
+    }
+  ],
+  "functionName": {
+    "python": "sorted_squares",
+    "javascript": "sortedSquares",
+    "typescript": "sortedSquares"
+  },
+  "starterCode": {
+    "python": "def sorted_squares(nums):\n    # Return the sorted squares.\n    pass\n",
+    "javascript": "function sortedSquares(nums) {\n  // Return the sorted squares.\n}\n",
+    "typescript": "function sortedSquares(nums: number[]): number[] {\n  // Return the sorted squares.\n  return [];\n}\n"
+  },
+  "tests": [
+    {
+      "name": "example 1",
+      "args": [
+        [
+          -4,
+          -1,
+          0,
+          3,
+          10
+        ]
+      ],
+      "expected": [
+        0,
+        1,
+        9,
+        16,
+        100
+      ]
+    },
+    {
+      "name": "example 2",
+      "args": [
+        [
+          -7,
+          -3,
+          2,
+          3,
+          11
+        ]
+      ],
+      "expected": [
+        4,
+        9,
+        9,
+        49,
+        121
+      ]
+    },
+    {
+      "name": "all negative",
+      "args": [
+        [
+          -5,
+          -3,
+          -1
+        ]
+      ],
+      "expected": [
+        1,
+        9,
+        25
+      ],
+      "hidden": true
+    },
+    {
+      "name": "single",
+      "args": [
+        [
+          2
+        ]
+      ],
+      "expected": [
+        4
+      ],
+      "hidden": true
+    }
+  ],
+  "solutions": [
+    {
+      "approachName": "Two Pointers from the Ends",
+      "summary": "The largest squares come from the extremes; fill the result back-to-front.",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "technique": {
+        "primaryPattern": "two-pointers",
+        "optimal": true,
+        "signature": {
+          "maxLoopDepth": 1,
+          "usesHashStructure": false,
+          "usesSorting": false,
+          "usesRecursion": false,
+          "twoPointer": true
+        }
+      },
+      "steps": [
+        {
+          "title": "Start from the function shape",
+          "explanation": "Signature plus a default `[]` return.",
+          "code": {
+            "python": "def sorted_squares(nums):\n    return []\n",
+            "javascript": "function sortedSquares(nums) {\n  return [];\n}\n",
+            "typescript": "function sortedSquares(nums: number[]): number[] {\n  return [];\n}\n"
+          }
+        },
+        {
+          "title": "Allocate the result and two pointers",
+          "explanation": "Make a result array of the same length and put `lo`/`hi` at the two ends.",
+          "code": {
+            "python": "def sorted_squares(nums):\n    n = len(nums)\n    res = [0] * n\n    lo, hi = 0, n - 1\n    return res\n",
+            "javascript": "function sortedSquares(nums) {\n  const n = nums.length;\n  const res = new Array(n).fill(0);\n  let lo = 0;\n  let hi = n - 1;\n  return res;\n}\n",
+            "typescript": "function sortedSquares(nums: number[]): number[] {\n  const n = nums.length;\n  const res = new Array<number>(n).fill(0);\n  let lo = 0;\n  let hi = n - 1;\n  return res;\n}\n"
+          }
+        },
+        {
+          "title": "Fill from the back",
+          "explanation": "Walk an output index `k` from the end toward the front — that is where the next-largest square goes.",
+          "code": {
+            "python": "def sorted_squares(nums):\n    n = len(nums)\n    res = [0] * n\n    lo, hi = 0, n - 1\n    for k in range(n - 1, -1, -1):\n        pass\n    return res\n",
+            "javascript": "function sortedSquares(nums) {\n  const n = nums.length;\n  const res = new Array(n).fill(0);\n  let lo = 0;\n  let hi = n - 1;\n  for (let k = n - 1; k >= 0; k--) {\n  }\n  return res;\n}\n",
+            "typescript": "function sortedSquares(nums: number[]): number[] {\n  const n = nums.length;\n  const res = new Array<number>(n).fill(0);\n  let lo = 0;\n  let hi = n - 1;\n  for (let k = n - 1; k >= 0; k--) {\n  }\n  return res;\n}\n"
+          }
+        },
+        {
+          "title": "Take the bigger end each time",
+          "explanation": "Compare absolute values; the larger one squares bigger, so place it at `k` and step that pointer inward.",
+          "code": {
+            "python": "def sorted_squares(nums):\n    n = len(nums)\n    res = [0] * n\n    lo, hi = 0, n - 1\n    for k in range(n - 1, -1, -1):\n        if abs(nums[lo]) > abs(nums[hi]):\n            res[k] = nums[lo] * nums[lo]\n            lo += 1\n        else:\n            res[k] = nums[hi] * nums[hi]\n            hi -= 1\n    return res\n",
+            "javascript": "function sortedSquares(nums) {\n  const n = nums.length;\n  const res = new Array(n).fill(0);\n  let lo = 0;\n  let hi = n - 1;\n  for (let k = n - 1; k >= 0; k--) {\n    if (Math.abs(nums[lo]) > Math.abs(nums[hi])) {\n      res[k] = nums[lo] * nums[lo];\n      lo++;\n    } else {\n      res[k] = nums[hi] * nums[hi];\n      hi--;\n    }\n  }\n  return res;\n}\n",
+            "typescript": "function sortedSquares(nums: number[]): number[] {\n  const n = nums.length;\n  const res = new Array<number>(n).fill(0);\n  let lo = 0;\n  let hi = n - 1;\n  for (let k = n - 1; k >= 0; k--) {\n    if (Math.abs(nums[lo]) > Math.abs(nums[hi])) {\n      res[k] = nums[lo] * nums[lo];\n      lo++;\n    } else {\n      res[k] = nums[hi] * nums[hi];\n      hi--;\n    }\n  }\n  return res;\n}\n"
+          }
+        }
+      ]
+    }
+  ]
+}

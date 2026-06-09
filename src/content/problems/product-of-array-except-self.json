@@ -1,0 +1,192 @@
+{
+  "slug": "product-of-array-except-self",
+  "title": "Product of Array Except Self",
+  "difficulty": "medium",
+  "tags": [
+    "array",
+    "prefix-sum"
+  ],
+  "patterns": [
+    "brute-force",
+    "dynamic-programming"
+  ],
+  "description": "Given an integer array `nums`, return an array `answer` such that `answer[i]`\nequals the product of all the elements of `nums` **except** `nums[i]`.\n\nSolve it **without using division** and in O(n) time.",
+  "constraints": [
+    "2 <= nums.length <= 10^5",
+    "-30 <= nums[i] <= 30",
+    "The product of any prefix or suffix fits in a 32-bit integer."
+  ],
+  "examples": [
+    {
+      "input": "nums = [1,2,3,4]",
+      "output": "[24,12,8,6]"
+    },
+    {
+      "input": "nums = [-1,1,0,-3,3]",
+      "output": "[0,0,9,0,0]"
+    }
+  ],
+  "functionName": {
+    "python": "product_except_self",
+    "javascript": "productExceptSelf",
+    "typescript": "productExceptSelf"
+  },
+  "starterCode": {
+    "python": "def product_except_self(nums):\n    # Return products of everything except self.\n    pass\n",
+    "javascript": "function productExceptSelf(nums) {\n  // Return products of everything except self.\n}\n",
+    "typescript": "function productExceptSelf(nums: number[]): number[] {\n  // Return products of everything except self.\n  return [];\n}\n"
+  },
+  "tests": [
+    {
+      "name": "example 1",
+      "args": [
+        [
+          1,
+          2,
+          3,
+          4
+        ]
+      ],
+      "expected": [
+        24,
+        12,
+        8,
+        6
+      ]
+    },
+    {
+      "name": "with zero",
+      "args": [
+        [
+          -1,
+          1,
+          0,
+          -3,
+          3
+        ]
+      ],
+      "expected": [
+        0,
+        0,
+        9,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "two elements",
+      "args": [
+        [
+          2,
+          3
+        ]
+      ],
+      "expected": [
+        3,
+        2
+      ],
+      "hidden": true
+    },
+    {
+      "name": "negatives",
+      "args": [
+        [
+          -2,
+          -3,
+          -4
+        ]
+      ],
+      "expected": [
+        12,
+        8,
+        6
+      ],
+      "hidden": true
+    }
+  ],
+  "solutions": [
+    {
+      "approachName": "Brute Force",
+      "summary": "For each index multiply all the others. Simple but O(n²).",
+      "timeComplexity": "O(n²)",
+      "spaceComplexity": "O(n)",
+      "technique": {
+        "primaryPattern": "brute-force",
+        "optimal": false,
+        "signature": {
+          "maxLoopDepth": 2,
+          "usesHashStructure": false,
+          "usesSorting": false,
+          "usesRecursion": false,
+          "twoPointer": false
+        }
+      },
+      "steps": [
+        {
+          "title": "Start from the function shape",
+          "explanation": "Signature plus a default `[]` return.",
+          "code": {
+            "python": "def product_except_self(nums):\n    return []\n",
+            "javascript": "function productExceptSelf(nums) {\n  return [];\n}\n",
+            "typescript": "function productExceptSelf(nums: number[]): number[] {\n  return [];\n}\n"
+          }
+        },
+        {
+          "title": "Multiply all the other indices",
+          "explanation": "For each `i`, loop a second index `j`, multiplying every value where `j != i`.",
+          "code": {
+            "python": "def product_except_self(nums):\n    res = []\n    for i in range(len(nums)):\n        product = 1\n        for j in range(len(nums)):\n            if j != i:\n                product *= nums[j]\n        res.append(product)\n    return res\n",
+            "javascript": "function productExceptSelf(nums) {\n  const res = [];\n  for (let i = 0; i < nums.length; i++) {\n    let product = 1;\n    for (let j = 0; j < nums.length; j++) {\n      if (j !== i) {\n        product *= nums[j];\n      }\n    }\n    res.push(product);\n  }\n  return res;\n}\n",
+            "typescript": "function productExceptSelf(nums: number[]): number[] {\n  const res: number[] = [];\n  for (let i = 0; i < nums.length; i++) {\n    let product = 1;\n    for (let j = 0; j < nums.length; j++) {\n      if (j !== i) {\n        product *= nums[j];\n      }\n    }\n    res.push(product);\n  }\n  return res;\n}\n"
+          }
+        }
+      ]
+    },
+    {
+      "approachName": "Prefix & Suffix Products",
+      "summary": "Sweep left building prefix products, then right multiplying suffixes.",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "technique": {
+        "primaryPattern": "dynamic-programming",
+        "optimal": true,
+        "signature": {
+          "maxLoopDepth": 1,
+          "usesHashStructure": false,
+          "usesSorting": false,
+          "usesRecursion": false,
+          "twoPointer": false
+        }
+      },
+      "steps": [
+        {
+          "title": "Start from the function shape",
+          "explanation": "Signature plus a default `[]` return.",
+          "code": {
+            "python": "def product_except_self(nums):\n    return []\n",
+            "javascript": "function productExceptSelf(nums) {\n  return [];\n}\n",
+            "typescript": "function productExceptSelf(nums: number[]): number[] {\n  return [];\n}\n"
+          }
+        },
+        {
+          "title": "Fill prefix products",
+          "explanation": "Set `res[i]` to the product of everything **before** `i`, carried in a running `prefix`.",
+          "code": {
+            "python": "def product_except_self(nums):\n    n = len(nums)\n    res = [1] * n\n    prefix = 1\n    for i in range(n):\n        res[i] = prefix\n        prefix *= nums[i]\n    return res\n",
+            "javascript": "function productExceptSelf(nums) {\n  const n = nums.length;\n  const res = new Array(n).fill(1);\n  let prefix = 1;\n  for (let i = 0; i < n; i++) {\n    res[i] = prefix;\n    prefix *= nums[i];\n  }\n  return res;\n}\n",
+            "typescript": "function productExceptSelf(nums: number[]): number[] {\n  const n = nums.length;\n  const res = new Array<number>(n).fill(1);\n  let prefix = 1;\n  for (let i = 0; i < n; i++) {\n    res[i] = prefix;\n    prefix *= nums[i];\n  }\n  return res;\n}\n"
+          }
+        },
+        {
+          "title": "Multiply in the suffix products",
+          "explanation": "Sweep from the right with a running `suffix`, multiplying it into each `res[i]`.",
+          "code": {
+            "python": "def product_except_self(nums):\n    n = len(nums)\n    res = [1] * n\n    prefix = 1\n    for i in range(n):\n        res[i] = prefix\n        prefix *= nums[i]\n    suffix = 1\n    for i in range(n - 1, -1, -1):\n        res[i] *= suffix\n        suffix *= nums[i]\n    return res\n",
+            "javascript": "function productExceptSelf(nums) {\n  const n = nums.length;\n  const res = new Array(n).fill(1);\n  let prefix = 1;\n  for (let i = 0; i < n; i++) {\n    res[i] = prefix;\n    prefix *= nums[i];\n  }\n  let suffix = 1;\n  for (let i = n - 1; i >= 0; i--) {\n    res[i] *= suffix;\n    suffix *= nums[i];\n  }\n  return res;\n}\n",
+            "typescript": "function productExceptSelf(nums: number[]): number[] {\n  const n = nums.length;\n  const res = new Array<number>(n).fill(1);\n  let prefix = 1;\n  for (let i = 0; i < n; i++) {\n    res[i] = prefix;\n    prefix *= nums[i];\n  }\n  let suffix = 1;\n  for (let i = n - 1; i >= 0; i--) {\n    res[i] *= suffix;\n    suffix *= nums[i];\n  }\n  return res;\n}\n"
+          }
+        }
+      ]
+    }
+  ]
+}

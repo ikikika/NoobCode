@@ -1,9 +1,13 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 
-/* Cream theme — warm off-white surfaces, caramel/terracotta accent, editorial
-   typography (Newsreader / Hanken Grotesk / JetBrains Mono, self-hosted). The
-   app is light-only. */
+/* Cream is the default theme (on :root); every other theme overrides the same
+   token set under a [data-theme='<id>'] selector. The active id is set on
+   <html data-theme> by the FOUC script in index.html and by the theme store.
+   See src/lib/themes.ts for the matching picker/Monaco palettes.
+
+   Cream — warm off-white surfaces, caramel/terracotta accent, editorial
+   typography (Newsreader / Hanken Grotesk / JetBrains Mono, self-hosted). */
 :root {
   --color-surface: #faf4e6;
   --color-surface-raised: #fffdf5;
@@ -35,6 +39,216 @@
   --serif: 'Newsreader', Georgia, serif;
   --sans: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif;
   --mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+/* Sand — high-contrast paper: near-white surfaces, near-black ink, ink accent. */
+[data-theme='sand'] {
+  --color-surface: #f7f5f0;
+  --color-surface-raised: #ffffff;
+  --color-surface-sunken: #ebe7df;
+  --color-fg: #1a1a17;
+  --color-fg-muted: #4a473f;
+  --color-fg-subtle: #76726a;
+  --color-line: #d8d3c8;
+  --color-line-soft: #e4e0d6;
+  --color-accent: #1a1a17;
+  --color-accent-hover: #000000;
+  --color-accent-contrast: #ffffff;
+  --color-accent-soft: rgba(26, 26, 23, 0.08);
+  --color-diff-added: #2f6e3f;
+  --color-diff-added-surface: #e6efe2;
+  --color-diff-removed: #b03022;
+  --color-diff-removed-surface: #f6e0dc;
+  --color-pass: #2f6e3f;
+  --color-pass-surface: #e6efe2;
+  --color-fail: #b03022;
+  --color-fail-surface: #f6e0dc;
+  --color-easy: #2f6e3f;
+  --color-easy-surface: #e6efe2;
+  --color-medium: #8a6a12;
+  --color-medium-surface: #f2ead0;
+  --color-hard: #b03022;
+  --color-hard-surface: #f6e0dc;
+}
+
+/* Forest — soft light greens, sage lines, leaf accent. */
+[data-theme='forest'] {
+  --color-surface: #f3f6ee;
+  --color-surface-raised: #fbfdf7;
+  --color-surface-sunken: #e4ecda;
+  --color-fg: #2c352a;
+  --color-fg-muted: #5a6553;
+  --color-fg-subtle: #8a9579;
+  --color-line: #d2ddc4;
+  --color-line-soft: #dde6d1;
+  --color-accent: #4f8a3f;
+  --color-accent-hover: #407030;
+  --color-accent-contrast: #fbfdf7;
+  --color-accent-soft: rgba(79, 138, 63, 0.12);
+  --color-diff-added: #3f7d4a;
+  --color-diff-added-surface: #e0efdc;
+  --color-diff-removed: #b5402f;
+  --color-diff-removed-surface: #f6e2dc;
+  --color-pass: #3f7d4a;
+  --color-pass-surface: #e0efdc;
+  --color-fail: #b5402f;
+  --color-fail-surface: #f6e2dc;
+  --color-easy: #2f7d5e;
+  --color-easy-surface: #e0efe5;
+  --color-medium: #9a7d1a;
+  --color-medium-surface: #f0ecd2;
+  --color-hard: #b5402f;
+  --color-hard-surface: #f6e2dc;
+}
+
+/* Ocean — cool light teals/blues, deep teal accent. */
+[data-theme='ocean'] {
+  --color-surface: #eef4f7;
+  --color-surface-raised: #f8fbfd;
+  --color-surface-sunken: #dde9ef;
+  --color-fg: #233039;
+  --color-fg-muted: #4f626e;
+  --color-fg-subtle: #7d909c;
+  --color-line: #c4d8e2;
+  --color-line-soft: #d3e2ea;
+  --color-accent: #1f7a99;
+  --color-accent-hover: #15637e;
+  --color-accent-contrast: #f8fbfd;
+  --color-accent-soft: rgba(31, 122, 153, 0.12);
+  --color-diff-added: #2a7d6a;
+  --color-diff-added-surface: #d9efe9;
+  --color-diff-removed: #c0473a;
+  --color-diff-removed-surface: #f6e2de;
+  --color-pass: #2a7d6a;
+  --color-pass-surface: #d9efe9;
+  --color-fail: #c0473a;
+  --color-fail-surface: #f6e2de;
+  --color-easy: #2a7d6a;
+  --color-easy-surface: #d9efe9;
+  --color-medium: #b07d1a;
+  --color-medium-surface: #f6ecd2;
+  --color-hard: #c0473a;
+  --color-hard-surface: #f6e2de;
+}
+
+/* Rose — warm light mauves, berry accent. */
+[data-theme='rose'] {
+  --color-surface: #f9f0f2;
+  --color-surface-raised: #fdf8f9;
+  --color-surface-sunken: #f0e0e4;
+  --color-fg: #3a2c30;
+  --color-fg-muted: #6e565d;
+  --color-fg-subtle: #a08089;
+  --color-line: #e6cdd4;
+  --color-line-soft: #eedae0;
+  --color-accent: #b14a72;
+  --color-accent-hover: #97395d;
+  --color-accent-contrast: #fdf8f9;
+  --color-accent-soft: rgba(177, 74, 114, 0.12);
+  --color-diff-added: #4a7c5f;
+  --color-diff-added-surface: #e3efe6;
+  --color-diff-removed: #c0473a;
+  --color-diff-removed-surface: #f7e1de;
+  --color-pass: #4a7c5f;
+  --color-pass-surface: #e3efe6;
+  --color-fail: #c0473a;
+  --color-fail-surface: #f7e1de;
+  --color-easy: #2f7d5e;
+  --color-easy-surface: #e3efe6;
+  --color-medium: #b07d1a;
+  --color-medium-surface: #f6ecd2;
+  --color-hard: #c0473a;
+  --color-hard-surface: #f7e1de;
+}
+
+/* Charcoal — warm dark browns, amber accent. */
+[data-theme='charcoal'] {
+  --color-surface: #211c16;
+  --color-surface-raised: #2a241c;
+  --color-surface-sunken: #181410;
+  --color-fg: #f0e6d2;
+  --color-fg-muted: #b6a98f;
+  --color-fg-subtle: #877c66;
+  --color-line: #3a3225;
+  --color-line-soft: #2f291f;
+  --color-accent: #e0975a;
+  --color-accent-hover: #ecaa72;
+  --color-accent-contrast: #211c16;
+  --color-accent-soft: rgba(224, 151, 90, 0.14);
+  --color-diff-added: #8fc06b;
+  --color-diff-added-surface: #243019;
+  --color-diff-removed: #e08a72;
+  --color-diff-removed-surface: #341f19;
+  --color-pass: #8fc06b;
+  --color-pass-surface: #243019;
+  --color-fail: #e08a72;
+  --color-fail-surface: #341f19;
+  --color-easy: #6cc08a;
+  --color-easy-surface: #1c2b20;
+  --color-medium: #e0b85e;
+  --color-medium-surface: #2e2716;
+  --color-hard: #e08a72;
+  --color-hard-surface: #341f19;
+}
+
+/* Midnight — cool dark slate-blues, sky accent. */
+[data-theme='midnight'] {
+  --color-surface: #161a22;
+  --color-surface-raised: #1e2430;
+  --color-surface-sunken: #11141a;
+  --color-fg: #e3e8f2;
+  --color-fg-muted: #a3acc0;
+  --color-fg-subtle: #6f7892;
+  --color-line: #2a3242;
+  --color-line-soft: #222938;
+  --color-accent: #6ea8fe;
+  --color-accent-hover: #8bbcff;
+  --color-accent-contrast: #11141a;
+  --color-accent-soft: rgba(110, 168, 254, 0.14);
+  --color-diff-added: #6dd49a;
+  --color-diff-added-surface: #15281f;
+  --color-diff-removed: #f0788c;
+  --color-diff-removed-surface: #2c1820;
+  --color-pass: #6dd49a;
+  --color-pass-surface: #15281f;
+  --color-fail: #f0788c;
+  --color-fail-surface: #2c1820;
+  --color-easy: #5fd0c0;
+  --color-easy-surface: #122723;
+  --color-medium: #e6c267;
+  --color-medium-surface: #2a2516;
+  --color-hard: #f0788c;
+  --color-hard-surface: #2c1820;
+}
+
+/* Grape — deep dark purples, violet accent. */
+[data-theme='grape'] {
+  --color-surface: #1c1726;
+  --color-surface-raised: #251e33;
+  --color-surface-sunken: #14101c;
+  --color-fg: #ece6f5;
+  --color-fg-muted: #b3a8c6;
+  --color-fg-subtle: #847a99;
+  --color-line: #352c47;
+  --color-line-soft: #2a2238;
+  --color-accent: #b07cf0;
+  --color-accent-hover: #c294ff;
+  --color-accent-contrast: #14101c;
+  --color-accent-soft: rgba(176, 124, 240, 0.16);
+  --color-diff-added: #74cf9a;
+  --color-diff-added-surface: #1a2a20;
+  --color-diff-removed: #f07a9c;
+  --color-diff-removed-surface: #2c1820;
+  --color-pass: #74cf9a;
+  --color-pass-surface: #1a2a20;
+  --color-fail: #f07a9c;
+  --color-fail-surface: #2c1820;
+  --color-easy: #5fd0c0;
+  --color-easy-surface: #122724;
+  --color-medium: #e6c267;
+  --color-medium-surface: #2a2516;
+  --color-hard: #f07a9c;
+  --color-hard-surface: #2c1820;
 }
 
 /* Map CSS variables to Tailwind color/font utilities (text-fg, bg-surface, …). */
@@ -235,7 +449,7 @@ body {
   display: inline-block;
 }
 .nc-dot.unseen {
-  background: rgba(156, 143, 118, 0.4);
+  background: color-mix(in srgb, var(--color-fg-subtle) 45%, transparent);
 }
 .nc-dot.weak {
   background: var(--color-fail);
@@ -333,7 +547,7 @@ a.nc-reset {
 }
 
 .nc-resume:hover {
-  background: rgba(194, 112, 61, 0.16);
+  background: color-mix(in srgb, var(--color-accent) 16%, transparent);
 }
 
 @media (max-width: 720px) {

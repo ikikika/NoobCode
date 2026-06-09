@@ -7,8 +7,12 @@
     <meta name="theme-color" content="#faf4e6" />
     <title>NoobCode</title>
     <script>
-      // The app is cream light-only; ensure no stale dark class is applied.
-      document.documentElement.classList.remove('dark')
+      // Apply the saved color theme before first paint to avoid a flash. An
+      // unknown/absent id falls back to the cream defaults on :root.
+      try {
+        var t = localStorage.getItem('noobcode-theme')
+        if (t) document.documentElement.dataset.theme = t
+      } catch (e) {}
     </script>
   </head>
   <body>

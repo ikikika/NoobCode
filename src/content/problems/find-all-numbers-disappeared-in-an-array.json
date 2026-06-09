@@ -1,0 +1,144 @@
+{
+  "slug": "find-all-numbers-disappeared-in-an-array",
+  "title": "Find All Numbers Disappeared in an Array",
+  "difficulty": "easy",
+  "tags": [
+    "array",
+    "hash-set"
+  ],
+  "patterns": [
+    "hash-set"
+  ],
+  "description": "Given an array `nums` of `n` integers where each value is in the range\n`[1, n]`, return an array of all the integers in `[1, n]` that **do not appear**\nin `nums`.",
+  "constraints": [
+    "n == nums.length",
+    "1 <= n <= 10^5",
+    "1 <= nums[i] <= n"
+  ],
+  "examples": [
+    {
+      "input": "nums = [4,3,2,7,8,2,3,1]",
+      "output": "[5,6]"
+    },
+    {
+      "input": "nums = [1,1]",
+      "output": "[2]"
+    }
+  ],
+  "functionName": {
+    "python": "find_disappeared_numbers",
+    "javascript": "findDisappearedNumbers",
+    "typescript": "findDisappearedNumbers"
+  },
+  "starterCode": {
+    "python": "def find_disappeared_numbers(nums):\n    # Return every value in [1, n] missing from nums.\n    pass\n",
+    "javascript": "function findDisappearedNumbers(nums) {\n  // Return every value in [1, n] missing from nums.\n}\n",
+    "typescript": "function findDisappearedNumbers(nums: number[]): number[] {\n  // Return every value in [1, n] missing from nums.\n  return [];\n}\n"
+  },
+  "tests": [
+    {
+      "name": "example 1",
+      "args": [
+        [
+          4,
+          3,
+          2,
+          7,
+          8,
+          2,
+          3,
+          1
+        ]
+      ],
+      "expected": [
+        5,
+        6
+      ]
+    },
+    {
+      "name": "example 2",
+      "args": [
+        [
+          1,
+          1
+        ]
+      ],
+      "expected": [
+        2
+      ]
+    },
+    {
+      "name": "none missing",
+      "args": [
+        [
+          1,
+          2,
+          3
+        ]
+      ],
+      "expected": [],
+      "hidden": true
+    },
+    {
+      "name": "all missing one",
+      "args": [
+        [
+          2,
+          2
+        ]
+      ],
+      "expected": [
+        1
+      ],
+      "hidden": true
+    }
+  ],
+  "solutions": [
+    {
+      "approachName": "Hash Set",
+      "summary": "Record present values, then collect the absent ones in order.",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "technique": {
+        "primaryPattern": "hash-set",
+        "optimal": true,
+        "signature": {
+          "maxLoopDepth": 1,
+          "usesHashStructure": true,
+          "usesSorting": false,
+          "usesRecursion": false,
+          "twoPointer": false
+        }
+      },
+      "steps": [
+        {
+          "title": "Start from the function shape",
+          "explanation": "Signature plus a default `[]` return.",
+          "code": {
+            "python": "def find_disappeared_numbers(nums):\n    return []\n",
+            "javascript": "function findDisappearedNumbers(nums) {\n  return [];\n}\n",
+            "typescript": "function findDisappearedNumbers(nums: number[]): number[] {\n  return [];\n}\n"
+          }
+        },
+        {
+          "title": "Record which values are present",
+          "explanation": "A set of the array gives O(1) membership tests.",
+          "code": {
+            "python": "def find_disappeared_numbers(nums):\n    present = set(nums)\n    return []\n",
+            "javascript": "function findDisappearedNumbers(nums) {\n  const present = new Set(nums);\n  return [];\n}\n",
+            "typescript": "function findDisappearedNumbers(nums: number[]): number[] {\n  const present = new Set(nums);\n  return [];\n}\n"
+          }
+        },
+        {
+          "title": "Collect the missing values",
+          "explanation": "Check every candidate from `1` to `n`; keep the ones not in the set.",
+          "code": {
+            "python": "def find_disappeared_numbers(nums):\n    present = set(nums)\n    out = []\n    for i in range(1, len(nums) + 1):\n        if i not in present:\n            out.append(i)\n    return out\n",
+            "javascript": "function findDisappearedNumbers(nums) {\n  const present = new Set(nums);\n  const out = [];\n  for (let i = 1; i <= nums.length; i++) {\n    if (!present.has(i)) {\n      out.push(i);\n    }\n  }\n  return out;\n}\n",
+            "typescript": "function findDisappearedNumbers(nums: number[]): number[] {\n  const present = new Set(nums);\n  const out: number[] = [];\n  for (let i = 1; i <= nums.length; i++) {\n    if (!present.has(i)) {\n      out.push(i);\n    }\n  }\n  return out;\n}\n"
+          }
+        }
+      ]
+    }
+  ]
+}

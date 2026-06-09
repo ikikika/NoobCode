@@ -1,0 +1,167 @@
+{
+  "slug": "pascals-triangle",
+  "title": "Pascal's Triangle",
+  "difficulty": "easy",
+  "tags": [
+    "array",
+    "dynamic-programming"
+  ],
+  "patterns": [
+    "dynamic-programming"
+  ],
+  "description": "Given an integer `numRows`, return the first `numRows` of **Pascal's\ntriangle**. Each number is the sum of the two numbers directly above it.",
+  "constraints": [
+    "1 <= numRows <= 30"
+  ],
+  "examples": [
+    {
+      "input": "numRows = 5",
+      "output": "[[1],[1,1],[1,2,1],[1,3,3,1],[1,4,6,4,1]]"
+    },
+    {
+      "input": "numRows = 1",
+      "output": "[[1]]"
+    }
+  ],
+  "functionName": {
+    "python": "generate",
+    "javascript": "generate",
+    "typescript": "generate"
+  },
+  "starterCode": {
+    "python": "def generate(num_rows):\n    # Return the first num_rows of Pascal's triangle.\n    pass\n",
+    "javascript": "function generate(numRows) {\n  // Return the first numRows of Pascal's triangle.\n}\n",
+    "typescript": "function generate(numRows: number): number[][] {\n  // Return the first numRows of Pascal's triangle.\n  return [];\n}\n"
+  },
+  "tests": [
+    {
+      "name": "five rows",
+      "args": [
+        5
+      ],
+      "expected": [
+        [
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2,
+          1
+        ],
+        [
+          1,
+          3,
+          3,
+          1
+        ],
+        [
+          1,
+          4,
+          6,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "name": "one row",
+      "args": [
+        1
+      ],
+      "expected": [
+        [
+          1
+        ]
+      ]
+    },
+    {
+      "name": "two rows",
+      "args": [
+        2
+      ],
+      "expected": [
+        [
+          1
+        ],
+        [
+          1,
+          1
+        ]
+      ],
+      "hidden": true
+    },
+    {
+      "name": "three rows",
+      "args": [
+        3
+      ],
+      "expected": [
+        [
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2,
+          1
+        ]
+      ],
+      "hidden": true
+    }
+  ],
+  "solutions": [
+    {
+      "approachName": "Build Row by Row",
+      "summary": "Each interior value sums the two above it from the previous row.",
+      "timeComplexity": "O(numRows²)",
+      "spaceComplexity": "O(numRows²)",
+      "technique": {
+        "primaryPattern": "dynamic-programming",
+        "optimal": true,
+        "signature": {
+          "maxLoopDepth": 2,
+          "usesHashStructure": false,
+          "usesSorting": false,
+          "usesRecursion": false,
+          "twoPointer": false
+        }
+      },
+      "steps": [
+        {
+          "title": "Start from the function shape",
+          "explanation": "Signature plus a default `[]` return.",
+          "code": {
+            "python": "def generate(num_rows):\n    return []\n",
+            "javascript": "function generate(numRows) {\n  return [];\n}\n",
+            "typescript": "function generate(numRows: number): number[][] {\n  return [];\n}\n"
+          }
+        },
+        {
+          "title": "Create each row of ones",
+          "explanation": "Row `r` has `r + 1` entries; start it filled with `1`, which already handles the edges.",
+          "code": {
+            "python": "def generate(num_rows):\n    rows = []\n    for r in range(num_rows):\n        row = [1] * (r + 1)\n        rows.append(row)\n    return rows\n",
+            "javascript": "function generate(numRows) {\n  const rows = [];\n  for (let r = 0; r < numRows; r++) {\n    const row = new Array(r + 1).fill(1);\n    rows.push(row);\n  }\n  return rows;\n}\n",
+            "typescript": "function generate(numRows: number): number[][] {\n  const rows: number[][] = [];\n  for (let r = 0; r < numRows; r++) {\n    const row = new Array<number>(r + 1).fill(1);\n    rows.push(row);\n  }\n  return rows;\n}\n"
+          }
+        },
+        {
+          "title": "Fill the interior from the row above",
+          "explanation": "For interior columns, add the two values directly above from the previous row.",
+          "code": {
+            "python": "def generate(num_rows):\n    rows = []\n    for r in range(num_rows):\n        row = [1] * (r + 1)\n        for c in range(1, r):\n            row[c] = rows[r - 1][c - 1] + rows[r - 1][c]\n        rows.append(row)\n    return rows\n",
+            "javascript": "function generate(numRows) {\n  const rows = [];\n  for (let r = 0; r < numRows; r++) {\n    const row = new Array(r + 1).fill(1);\n    for (let c = 1; c < r; c++) {\n      row[c] = rows[r - 1][c - 1] + rows[r - 1][c];\n    }\n    rows.push(row);\n  }\n  return rows;\n}\n",
+            "typescript": "function generate(numRows: number): number[][] {\n  const rows: number[][] = [];\n  for (let r = 0; r < numRows; r++) {\n    const row = new Array<number>(r + 1).fill(1);\n    for (let c = 1; c < r; c++) {\n      row[c] = rows[r - 1][c - 1] + rows[r - 1][c];\n    }\n    rows.push(row);\n  }\n  return rows;\n}\n"
+          }
+        }
+      ]
+    }
+  ]
+}
