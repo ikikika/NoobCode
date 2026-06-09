@@ -7,17 +7,8 @@
     <meta name="theme-color" content="#faf4e6" />
     <title>NoobCode</title>
     <script>
-      // Blocking FOUC-prevention: set theme class before first paint.
-      // Default to light (cream) when no preference is stored.
-      ;(function () {
-        try {
-          var stored = localStorage.getItem('theme')
-          var dark = stored ? stored === 'dark' : false
-          document.documentElement.classList[dark ? 'add' : 'remove']('dark')
-        } catch (e) {
-          document.documentElement.classList.remove('dark')
-        }
-      })()
+      // The app is cream light-only; ensure no stale dark class is applied.
+      document.documentElement.classList.remove('dark')
     </script>
   </head>
   <body>

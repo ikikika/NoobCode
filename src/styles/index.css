@@ -1,13 +1,9 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 
-/* Light (cream) is the default theme; .dark (warm espresso) is applied by the
-   FOUC script when the user opts in. */
-@custom-variant dark (&:where(.dark, .dark *));
-
-/* Cream theme — warm off-white surfaces, caramel/terracotta accent. */
-
-/* Light palette (cream) */
+/* Cream theme — warm off-white surfaces, caramel/terracotta accent, editorial
+   typography (Newsreader / Hanken Grotesk / JetBrains Mono, self-hosted). The
+   app is light-only. */
 :root {
   --color-surface: #faf4e6;
   --color-surface-raised: #fffdf5;
@@ -16,9 +12,11 @@
   --color-fg-muted: #6f6553;
   --color-fg-subtle: #9c8f76;
   --color-line: #e4d8bd;
+  --color-line-soft: #ece1c6;
   --color-accent: #c2703d;
   --color-accent-hover: #a85c2e;
   --color-accent-contrast: #fffdf5;
+  --color-accent-soft: rgba(194, 112, 61, 0.1);
   --color-diff-added: #4a7c3f;
   --color-diff-added-surface: #e9efd6;
   --color-diff-removed: #b5402f;
@@ -33,37 +31,13 @@
   --color-medium-surface: #f6ecd2;
   --color-hard: #b5402f;
   --color-hard-surface: #f6e2dc;
+
+  --serif: 'Newsreader', Georgia, serif;
+  --sans: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
 }
 
-/* Dark palette (warm espresso) */
-.dark {
-  --color-surface: #211c16;
-  --color-surface-raised: #2c261e;
-  --color-surface-sunken: #1a1611;
-  --color-fg: #f0e6d2;
-  --color-fg-muted: #b8ac95;
-  --color-fg-subtle: #877c66;
-  --color-line: #3e362b;
-  --color-accent: #d98a4e;
-  --color-accent-hover: #e89d63;
-  --color-accent-contrast: #211c16;
-  --color-diff-added: #6db564;
-  --color-diff-added-surface: #1f2a18;
-  --color-diff-removed: #e08160;
-  --color-diff-removed-surface: #2e1c16;
-  --color-pass: #6db564;
-  --color-pass-surface: #1f2a18;
-  --color-fail: #e08160;
-  --color-fail-surface: #2e1c16;
-  --color-easy: #5fb98f;
-  --color-easy-surface: #182a22;
-  --color-medium: #e0b85e;
-  --color-medium-surface: #2e2614;
-  --color-hard: #e08160;
-  --color-hard-surface: #2e1a16;
-}
-
-/* Map CSS variables to Tailwind color utilities (text-fg, bg-surface, etc.) */
+/* Map CSS variables to Tailwind color/font utilities (text-fg, bg-surface, …). */
 @theme inline {
   --color-surface: var(--color-surface);
   --color-surface-raised: var(--color-surface-raised);
@@ -72,9 +46,11 @@
   --color-fg-muted: var(--color-fg-muted);
   --color-fg-subtle: var(--color-fg-subtle);
   --color-line: var(--color-line);
+  --color-line-soft: var(--color-line-soft);
   --color-accent: var(--color-accent);
   --color-accent-hover: var(--color-accent-hover);
   --color-accent-contrast: var(--color-accent-contrast);
+  --color-accent-soft: var(--color-accent-soft);
   --color-diff-added: var(--color-diff-added);
   --color-diff-added-surface: var(--color-diff-added-surface);
   --color-diff-removed: var(--color-diff-removed);
@@ -89,6 +65,9 @@
   --color-medium-surface: var(--color-medium-surface);
   --color-hard: var(--color-hard);
   --color-hard-surface: var(--color-hard-surface);
+  --font-sans: var(--sans);
+  --font-serif: var(--serif);
+  --font-mono: var(--mono);
 }
 
 html,
@@ -101,11 +80,272 @@ body {
   margin: 0;
   background-color: var(--color-surface);
   color: var(--color-fg);
-  font-family:
-    ui-sans-serif,
-    system-ui,
-    -apple-system,
-    'Segoe UI',
-    Roboto,
-    sans-serif;
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ---- Editorial design-system classes (ported from the redesign mockup) ---- */
+.nc-serif {
+  font-family: var(--serif);
+}
+.nc-mono {
+  font-family: var(--mono);
+}
+
+.nc-kicker {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-fg-subtle);
+}
+
+.nc-head {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  padding: 20px 48px;
+  border-bottom: 1px solid var(--color-line);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: color-mix(in srgb, var(--color-surface) 88%, transparent);
+  backdrop-filter: blur(8px);
+}
+.nc-wordmark {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--color-fg);
+  text-decoration: none;
+}
+.nc-wordmark .br {
+  font-family: var(--mono);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-accent);
+}
+.nc-nav {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+}
+.nc-nav a {
+  font-size: 14.5px;
+  font-weight: 500;
+  color: var(--color-fg-subtle);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.nc-nav a:hover {
+  color: var(--color-fg-muted);
+}
+.nc-nav a.on {
+  color: var(--color-fg);
+}
+.nc-nav a.on::after {
+  content: '';
+  display: block;
+  height: 2px;
+  margin-top: 5px;
+  border-radius: 2px;
+  background: var(--color-accent);
+}
+.nc-head-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-fg-subtle);
+}
+.nc-iconbtn {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  border: 1px solid var(--color-line);
+  background: var(--color-surface-raised);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-fg-muted);
+  font-size: 15px;
+  cursor: pointer;
+  transition:
+    border-color 0.15s,
+    color 0.15s;
+}
+.nc-iconbtn:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.nc-diff {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+.nc-diff.easy {
+  color: var(--color-easy);
+  background: var(--color-easy-surface);
+}
+.nc-diff.medium {
+  color: var(--color-medium);
+  background: var(--color-medium-surface);
+}
+.nc-diff.hard {
+  color: var(--color-hard);
+  background: var(--color-hard-surface);
+}
+
+.nc-tag {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-fg-muted);
+  background: var(--color-surface-sunken);
+  padding: 3px 9px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.nc-tag.mono {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.02em;
+}
+
+.nc-check {
+  color: var(--color-pass);
+  font-size: 13px;
+}
+
+.nc-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+  display: inline-block;
+}
+.nc-dot.unseen {
+  background: rgba(156, 143, 118, 0.4);
+}
+.nc-dot.weak {
+  background: var(--color-fail);
+}
+.nc-dot.learning {
+  background: var(--color-medium);
+}
+.nc-dot.mastered {
+  background: var(--color-pass);
+}
+
+.nc-chip {
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 3px 9px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.nc-chip.unseen {
+  color: var(--color-fg-subtle);
+  background: var(--color-surface-sunken);
+}
+.nc-chip.weak {
+  color: var(--color-fail);
+  background: var(--color-fail-surface);
+}
+.nc-chip.learning {
+  color: var(--color-medium);
+  background: var(--color-medium-surface);
+}
+.nc-chip.mastered {
+  color: var(--color-pass);
+  background: var(--color-pass-surface);
+}
+
+.nc-bar {
+  height: 6px;
+  width: 100%;
+  border-radius: 999px;
+  background: var(--color-surface-sunken);
+  overflow: hidden;
+}
+.nc-bar > i {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--color-accent);
+  transition: width 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.nc-bar.thin {
+  height: 4px;
+}
+
+.nc-card {
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-line);
+  border-radius: 14px;
+}
+
+a.nc-reset {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+.nc-divide > * + * {
+  border-top: 1px solid var(--color-line-soft);
+}
+
+.nc-row-hover {
+  transition: background 0.12s;
+  border-radius: 8px;
+}
+.nc-row-hover:hover {
+  background: var(--color-accent-soft);
+}
+.nc-row-hover:hover .t {
+  color: var(--color-accent);
+}
+
+.nc-tile {
+  border: 1px solid var(--color-line);
+  border-radius: 11px;
+  background: var(--color-surface-raised);
+  padding: 13px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  min-height: 86px;
+}
+.nc-tile.empty {
+  background: transparent;
+  border-style: dashed;
+  border-color: var(--color-line);
+}
+
+.nc-resume:hover {
+  background: rgba(194, 112, 61, 0.16);
+}
+
+@media (max-width: 720px) {
+  .nc-head {
+    padding: 16px 20px;
+    gap: 20px;
+  }
+  .nc-head-actions {
+    gap: 6px;
+  }
+  .nc-grouprow {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
 }

@@ -34,6 +34,7 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
   const updateSchedule = useProgressStore((s) => s.updateSchedule)
   const recordAttempt = useProgressStore((s) => s.recordAttempt)
   const storeReview = useProgressStore((s) => s.storeReview)
+  const setLastRun = useProgressStore((s) => s.setLastRun)
 
   const language = useSolutionStore((s) => s.activeLanguage)
   const setLanguage = useSolutionStore((s) => s.setLanguage)
@@ -78,6 +79,10 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
     const passed = runResult.passed
     if (passed) markSolved(problem.slug)
     updateSchedule(problem.slug, passed)
+    setLastRun(problem.slug, {
+      passed: runResult.cases.filter((c) => c.passed).length,
+      total: runResult.cases.length,
+    })
 
     // Fire-and-forget review pipeline.
     void (async () => {
