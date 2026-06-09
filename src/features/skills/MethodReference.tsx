@@ -5,27 +5,30 @@ import { METHOD_REFERENCE, buildCorpus, isMethodUsed } from './methodCatalog'
 
 const LANGUAGES: LanguageId[] = ['python', 'javascript', 'typescript']
 
-const selectClass =
-  'rounded-md border border-line bg-surface px-2 py-1 text-sm text-fg'
+const selectStyle: React.CSSProperties = {
+  fontFamily: 'var(--mono)',
+  fontSize: 11,
+  letterSpacing: '0.02em',
+  color: 'var(--color-fg)',
+  background: 'var(--color-surface-sunken)',
+  border: 'none',
+  borderRadius: 999,
+  padding: '4px 9px',
+  cursor: 'pointer',
+}
 
 export function MethodReference() {
   const attempts = useProgressStore((s) => s.attempts)
   const lastLanguage = useProgressStore((s) => s.lastLanguage)
 
   const [language, setLanguage] = useState<LanguageId>(lastLanguage)
-  const [structureId, setStructureId] = useState<string>(
-    () => METHOD_REFERENCE[lastLanguage][0].id,
-  )
+  const [structureId, setStructureId] = useState<string>(() => METHOD_REFERENCE[lastLanguage][0].id)
 
   const groups = METHOD_REFERENCE[language]
   const group = groups.find((g) => g.id === structureId) ?? groups[0]
 
   const corpus = useMemo(() => buildCorpus(attempts, language), [attempts, language])
-
-  const used = useMemo(
-    () => group.methods.map((m) => isMethodUsed(corpus, m)),
-    [group, corpus],
-  )
+  const used = useMemo(() => group.methods.map((m) => isMethodUsed(corpus, m)), [group, corpus])
   const usedCount = used.filter(Boolean).length
 
   function onLanguageChange(next: LanguageId) {
@@ -34,14 +37,15 @@ export function MethodReference() {
   }
 
   return (
-    <div className="rounded-lg border border-line bg-surface-raised p-4">
-      <div className="flex flex-wrap items-center gap-3">
-        <label className="flex items-center gap-2 text-xs font-medium text-fg-muted">
+    <div className="nc-card" style={{ padding: '18px 20px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap', marginBottom: 14 }}>
+        <span style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12.5, color: 'var(--color-fg-muted)' }}>
           Language
           <select
+            aria-label="Language"
             value={language}
             onChange={(e) => onLanguageChange(e.target.value as LanguageId)}
-            className={selectClass}
+            style={selectStyle}
           >
             {LANGUAGES.map((lang) => (
               <option key={lang} value={lang}>
@@ -49,13 +53,14 @@ export function MethodReference() {
               </option>
             ))}
           </select>
-        </label>
-        <label className="flex items-center gap-2 text-xs font-medium text-fg-muted">
-          Data structure
+        </span>
+        <span style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12.5, color: 'var(--color-fg-muted)' }}>
+          Structure
           <select
+            aria-label="Data structure"
             value={group.id}
             onChange={(e) => setStructureId(e.target.value)}
-            className={selectClass}
+            style={selectStyle}
           >
             {groups.map((g) => (
               <option key={g.id} value={g.id}>
@@ -63,40 +68,37 @@ export function MethodReference() {
               </option>
             ))}
           </select>
-        </label>
-        <span className="ml-auto text-xs text-fg-subtle">
-          {usedCount}/{group.methods.length} used before
+        </span>
+        <span className="nc-mono" style={{ marginLeft: 'auto', fontSize: 12, color: 'var(--color-fg-subtle)' }}>
+          {usedCount}/{group.methods.length} used
         </span>
       </div>
-
-      <div className="mt-4 grid grid-cols-[auto_1fr_auto] gap-x-4 gap-y-0 text-sm">
-        <div className="border-b border-line pb-1 text-xs font-medium text-fg-subtle">Method</div>
-        <div className="border-b border-line pb-1 text-xs font-medium text-fg-subtle">
-          Description
-        </div>
-        <div className="border-b border-line pb-1 text-right text-xs font-medium text-fg-subtle">
-          Used
-        </div>
+      <div className="nc-divide">
         {group.methods.map((m, i) => (
-          <div key={m.name} className="contents">
-            <div className="border-b border-line/60 py-1.5 font-mono text-xs text-fg">{m.name}</div>
-            <div className="border-b border-line/60 py-1.5 text-fg-muted">{m.description}</div>
-            <div className="border-b border-line/60 py-1.5 text-right">
-              {used[i] ? (
-                <span className="font-medium text-pass" title="Used in a past submission">
-                  ✓
-                </span>
-              ) : (
-                <span className="text-fg-subtle" title="Not used yet">
-                  —
-                </span>
-              )}
-            </div>
+          <div
+            key={m.name}
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '200px 1fr auto',
+              gap: 16,
+              alignItems: 'center',
+              padding: '9px 0',
+            }}
+          >
+            <span className="nc-mono" style={{ fontSize: 12.5, color: 'var(--color-fg)' }}>
+              {m.name}
+            </span>
+            <span style={{ fontSize: 13, color: 'var(--color-fg-muted)' }}>{m.description}</span>
+            <span
+              style={{ fontSize: 13, color: used[i] ? 'var(--color-pass)' : 'var(--color-fg-subtle)' }}
+              title={used[i] ? 'Used in a past submission' : 'Not used yet'}
+            >
+              {used[i] ? '✓' : '—'}
+            </span>
           </div>
         ))}
       </div>
-
-      <p className="mt-3 text-[11px] leading-snug text-fg-subtle">
+      <p style={{ marginTop: 12, fontSize: 11, lineHeight: 1.4, color: 'var(--color-fg-subtle)' }}>
         “Used” means the method appears in one of your past submissions in this language.
       </p>
     </div>

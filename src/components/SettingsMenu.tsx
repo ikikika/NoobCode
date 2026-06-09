@@ -36,9 +36,10 @@ export function SettingsMenu() {
         onClick={() => setOpen((o) => !o)}
         aria-label="Settings"
         aria-expanded={open}
-        className="rounded-md p-2 text-fg-muted hover:bg-surface-raised hover:text-fg"
+        className="nc-iconbtn"
+        title="Settings"
       >
-        <span className="text-lg leading-none">⚙️</span>
+        ⚙
       </button>
 
       {open && (

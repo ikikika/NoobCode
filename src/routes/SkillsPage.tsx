@@ -3,30 +3,11 @@ import { Link } from 'react-router-dom'
 import { PATTERNS, PATTERN_LABELS, type PatternId } from '../content/patterns'
 import { builtinMeta } from '../content'
 import { useProgressStore } from '../store/useProgressStore'
-import { dueLabel, isDue } from '../features/review/schedule'
-import {
-  deriveMastery,
-  MASTERY_LABELS,
-  MASTERY_ORDER,
-  type MasteryLevel,
-} from '../features/skills/mastery'
+import { deriveMastery, MASTERY_ORDER, type MasteryLevel } from '../features/skills/mastery'
 import type { AttemptRecord } from '../features/analysis/types'
 import { MethodReference } from '../features/skills/MethodReference'
 import { Tabs } from '../components/Tabs'
-
-const MASTERY_STYLES: Record<MasteryLevel, string> = {
-  unseen: 'bg-surface-sunken text-fg-subtle',
-  weak: 'bg-fail-surface text-fail',
-  learning: 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-400',
-  mastered: 'bg-pass-surface text-pass',
-}
-
-const MASTERY_DOT: Record<MasteryLevel, string> = {
-  unseen: 'bg-fg-subtle/40',
-  weak: 'bg-fail',
-  learning: 'bg-amber-500',
-  mastered: 'bg-pass',
-}
+import { Bar, Kicker, MasteryChip, MasteryDot, Ring } from '../components/ui'
 
 type SkillsTab = 'patterns' | 'methods'
 
@@ -38,6 +19,7 @@ interface RelatedProblem {
 
 interface PatternStat {
   pattern: PatternId
+  label: string
   mastery: MasteryLevel
   solved: number
   total: number
@@ -45,90 +27,67 @@ interface PatternStat {
   related: RelatedProblem[]
 }
 
-function ProgressBar({ value, max, tone }: { value: number; max: number; tone: string }) {
-  const pct = max === 0 ? 0 : Math.round((value / max) * 100)
+const LEGEND: [MasteryLevel, string][] = [
+  ['mastered', 'Mastered'],
+  ['learning', 'Learning'],
+  ['weak', 'Weak'],
+  ['unseen', 'Unseen'],
+]
+
+function Legend() {
   return (
-    <div className="h-1.5 w-full overflow-hidden rounded-full bg-surface-sunken">
-      <div className={`h-full rounded-full ${tone} transition-[width]`} style={{ width: `${pct}%` }} />
+    <div style={{ display: 'flex', gap: 18, flexWrap: 'wrap' }}>
+      {LEGEND.map(([k, l]) => (
+        <span
+          key={k}
+          style={{ display: 'flex', alignItems: 'center', gap: 7, fontSize: 12.5, color: 'var(--color-fg-muted)' }}
+        >
+          <MasteryDot level={k} />
+          {l}
+        </span>
+      ))}
     </div>
   )
 }
 
-function PatternRow({ stat }: { stat: PatternStat }) {
-  const pct = stat.total === 0 ? 0 : Math.round((stat.solved / stat.total) * 100)
+function MiniStat({ value, label }: { value: string | number; label: string }) {
   return (
-    <div className="flex flex-col gap-3 rounded-lg border border-line bg-surface-raised p-3 sm:flex-row sm:gap-4">
-      <div className="sm:w-60 sm:shrink-0">
-        <div className="flex items-center justify-between gap-2">
-          <span className="flex items-center gap-2 text-sm font-semibold text-fg">
-            <span className={`h-2 w-2 shrink-0 rounded-full ${MASTERY_DOT[stat.mastery]}`} />
-            {PATTERN_LABELS[stat.pattern]}
-          </span>
-          <span
-            className={`rounded-full px-2 py-0.5 text-xs font-medium ${MASTERY_STYLES[stat.mastery]}`}
-          >
-            {MASTERY_LABELS[stat.mastery]}
-          </span>
-        </div>
-        <div className="mt-1.5 mb-1 text-xs text-fg-subtle">
-          {stat.solved}/{stat.total} solved · {pct}%
-        </div>
-        <ProgressBar value={stat.solved} max={stat.total} tone="bg-accent" />
+    <div>
+      <div className="nc-serif" style={{ fontSize: 24, fontWeight: 500, lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}>
+        {value}
       </div>
-      <ol className="flex flex-col gap-0.5 sm:flex-1">
-        {stat.related.map((p, i) => (
-          <li key={p.slug}>
-            <Link
-              to={`/problems/${p.slug}`}
-              className={`flex items-center gap-2 rounded-md px-2 py-1 text-xs ${
-                p.solved
-                  ? 'text-pass hover:bg-pass-surface'
-                  : 'text-fg-muted hover:bg-surface-sunken hover:text-accent'
-              }`}
-            >
-              <span className="w-5 shrink-0 text-right tabular-nums text-fg-subtle">{i + 1}.</span>
-              <span className="flex-1">{p.title}</span>
-              {p.solved && <span aria-hidden>✓</span>}
-            </Link>
-          </li>
-        ))}
-      </ol>
+      <Kicker style={{ marginTop: 7, display: 'block' }}>{label}</Kicker>
     </div>
   )
 }
 
-function Stat({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-lg border border-line bg-surface p-3">
-      <div className="text-xs text-fg-subtle">{label}</div>
-      <div className="text-xl font-bold text-fg">{value}</div>
-    </div>
-  )
+function patternHref(s: PatternStat): string {
+  const target = s.related.find((p) => !p.solved) ?? s.related[0]
+  return target ? `/problems/${target.slug}` : '/problems'
 }
 
 export function SkillsPage() {
   const solved = useProgressStore((s) => s.solved)
   const attempts = useProgressStore((s) => s.attempts)
-  const schedule = useProgressStore((s) => s.schedule)
-  const problemsMeta = builtinMeta
   const now = Date.now()
 
   const [tab, setTab] = useState<SkillsTab>('patterns')
 
   const slugPatterns = useMemo(() => {
     const map = new Map<string, PatternId[]>()
-    for (const p of problemsMeta) map.set(p.slug, p.patterns)
+    for (const p of builtinMeta) map.set(p.slug, p.patterns)
     return map
-  }, [problemsMeta])
+  }, [])
 
   const stats = useMemo<PatternStat[]>(() => {
     return PATTERNS.map((pattern) => {
-      const related = problemsMeta.filter((p) => p.patterns.includes(pattern))
+      const related = builtinMeta.filter((p) => p.patterns.includes(pattern))
       const patternAttempts: AttemptRecord[] = attempts.filter((a) =>
         slugPatterns.get(a.slug)?.includes(pattern),
       )
       return {
         pattern,
+        label: PATTERN_LABELS[pattern],
         mastery: deriveMastery(patternAttempts, now),
         solved: related.filter((p) => solved[p.slug]).length,
         total: related.length,
@@ -136,31 +95,36 @@ export function SkillsPage() {
         related: related.map((p) => ({ slug: p.slug, title: p.title, solved: !!solved[p.slug] })),
       }
     })
-  }, [attempts, solved, slugPatterns, problemsMeta, now])
+  }, [attempts, solved, slugPatterns, now])
 
-  const solvedCount = Object.values(solved).filter(Boolean).length
+  const solvedCount = builtinMeta.filter((p) => solved[p.slug]).length
+  const total = builtinMeta.length
   const totalRuns = attempts.length
   const coveredStats = stats.filter((s) => s.total > 0)
-  const uncovered = stats.filter((s) => s.total === 0)
-  const patternsExplored = coveredStats.filter((s) => s.attempted).length
   const masteredCount = coveredStats.filter((s) => s.mastery === 'mastered').length
-
-  const dueProblems = problemsMeta.filter((p) => isDue(schedule[p.slug], now))
-
-  const focusAreas = useMemo(
+  const exploredCount = coveredStats.filter((s) => s.attempted).length
+  const weak = useMemo(
     () =>
       stats
-        .filter((s) => s.attempted && s.mastery !== 'mastered')
-        .sort((a, b) => MASTERY_ORDER[a.mastery] - MASTERY_ORDER[b.mastery])
-        .slice(0, 3),
+        .filter((s) => s.attempted && s.mastery === 'weak')
+        .sort((a, b) => MASTERY_ORDER[a.mastery] - MASTERY_ORDER[b.mastery]),
     [stats],
   )
+  const pct = total === 0 ? 0 : Math.round((solvedCount / total) * 100)
 
   return (
-    <div className="mx-auto h-full max-w-5xl overflow-auto px-4 py-6">
-      <h1 className="mb-3 text-2xl font-bold text-fg">Skills</h1>
+    <div style={{ padding: '36px 48px 56px', maxWidth: 1180, margin: '0 auto' }}>
+      <div style={{ marginBottom: 20, display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 16 }}>
+        <div>
+          <Kicker>Your skills</Kicker>
+          <h1 className="nc-serif" style={{ fontSize: 32, fontWeight: 500, letterSpacing: '-0.02em', margin: '8px 0 0' }}>
+            Skills overview
+          </h1>
+        </div>
+        {tab === 'patterns' && <Legend />}
+      </div>
 
-      <div className="mb-6">
+      <div style={{ marginBottom: 24 }}>
         <Tabs
           tabs={[
             { id: 'patterns', label: 'Question Patterns' },
@@ -173,83 +137,107 @@ export function SkillsPage() {
 
       {tab === 'patterns' ? (
         <>
-          <div className="mb-6 rounded-lg border border-line bg-surface-raised p-4">
-            <div className="mb-1 flex items-baseline justify-between">
-              <span className="text-sm font-semibold text-fg">Overall progress</span>
-              <span className="text-xs text-fg-muted">
-                {solvedCount} of {problemsMeta.length} problems solved
-              </span>
+          {/* overall + where to focus */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1.15fr 1fr', gap: 20, marginBottom: 20 }}>
+            <div className="nc-card" style={{ padding: '24px 26px', display: 'flex', alignItems: 'center', gap: 30 }}>
+              <Ring pct={pct} />
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px 28px', flex: 1 }}>
+                <MiniStat value={`${solvedCount}/${total}`} label="Solved" />
+                <MiniStat value={`${masteredCount}/${coveredStats.length}`} label="Mastered" />
+                <MiniStat value={`${exploredCount}/${coveredStats.length}`} label="Explored" />
+                <MiniStat value={totalRuns} label="Total runs" />
+              </div>
             </div>
-            <ProgressBar value={solvedCount} max={problemsMeta.length} tone="bg-accent" />
-            <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
-              <Stat label="Problems solved" value={`${solvedCount}/${problemsMeta.length}`} />
-              <Stat label="Patterns mastered" value={`${masteredCount}/${coveredStats.length}`} />
-              <Stat label="Patterns explored" value={`${patternsExplored}/${coveredStats.length}`} />
-              <Stat label="Total runs" value={String(totalRuns)} />
+            <div className="nc-card" style={{ padding: '20px 24px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+                <span className="nc-serif" style={{ fontSize: 18, fontWeight: 500 }}>
+                  Where to focus
+                </span>
+                <span className="nc-chip weak">{weak.length} weak</span>
+              </div>
+              {weak.length === 0 ? (
+                <p style={{ fontSize: 13, color: 'var(--color-fg-subtle)', margin: 0 }}>
+                  Nothing weak right now — keep practicing to surface gaps.
+                </p>
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+                  {weak.map((s) => (
+                    <Link
+                      key={s.pattern}
+                      to={patternHref(s)}
+                      className="nc-reset"
+                      style={{ display: 'grid', gridTemplateColumns: '150px 1fr 44px', gap: 14, alignItems: 'center' }}
+                    >
+                      <span style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, fontWeight: 500 }}>
+                        <MasteryDot level={s.mastery} />
+                        {s.label}
+                      </span>
+                      <Bar value={s.solved} max={s.total} thin />
+                      <span className="nc-mono" style={{ fontSize: 11.5, color: 'var(--color-fg-subtle)', textAlign: 'right' }}>
+                        {s.solved}/{s.total}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 
-          {dueProblems.length > 0 && (
-            <section className="mb-6">
-              <h2 className="mb-2 text-sm font-semibold text-fg">Due for review</h2>
-              <ul className="flex flex-col gap-2">
-                {dueProblems.map((p) => (
-                  <li key={p.slug}>
-                    <Link
-                      to={`/problems/${p.slug}`}
-                      className="flex items-center justify-between rounded-md border border-line bg-surface-raised px-3 py-2 text-sm hover:bg-surface-sunken"
-                    >
-                      <span className="font-medium text-fg">{p.title}</span>
-                      <span className="rounded-full bg-accent/15 px-2 py-0.5 text-xs font-medium text-accent">
-                        {dueLabel(schedule[p.slug], now)}
-                      </span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </section>
-          )}
-
-          {focusAreas.length > 0 && (
-            <section className="mb-6">
-              <h2 className="mb-2 text-sm font-semibold text-fg">Focus areas</h2>
-              <p className="mb-2 text-xs text-fg-subtle">
-                The patterns you’ve attempted but haven’t mastered yet — worth another pass.
-              </p>
-              <div className="flex flex-col gap-2">
-                {focusAreas.map((stat) => (
-                  <PatternRow key={stat.pattern} stat={stat} />
-                ))}
-              </div>
-            </section>
-          )}
-
-          <section>
-            <div className="mb-2 flex items-center gap-2">
-              <h2 className="text-sm font-semibold text-fg">All patterns</h2>
-              <span className="text-xs text-fg-subtle">({coveredStats.length})</span>
-            </div>
-            <div className="flex flex-col gap-2">
-              {coveredStats.map((stat) => (
-                <PatternRow key={stat.pattern} stat={stat} />
+          {/* mastery matrix */}
+          <div className="nc-card" style={{ padding: '6px 26px 12px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '230px 90px 1fr 130px', gap: 20, alignItems: 'center', padding: '14px 0 10px' }}>
+              {['Pattern', 'Solved', 'Problems', 'Mastery'].map((h) => (
+                <Kicker key={h}>{h}</Kicker>
               ))}
             </div>
-            {uncovered.length > 0 && (
-              <p className="mt-3 text-xs text-fg-subtle">
-                Not yet covered by any problem:{' '}
-                {uncovered.map((s) => PATTERN_LABELS[s.pattern]).join(', ')}.
-              </p>
-            )}
-          </section>
+            <div className="nc-divide">
+              {coveredStats.map((s) => (
+                <Link key={s.pattern} className="nc-reset" to={patternHref(s)}>
+                  <div
+                    className="nc-row-hover"
+                    style={{ display: 'grid', gridTemplateColumns: '230px 90px 1fr 130px', gap: 20, alignItems: 'center', padding: '12px', margin: '0 -12px' }}
+                  >
+                    <span style={{ display: 'flex', alignItems: 'center', gap: 9, fontSize: 14.5, fontWeight: 500 }}>
+                      <MasteryDot level={s.mastery} />
+                      <span className="t" style={{ transition: 'color .12s' }}>
+                        {s.label}
+                      </span>
+                    </span>
+                    <span className="nc-mono" style={{ fontSize: 12.5, color: 'var(--color-fg-muted)' }}>
+                      {s.solved}/{s.total}
+                    </span>
+                    <span style={{ display: 'flex', gap: 5, flexWrap: 'wrap' }}>
+                      {s.related.map((p) => (
+                        <span
+                          key={p.slug}
+                          title={p.title}
+                          style={{
+                            width: 18,
+                            height: 18,
+                            borderRadius: 5,
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            fontSize: 10,
+                            background: p.solved ? 'var(--color-pass-surface)' : 'var(--color-surface-sunken)',
+                            color: p.solved ? 'var(--color-pass)' : 'var(--color-fg-subtle)',
+                          }}
+                        >
+                          {p.solved ? '✓' : '·'}
+                        </span>
+                      ))}
+                    </span>
+                    <span style={{ justifySelf: 'start' }}>
+                      <MasteryChip level={s.mastery} />
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
         </>
       ) : (
-        <section>
-          <p className="mb-3 text-xs text-fg-subtle">
-            Common methods for a data structure in each language, with a check for the ones you’ve
-            already used in a past submission.
-          </p>
-          <MethodReference />
-        </section>
+        <MethodReference />
       )}
     </div>
   )
