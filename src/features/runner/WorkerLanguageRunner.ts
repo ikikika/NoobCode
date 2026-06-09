@@ -136,6 +136,8 @@ export abstract class WorkerLanguageRunner implements LanguageRunner {
         userCode: opts.userCode,
         functionName: opts.functionName,
         tests: opts.tests,
+        kind: opts.kind,
+        io: opts.io,
       })
     })
   }

@@ -29,7 +29,7 @@ export function ReviewPanel({ slug }: { slug: string }) {
           className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${
             review.isOptimal
               ? 'bg-pass-surface text-pass'
-              : 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-400'
+              : 'bg-medium-surface text-medium'
           }`}
         >
           {review.isOptimal ? 'Optimal' : 'Needs work'}

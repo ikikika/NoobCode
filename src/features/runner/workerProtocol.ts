@@ -1,6 +1,6 @@
 import type { TestCase } from '../../content/schema'
 import type { CodeFeatures } from '../analysis/types'
-import type { RunResult } from './LanguageRunner'
+import type { ExecSpec, RunResult } from './LanguageRunner'
 
 // --- Requests (main thread → worker) ---
 export interface WorkerInitRequest {
@@ -11,7 +11,7 @@ export interface WorkerInitRequest {
   interruptBuffer?: Uint8Array
 }
 
-export interface WorkerRunRequest {
+export interface WorkerRunRequest extends ExecSpec {
   type: 'run'
   id: number
   userCode: string

@@ -1,0 +1,225 @@
+{
+  "slug": "three-sum",
+  "title": "3Sum",
+  "difficulty": "medium",
+  "tags": [
+    "array",
+    "two-pointers"
+  ],
+  "patterns": [
+    "two-pointers",
+    "sorting"
+  ],
+  "description": "Given an integer array `nums`, return all the triplets `[nums[i], nums[j],\nnums[k]]` such that `i`, `j`, `k` are distinct and `nums[i] + nums[j] +\nnums[k] == 0`. The solution set must not contain duplicate triplets.\n\nReturn the triplets sorted (each triplet ascending, and the list of triplets in\nascending order).",
+  "constraints": [
+    "3 <= nums.length <= 3000",
+    "-10^5 <= nums[i] <= 10^5"
+  ],
+  "examples": [
+    {
+      "input": "nums = [-1,0,1,2,-1,-4]",
+      "output": "[[-1,-1,2],[-1,0,1]]"
+    },
+    {
+      "input": "nums = [0,1,1]",
+      "output": "[]"
+    },
+    {
+      "input": "nums = [0,0,0]",
+      "output": "[[0,0,0]]"
+    }
+  ],
+  "functionName": {
+    "python": "three_sum",
+    "javascript": "threeSum",
+    "typescript": "threeSum"
+  },
+  "starterCode": {
+    "python": "def three_sum(nums):\n    # Return all unique triplets summing to zero.\n    pass\n",
+    "javascript": "function threeSum(nums) {\n  // Return all unique triplets summing to zero.\n}\n",
+    "typescript": "function threeSum(nums: number[]): number[][] {\n  // Return all unique triplets summing to zero.\n  return [];\n}\n"
+  },
+  "tests": [
+    {
+      "name": "example 1",
+      "args": [
+        [
+          -1,
+          0,
+          1,
+          2,
+          -1,
+          -4
+        ]
+      ],
+      "expected": [
+        [
+          -1,
+          -1,
+          2
+        ],
+        [
+          -1,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "name": "no triplet",
+      "args": [
+        [
+          0,
+          1,
+          1
+        ]
+      ],
+      "expected": []
+    },
+    {
+      "name": "all zeros",
+      "args": [
+        [
+          0,
+          0,
+          0
+        ]
+      ],
+      "expected": [
+        [
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "name": "multiple",
+      "args": [
+        [
+          -2,
+          0,
+          1,
+          1,
+          2
+        ]
+      ],
+      "expected": [
+        [
+          -2,
+          0,
+          2
+        ],
+        [
+          -2,
+          1,
+          1
+        ]
+      ],
+      "hidden": true
+    },
+    {
+      "name": "negatives",
+      "args": [
+        [
+          -4,
+          -2,
+          -2,
+          -2,
+          0,
+          1,
+          2,
+          2,
+          2,
+          3,
+          3,
+          4,
+          4,
+          6,
+          6
+        ]
+      ],
+      "expected": [
+        [
+          -4,
+          -2,
+          6
+        ],
+        [
+          -4,
+          0,
+          4
+        ],
+        [
+          -4,
+          1,
+          3
+        ],
+        [
+          -4,
+          2,
+          2
+        ],
+        [
+          -2,
+          -2,
+          4
+        ],
+        [
+          -2,
+          0,
+          2
+        ]
+      ],
+      "hidden": true
+    }
+  ],
+  "solutions": [
+    {
+      "approachName": "Sort + Two Pointers",
+      "summary": "Fix one number, then two-pointer scan the rest for its complement pair.",
+      "timeComplexity": "O(n²)",
+      "spaceComplexity": "O(1)",
+      "technique": {
+        "primaryPattern": "two-pointers",
+        "optimal": true,
+        "signature": {
+          "maxLoopDepth": 2,
+          "usesHashStructure": false,
+          "usesSorting": true,
+          "usesRecursion": false,
+          "twoPointer": true
+        }
+      },
+      "steps": [
+        {
+          "title": "Sort and set up the result",
+          "explanation": "Sorting lets us skip duplicates and move two pointers by comparing the running sum to zero.",
+          "code": {
+            "python": "def three_sum(nums):\n    nums.sort()\n    res = []\n    return res\n",
+            "javascript": "function threeSum(nums) {\n  nums.sort((a, b) => a - b);\n  const res = [];\n  return res;\n}\n",
+            "typescript": "function threeSum(nums: number[]): number[][] {\n  nums.sort((a, b) => a - b);\n  const res: number[][] = [];\n  return res;\n}\n"
+          }
+        },
+        {
+          "title": "Fix the first number",
+          "explanation": "Loop `i` over each value as the first of the triplet, skipping repeats so triplets stay unique.",
+          "code": {
+            "python": "def three_sum(nums):\n    nums.sort()\n    res = []\n    n = len(nums)\n    for i in range(n):\n        if i > 0 and nums[i] == nums[i - 1]:\n            continue\n    return res\n",
+            "javascript": "function threeSum(nums) {\n  nums.sort((a, b) => a - b);\n  const res = [];\n  const n = nums.length;\n  for (let i = 0; i < n; i++) {\n    if (i > 0 && nums[i] === nums[i - 1]) continue;\n  }\n  return res;\n}\n",
+            "typescript": "function threeSum(nums: number[]): number[][] {\n  nums.sort((a, b) => a - b);\n  const res: number[][] = [];\n  const n = nums.length;\n  for (let i = 0; i < n; i++) {\n    if (i > 0 && nums[i] === nums[i - 1]) continue;\n  }\n  return res;\n}\n"
+          }
+        },
+        {
+          "title": "Two-pointer the remainder",
+          "explanation": "Move `lo`/`hi` inward: grow the sum by raising `lo`, shrink it by lowering `hi`, and record every zero, skipping duplicates.",
+          "code": {
+            "python": "def three_sum(nums):\n    nums.sort()\n    res = []\n    n = len(nums)\n    for i in range(n):\n        if i > 0 and nums[i] == nums[i - 1]:\n            continue\n        lo, hi = i + 1, n - 1\n        while lo < hi:\n            total = nums[i] + nums[lo] + nums[hi]\n            if total < 0:\n                lo += 1\n            elif total > 0:\n                hi -= 1\n            else:\n                res.append([nums[i], nums[lo], nums[hi]])\n                lo += 1\n                hi -= 1\n                while lo < hi and nums[lo] == nums[lo - 1]:\n                    lo += 1\n                while lo < hi and nums[hi] == nums[hi + 1]:\n                    hi -= 1\n    return res\n",
+            "javascript": "function threeSum(nums) {\n  nums.sort((a, b) => a - b);\n  const res = [];\n  const n = nums.length;\n  for (let i = 0; i < n; i++) {\n    if (i > 0 && nums[i] === nums[i - 1]) continue;\n    let lo = i + 1, hi = n - 1;\n    while (lo < hi) {\n      const total = nums[i] + nums[lo] + nums[hi];\n      if (total < 0) lo++;\n      else if (total > 0) hi--;\n      else {\n        res.push([nums[i], nums[lo], nums[hi]]);\n        lo++; hi--;\n        while (lo < hi && nums[lo] === nums[lo - 1]) lo++;\n        while (lo < hi && nums[hi] === nums[hi + 1]) hi--;\n      }\n    }\n  }\n  return res;\n}\n",
+            "typescript": "function threeSum(nums: number[]): number[][] {\n  nums.sort((a, b) => a - b);\n  const res: number[][] = [];\n  const n = nums.length;\n  for (let i = 0; i < n; i++) {\n    if (i > 0 && nums[i] === nums[i - 1]) continue;\n    let lo = i + 1, hi = n - 1;\n    while (lo < hi) {\n      const total = nums[i] + nums[lo] + nums[hi];\n      if (total < 0) lo++;\n      else if (total > 0) hi--;\n      else {\n        res.push([nums[i], nums[lo], nums[hi]]);\n        lo++; hi--;\n        while (lo < hi && nums[lo] === nums[lo - 1]) lo++;\n        while (lo < hi && nums[hi] === nums[hi + 1]) hi--;\n      }\n    }\n  }\n  return res;\n}\n"
+          }
+        }
+      ]
+    }
+  ]
+}

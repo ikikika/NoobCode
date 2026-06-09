@@ -1,0 +1,179 @@
+{
+  "slug": "word-search",
+  "title": "Word Search",
+  "difficulty": "hard",
+  "tags": [
+    "grid",
+    "backtracking"
+  ],
+  "patterns": [
+    "backtracking",
+    "depth-first-search"
+  ],
+  "description": "Given an `m x n` grid of characters `board` and a string `word`, return `true`\nif `word` exists in the grid. The word is built from sequentially adjacent\ncells (horizontal/vertical neighbors); the same cell may not be used twice.",
+  "constraints": [
+    "1 <= m, n <= 6",
+    "1 <= word.length <= 15",
+    "board and word consist of lowercase/uppercase letters."
+  ],
+  "examples": [
+    {
+      "input": "board = [[\"A\",\"B\",\"C\",\"E\"],[\"S\",\"F\",\"C\",\"S\"],[\"A\",\"D\",\"E\",\"E\"]], word = \"ABCCED\"",
+      "output": "true"
+    },
+    {
+      "input": "same board, word = \"ABCB\"",
+      "output": "false"
+    }
+  ],
+  "functionName": {
+    "python": "exist",
+    "javascript": "exist",
+    "typescript": "exist"
+  },
+  "starterCode": {
+    "python": "def exist(board, word):\n    # Return True if word can be traced in the grid.\n    pass\n",
+    "javascript": "function exist(board, word) {\n  // Return true if word can be traced in the grid.\n}\n",
+    "typescript": "function exist(board: string[][], word: string): boolean {\n  // Return true if word can be traced in the grid.\n  return false;\n}\n"
+  },
+  "tests": [
+    {
+      "name": "present",
+      "args": [
+        [
+          [
+            "A",
+            "B",
+            "C",
+            "E"
+          ],
+          [
+            "S",
+            "F",
+            "C",
+            "S"
+          ],
+          [
+            "A",
+            "D",
+            "E",
+            "E"
+          ]
+        ],
+        "ABCCED"
+      ],
+      "expected": true
+    },
+    {
+      "name": "also present",
+      "args": [
+        [
+          [
+            "A",
+            "B",
+            "C",
+            "E"
+          ],
+          [
+            "S",
+            "F",
+            "C",
+            "S"
+          ],
+          [
+            "A",
+            "D",
+            "E",
+            "E"
+          ]
+        ],
+        "SEE"
+      ],
+      "expected": true
+    },
+    {
+      "name": "absent",
+      "args": [
+        [
+          [
+            "A",
+            "B",
+            "C",
+            "E"
+          ],
+          [
+            "S",
+            "F",
+            "C",
+            "S"
+          ],
+          [
+            "A",
+            "D",
+            "E",
+            "E"
+          ]
+        ],
+        "ABCB"
+      ],
+      "expected": false
+    },
+    {
+      "name": "single cell",
+      "args": [
+        [
+          [
+            "A"
+          ]
+        ],
+        "A"
+      ],
+      "expected": true,
+      "hidden": true
+    },
+    {
+      "name": "too long",
+      "args": [
+        [
+          [
+            "A",
+            "B"
+          ]
+        ],
+        "ABA"
+      ],
+      "expected": false,
+      "hidden": true
+    }
+  ],
+  "solutions": [
+    {
+      "approachName": "DFS Backtracking",
+      "summary": "From each cell, walk matching neighbors, marking visited and undoing on backtrack.",
+      "timeComplexity": "O(m · n · 4^L)",
+      "spaceComplexity": "O(L)",
+      "technique": {
+        "primaryPattern": "backtracking",
+        "optimal": true,
+        "signature": {
+          "maxLoopDepth": 2,
+          "usesHashStructure": false,
+          "usesSorting": false,
+          "usesRecursion": true,
+          "twoPointer": false
+        }
+      },
+      "steps": [
+        {
+          "title": "Search each start cell with backtracking",
+          "explanation": "At each step, match `word[i]`, temporarily blank the cell, recurse into the four neighbors, then restore the cell.",
+          "code": {
+            "python": "def exist(board, word):\n    rows, cols = len(board), len(board[0])\n    def dfs(r, c, i):\n        if i == len(word):\n            return True\n        if r < 0 or c < 0 or r >= rows or c >= cols or board[r][c] != word[i]:\n            return False\n        tmp = board[r][c]\n        board[r][c] = \"#\"\n        found = (dfs(r + 1, c, i + 1) or dfs(r - 1, c, i + 1) or\n                 dfs(r, c + 1, i + 1) or dfs(r, c - 1, i + 1))\n        board[r][c] = tmp\n        return found\n    for r in range(rows):\n        for c in range(cols):\n            if dfs(r, c, 0):\n                return True\n    return False\n",
+            "javascript": "function exist(board, word) {\n  const rows = board.length, cols = board[0].length;\n  function dfs(r, c, i) {\n    if (i === word.length) return true;\n    if (r < 0 || c < 0 || r >= rows || c >= cols || board[r][c] !== word[i]) return false;\n    const tmp = board[r][c];\n    board[r][c] = \"#\";\n    const found = dfs(r + 1, c, i + 1) || dfs(r - 1, c, i + 1) || dfs(r, c + 1, i + 1) || dfs(r, c - 1, i + 1);\n    board[r][c] = tmp;\n    return found;\n  }\n  for (let r = 0; r < rows; r++) {\n    for (let c = 0; c < cols; c++) {\n      if (dfs(r, c, 0)) return true;\n    }\n  }\n  return false;\n}\n",
+            "typescript": "function exist(board: string[][], word: string): boolean {\n  const rows = board.length, cols = board[0].length;\n  function dfs(r: number, c: number, i: number): boolean {\n    if (i === word.length) return true;\n    if (r < 0 || c < 0 || r >= rows || c >= cols || board[r][c] !== word[i]) return false;\n    const tmp = board[r][c];\n    board[r][c] = \"#\";\n    const found = dfs(r + 1, c, i + 1) || dfs(r - 1, c, i + 1) || dfs(r, c + 1, i + 1) || dfs(r, c - 1, i + 1);\n    board[r][c] = tmp;\n    return found;\n  }\n  for (let r = 0; r < rows; r++) {\n    for (let c = 0; c < cols; c++) {\n      if (dfs(r, c, 0)) return true;\n    }\n  }\n  return false;\n}\n"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -73,7 +73,14 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
     const userCode = code
     const tests = sampleOnly ? problem.tests.filter((t) => !t.hidden) : problem.tests
 
-    const runResult = await run({ language, userCode, functionName: fnName, tests })
+    const runResult = await run({
+      language,
+      userCode,
+      functionName: fnName,
+      tests,
+      kind: problem.kind,
+      io: problem.io,
+    })
     if (sampleOnly || !runResult) return
 
     const passed = runResult.passed

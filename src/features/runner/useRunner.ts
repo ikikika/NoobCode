@@ -2,9 +2,9 @@ import { useCallback } from 'react'
 import type { LanguageId, TestCase } from '../../content/schema'
 import { useRunnerStore } from '../../store/useRunnerStore'
 import { getRunner } from './runnerRegistry'
-import type { RunResult } from './LanguageRunner'
+import type { ExecSpec, RunResult } from './LanguageRunner'
 
-export interface RunArgs {
+export interface RunArgs extends ExecSpec {
   language: LanguageId
   userCode: string
   functionName: string
@@ -36,6 +36,8 @@ export function useRunner() {
           functionName: args.functionName,
           tests: args.tests,
           timeoutMs: args.timeoutMs,
+          kind: args.kind,
+          io: args.io,
         })
         setResult(runResult)
         setStatus(runResult.error && runResult.cases.length === 0 ? 'error' : 'done')

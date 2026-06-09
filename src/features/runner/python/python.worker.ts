@@ -31,6 +31,8 @@ async function handleRun(req: Extract<WorkerRequest, { type: 'run' }>) {
   py.globals.set('__user_code__', req.userCode)
   py.globals.set('__function_name__', req.functionName)
   py.globals.set('__tests_json__', JSON.stringify(req.tests))
+  py.globals.set('__kind__', req.kind ?? 'function')
+  py.globals.set('__io_json__', JSON.stringify(req.io ?? {}))
 
   let raw: string
   try {

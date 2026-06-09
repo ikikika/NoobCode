@@ -1,0 +1,153 @@
+{
+  "slug": "number-of-islands",
+  "title": "Number of Islands",
+  "difficulty": "medium",
+  "tags": [
+    "grid",
+    "depth-first-search"
+  ],
+  "patterns": [
+    "depth-first-search"
+  ],
+  "description": "Given a 2D grid of `\"1\"` (land) and `\"0\"` (water), return the number of\nislands. An island is surrounded by water and formed by connecting adjacent\nland horizontally or vertically.",
+  "constraints": [
+    "1 <= grid.length, grid[0].length <= 300",
+    "grid[i][j] is \"0\" or \"1\"."
+  ],
+  "examples": [
+    {
+      "input": "grid = [[\"1\",\"1\",\"0\"],[\"1\",\"0\",\"0\"],[\"0\",\"0\",\"1\"]]",
+      "output": "2"
+    },
+    {
+      "input": "grid = [[\"1\",\"1\",\"1\"],[\"0\",\"1\",\"0\"],[\"1\",\"1\",\"1\"]]",
+      "output": "1"
+    }
+  ],
+  "functionName": {
+    "python": "num_islands",
+    "javascript": "numIslands",
+    "typescript": "numIslands"
+  },
+  "starterCode": {
+    "python": "def num_islands(grid):\n    # Count connected groups of \"1\".\n    pass\n",
+    "javascript": "function numIslands(grid) {\n  // Count connected groups of \"1\".\n}\n",
+    "typescript": "function numIslands(grid: string[][]): number {\n  // Count connected groups of \"1\".\n  return 0;\n}\n"
+  },
+  "tests": [
+    {
+      "name": "two islands",
+      "args": [
+        [
+          [
+            "1",
+            "1",
+            "0"
+          ],
+          [
+            "1",
+            "0",
+            "0"
+          ],
+          [
+            "0",
+            "0",
+            "1"
+          ]
+        ]
+      ],
+      "expected": 2
+    },
+    {
+      "name": "ring",
+      "args": [
+        [
+          [
+            "1",
+            "1",
+            "1"
+          ],
+          [
+            "0",
+            "1",
+            "0"
+          ],
+          [
+            "1",
+            "1",
+            "1"
+          ]
+        ]
+      ],
+      "expected": 1
+    },
+    {
+      "name": "all water",
+      "args": [
+        [
+          [
+            "0",
+            "0"
+          ],
+          [
+            "0",
+            "0"
+          ]
+        ]
+      ],
+      "expected": 0,
+      "hidden": true
+    },
+    {
+      "name": "single land",
+      "args": [
+        [
+          [
+            "1"
+          ]
+        ]
+      ],
+      "expected": 1,
+      "hidden": true
+    }
+  ],
+  "solutions": [
+    {
+      "approachName": "Flood Fill (DFS)",
+      "summary": "Each unvisited land cell starts an island; sink its whole region.",
+      "timeComplexity": "O(rows · cols)",
+      "spaceComplexity": "O(rows · cols)",
+      "technique": {
+        "primaryPattern": "depth-first-search",
+        "optimal": true,
+        "signature": {
+          "maxLoopDepth": 2,
+          "usesHashStructure": false,
+          "usesSorting": false,
+          "usesRecursion": true,
+          "twoPointer": false
+        }
+      },
+      "steps": [
+        {
+          "title": "A helper that sinks one island",
+          "explanation": "From a land cell, recursively flip it and its neighbors to water so it is not counted again.",
+          "code": {
+            "python": "def num_islands(grid):\n    rows, cols = len(grid), len(grid[0])\n    def sink(r, c):\n        if r < 0 or c < 0 or r >= rows or c >= cols or grid[r][c] != \"1\":\n            return\n        grid[r][c] = \"0\"\n        sink(r + 1, c)\n        sink(r - 1, c)\n        sink(r, c + 1)\n        sink(r, c - 1)\n    return 0\n",
+            "javascript": "function numIslands(grid) {\n  const rows = grid.length, cols = grid[0].length;\n  function sink(r, c) {\n    if (r < 0 || c < 0 || r >= rows || c >= cols || grid[r][c] !== \"1\") return;\n    grid[r][c] = \"0\";\n    sink(r + 1, c);\n    sink(r - 1, c);\n    sink(r, c + 1);\n    sink(r, c - 1);\n  }\n  return 0;\n}\n",
+            "typescript": "function numIslands(grid: string[][]): number {\n  const rows = grid.length, cols = grid[0].length;\n  function sink(r: number, c: number): void {\n    if (r < 0 || c < 0 || r >= rows || c >= cols || grid[r][c] !== \"1\") return;\n    grid[r][c] = \"0\";\n    sink(r + 1, c);\n    sink(r - 1, c);\n    sink(r, c + 1);\n    sink(r, c - 1);\n  }\n  return 0;\n}\n"
+          }
+        },
+        {
+          "title": "Count and sink each new island",
+          "explanation": "Scan every cell; each time you hit land, increment the count and flood-fill it away.",
+          "code": {
+            "python": "def num_islands(grid):\n    rows, cols = len(grid), len(grid[0])\n    def sink(r, c):\n        if r < 0 or c < 0 or r >= rows or c >= cols or grid[r][c] != \"1\":\n            return\n        grid[r][c] = \"0\"\n        sink(r + 1, c)\n        sink(r - 1, c)\n        sink(r, c + 1)\n        sink(r, c - 1)\n    count = 0\n    for r in range(rows):\n        for c in range(cols):\n            if grid[r][c] == \"1\":\n                count += 1\n                sink(r, c)\n    return count\n",
+            "javascript": "function numIslands(grid) {\n  const rows = grid.length, cols = grid[0].length;\n  function sink(r, c) {\n    if (r < 0 || c < 0 || r >= rows || c >= cols || grid[r][c] !== \"1\") return;\n    grid[r][c] = \"0\";\n    sink(r + 1, c);\n    sink(r - 1, c);\n    sink(r, c + 1);\n    sink(r, c - 1);\n  }\n  let count = 0;\n  for (let r = 0; r < rows; r++) {\n    for (let c = 0; c < cols; c++) {\n      if (grid[r][c] === \"1\") {\n        count++;\n        sink(r, c);\n      }\n    }\n  }\n  return count;\n}\n",
+            "typescript": "function numIslands(grid: string[][]): number {\n  const rows = grid.length, cols = grid[0].length;\n  function sink(r: number, c: number): void {\n    if (r < 0 || c < 0 || r >= rows || c >= cols || grid[r][c] !== \"1\") return;\n    grid[r][c] = \"0\";\n    sink(r + 1, c);\n    sink(r - 1, c);\n    sink(r, c + 1);\n    sink(r, c - 1);\n  }\n  let count = 0;\n  for (let r = 0; r < rows; r++) {\n    for (let c = 0; c < cols; c++) {\n      if (grid[r][c] === \"1\") {\n        count++;\n        sink(r, c);\n      }\n    }\n  }\n  return count;\n}\n"
+          }
+        }
+      ]
+    }
+  ]
+}

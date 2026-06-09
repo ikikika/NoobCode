@@ -1,6 +1,14 @@
-import type { LanguageId, TestCase } from '../../content/schema'
+import type { IoKind, LanguageId, TestCase } from '../../content/schema'
 
-export interface RunOptions {
+// Execution shape for a problem: how to invoke the user's code and how to
+// encode/decode structured arguments and results. Defaults to a plain function
+// call with JSON-passthrough I/O, which matches the bulk of problems.
+export interface ExecSpec {
+  kind?: 'function' | 'design'
+  io?: { args?: (IoKind | undefined)[]; result?: IoKind }
+}
+
+export interface RunOptions extends ExecSpec {
   userCode: string
   functionName: string
   tests: TestCase[]

@@ -1,0 +1,145 @@
+{
+  "slug": "top-k-frequent-elements",
+  "title": "Top K Frequent Elements",
+  "difficulty": "medium",
+  "tags": [
+    "array",
+    "hash-map"
+  ],
+  "patterns": [
+    "hash-map",
+    "sorting"
+  ],
+  "description": "Given an integer array `nums` and an integer `k`, return the `k` most frequent\nelements. Return them sorted in ascending order so the output is deterministic.",
+  "constraints": [
+    "1 <= nums.length <= 10^5",
+    "k is in the range [1, number of unique elements]"
+  ],
+  "examples": [
+    {
+      "input": "nums = [1,1,1,2,2,3], k = 2",
+      "output": "[1,2]"
+    },
+    {
+      "input": "nums = [1], k = 1",
+      "output": "[1]"
+    }
+  ],
+  "functionName": {
+    "python": "top_k_frequent",
+    "javascript": "topKFrequent",
+    "typescript": "topKFrequent"
+  },
+  "starterCode": {
+    "python": "def top_k_frequent(nums, k):\n    # Return the k most frequent values, sorted.\n    pass\n",
+    "javascript": "function topKFrequent(nums, k) {\n  // Return the k most frequent values, sorted.\n}\n",
+    "typescript": "function topKFrequent(nums: number[], k: number): number[] {\n  // Return the k most frequent values, sorted.\n  return [];\n}\n"
+  },
+  "tests": [
+    {
+      "name": "example 1",
+      "args": [
+        [
+          1,
+          1,
+          1,
+          2,
+          2,
+          3
+        ],
+        2
+      ],
+      "expected": [
+        1,
+        2
+      ]
+    },
+    {
+      "name": "single",
+      "args": [
+        [
+          1
+        ],
+        1
+      ],
+      "expected": [
+        1
+      ]
+    },
+    {
+      "name": "tie broken by value",
+      "args": [
+        [
+          4,
+          4,
+          4,
+          5,
+          5,
+          6
+        ],
+        2
+      ],
+      "expected": [
+        4,
+        5
+      ],
+      "hidden": true
+    },
+    {
+      "name": "all unique",
+      "args": [
+        [
+          3,
+          1,
+          2
+        ],
+        3
+      ],
+      "expected": [
+        1,
+        2,
+        3
+      ],
+      "hidden": true
+    }
+  ],
+  "solutions": [
+    {
+      "approachName": "Count + Sort by Frequency",
+      "summary": "Tally counts, order by frequency (descending), keep k, then sort.",
+      "timeComplexity": "O(n log n)",
+      "spaceComplexity": "O(n)",
+      "technique": {
+        "primaryPattern": "hash-map",
+        "optimal": true,
+        "signature": {
+          "maxLoopDepth": 1,
+          "usesHashStructure": true,
+          "usesSorting": true,
+          "usesRecursion": false,
+          "twoPointer": false
+        }
+      },
+      "steps": [
+        {
+          "title": "Count occurrences",
+          "explanation": "Build a frequency map of each value.",
+          "code": {
+            "python": "def top_k_frequent(nums, k):\n    counts = {}\n    for n in nums:\n        counts[n] = counts.get(n, 0) + 1\n    return []\n",
+            "javascript": "function topKFrequent(nums, k) {\n  const counts = new Map();\n  for (const n of nums) counts.set(n, (counts.get(n) || 0) + 1);\n  return [];\n}\n",
+            "typescript": "function topKFrequent(nums: number[], k: number): number[] {\n  const counts = new Map<number, number>();\n  for (const n of nums) counts.set(n, (counts.get(n) || 0) + 1);\n  return [];\n}\n"
+          }
+        },
+        {
+          "title": "Order by frequency and take k",
+          "explanation": "Sort the distinct values by count (descending, ties by value), keep the first `k`, then sort those ascending.",
+          "code": {
+            "python": "def top_k_frequent(nums, k):\n    counts = {}\n    for n in nums:\n        counts[n] = counts.get(n, 0) + 1\n    ordered = sorted(counts, key=lambda x: (-counts[x], x))\n    return sorted(ordered[:k])\n",
+            "javascript": "function topKFrequent(nums, k) {\n  const counts = new Map();\n  for (const n of nums) counts.set(n, (counts.get(n) || 0) + 1);\n  const ordered = [...counts.keys()].sort((a, b) => counts.get(b) - counts.get(a) || a - b);\n  return ordered.slice(0, k).sort((a, b) => a - b);\n}\n",
+            "typescript": "function topKFrequent(nums: number[], k: number): number[] {\n  const counts = new Map<number, number>();\n  for (const n of nums) counts.set(n, (counts.get(n) || 0) + 1);\n  const ordered = [...counts.keys()].sort((a, b) => counts.get(b)! - counts.get(a)! || a - b);\n  return ordered.slice(0, k).sort((a, b) => a - b);\n}\n"
+          }
+        }
+      ]
+    }
+  ]
+}

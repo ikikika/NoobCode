@@ -1,0 +1,162 @@
+{
+  "slug": "course-schedule",
+  "title": "Course Schedule",
+  "difficulty": "medium",
+  "tags": [
+    "graph",
+    "breadth-first-search"
+  ],
+  "patterns": [
+    "breadth-first-search",
+    "greedy"
+  ],
+  "description": "There are `numCourses` courses labeled `0` to `numCourses - 1`. Some have\nprerequisites given as pairs `[a, b]` meaning you must take `b` before `a`.\nReturn `true` if you can finish all courses (the prerequisite graph has no\ncycle), otherwise `false`.",
+  "constraints": [
+    "1 <= numCourses <= 2000",
+    "0 <= prerequisites.length <= 5000",
+    "All prerequisite pairs are distinct."
+  ],
+  "examples": [
+    {
+      "input": "numCourses = 2, prerequisites = [[1,0]]",
+      "output": "true"
+    },
+    {
+      "input": "numCourses = 2, prerequisites = [[1,0],[0,1]]",
+      "output": "false"
+    }
+  ],
+  "functionName": {
+    "python": "can_finish",
+    "javascript": "canFinish",
+    "typescript": "canFinish"
+  },
+  "starterCode": {
+    "python": "def can_finish(num_courses, prerequisites):\n    # Return True if all courses can be finished.\n    pass\n",
+    "javascript": "function canFinish(numCourses, prerequisites) {\n  // Return true if all courses can be finished.\n}\n",
+    "typescript": "function canFinish(numCourses: number, prerequisites: number[][]): boolean {\n  // Return true if all courses can be finished.\n  return false;\n}\n"
+  },
+  "tests": [
+    {
+      "name": "linear",
+      "args": [
+        2,
+        [
+          [
+            1,
+            0
+          ]
+        ]
+      ],
+      "expected": true
+    },
+    {
+      "name": "cycle",
+      "args": [
+        2,
+        [
+          [
+            1,
+            0
+          ],
+          [
+            0,
+            1
+          ]
+        ]
+      ],
+      "expected": false
+    },
+    {
+      "name": "no prereqs",
+      "args": [
+        1,
+        []
+      ],
+      "expected": true
+    },
+    {
+      "name": "chain ok",
+      "args": [
+        4,
+        [
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            3,
+            2
+          ]
+        ]
+      ],
+      "expected": true,
+      "hidden": true
+    },
+    {
+      "name": "three cycle",
+      "args": [
+        3,
+        [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            0
+          ]
+        ]
+      ],
+      "expected": false,
+      "hidden": true
+    }
+  ],
+  "solutions": [
+    {
+      "approachName": "Kahn's Topological Sort",
+      "summary": "Repeatedly remove courses with no remaining prerequisites; a leftover means a cycle.",
+      "timeComplexity": "O(V + E)",
+      "spaceComplexity": "O(V + E)",
+      "technique": {
+        "primaryPattern": "breadth-first-search",
+        "optimal": true,
+        "signature": {
+          "maxLoopDepth": 2,
+          "usesHashStructure": false,
+          "usesSorting": false,
+          "usesRecursion": false,
+          "twoPointer": false
+        }
+      },
+      "steps": [
+        {
+          "title": "Build graph + indegrees",
+          "explanation": "Record who depends on each course and how many prerequisites each course still needs.",
+          "code": {
+            "python": "def can_finish(num_courses, prerequisites):\n    graph = [[] for _ in range(num_courses)]\n    indegree = [0] * num_courses\n    for a, b in prerequisites:\n        graph[b].append(a)\n        indegree[a] += 1\n    return True\n",
+            "javascript": "function canFinish(numCourses, prerequisites) {\n  const graph = Array.from({ length: numCourses }, () => []);\n  const indegree = new Array(numCourses).fill(0);\n  for (const [a, b] of prerequisites) {\n    graph[b].push(a);\n    indegree[a]++;\n  }\n  return true;\n}\n",
+            "typescript": "function canFinish(numCourses: number, prerequisites: number[][]): boolean {\n  const graph: number[][] = Array.from({ length: numCourses }, () => []);\n  const indegree = new Array<number>(numCourses).fill(0);\n  for (const [a, b] of prerequisites) {\n    graph[b].push(a);\n    indegree[a]++;\n  }\n  return true;\n}\n"
+          }
+        },
+        {
+          "title": "Peel off zero-indegree courses",
+          "explanation": "Start from courses with no prerequisites; each time one is taken, decrement its dependents. If everyone gets taken, there is no cycle.",
+          "code": {
+            "python": "def can_finish(num_courses, prerequisites):\n    graph = [[] for _ in range(num_courses)]\n    indegree = [0] * num_courses\n    for a, b in prerequisites:\n        graph[b].append(a)\n        indegree[a] += 1\n    from collections import deque\n    queue = deque(i for i in range(num_courses) if indegree[i] == 0)\n    seen = 0\n    while queue:\n        node = queue.popleft()\n        seen += 1\n        for nxt in graph[node]:\n            indegree[nxt] -= 1\n            if indegree[nxt] == 0:\n                queue.append(nxt)\n    return seen == num_courses\n",
+            "javascript": "function canFinish(numCourses, prerequisites) {\n  const graph = Array.from({ length: numCourses }, () => []);\n  const indegree = new Array(numCourses).fill(0);\n  for (const [a, b] of prerequisites) {\n    graph[b].push(a);\n    indegree[a]++;\n  }\n  const queue = [];\n  for (let i = 0; i < numCourses; i++) if (indegree[i] === 0) queue.push(i);\n  let seen = 0;\n  while (queue.length) {\n    const node = queue.shift();\n    seen++;\n    for (const nxt of graph[node]) {\n      if (--indegree[nxt] === 0) queue.push(nxt);\n    }\n  }\n  return seen === numCourses;\n}\n",
+            "typescript": "function canFinish(numCourses: number, prerequisites: number[][]): boolean {\n  const graph: number[][] = Array.from({ length: numCourses }, () => []);\n  const indegree = new Array<number>(numCourses).fill(0);\n  for (const [a, b] of prerequisites) {\n    graph[b].push(a);\n    indegree[a]++;\n  }\n  const queue: number[] = [];\n  for (let i = 0; i < numCourses; i++) if (indegree[i] === 0) queue.push(i);\n  let seen = 0;\n  while (queue.length) {\n    const node = queue.shift()!;\n    seen++;\n    for (const nxt of graph[node]) {\n      if (--indegree[nxt] === 0) queue.push(nxt);\n    }\n  }\n  return seen === numCourses;\n}\n"
+          }
+        }
+      ]
+    }
+  ]
+}

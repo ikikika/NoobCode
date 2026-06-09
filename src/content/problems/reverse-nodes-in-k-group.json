@@ -1,0 +1,159 @@
+{
+  "slug": "reverse-nodes-in-k-group",
+  "title": "Reverse Nodes in k-Group",
+  "difficulty": "hard",
+  "tags": [
+    "linked-list",
+    "recursion"
+  ],
+  "patterns": [
+    "recursion"
+  ],
+  "io": {
+    "args": [
+      "list"
+    ],
+    "result": "list"
+  },
+  "description": "Given the `head` of a linked list, reverse the nodes `k` at a time and return\nthe modified list. Nodes left over at the end (fewer than `k`) stay in their\noriginal order. Lists are given/returned as arrays.",
+  "constraints": [
+    "1 <= k <= list length <= 5000",
+    "0 <= Node.val <= 1000"
+  ],
+  "examples": [
+    {
+      "input": "head = [1,2,3,4,5], k = 2",
+      "output": "[2,1,4,3,5]"
+    },
+    {
+      "input": "head = [1,2,3,4,5], k = 3",
+      "output": "[3,2,1,4,5]"
+    }
+  ],
+  "functionName": {
+    "python": "reverse_k_group",
+    "javascript": "reverseKGroup",
+    "typescript": "reverseKGroup"
+  },
+  "starterCode": {
+    "python": "# Definition for singly-linked list node: node.val, node.next\ndef reverse_k_group(head, k):\n    # Reverse the list k nodes at a time.\n    pass\n",
+    "javascript": "// Singly-linked list node shape: { val, next }\nfunction reverseKGroup(head, k) {\n  // Reverse the list k nodes at a time.\n}\n",
+    "typescript": "// Singly-linked list node shape: { val, next }\nfunction reverseKGroup(head: any, k: number): any {\n  // Reverse the list k nodes at a time.\n  return head;\n}\n"
+  },
+  "tests": [
+    {
+      "name": "k=2",
+      "args": [
+        [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        2
+      ],
+      "expected": [
+        2,
+        1,
+        4,
+        3,
+        5
+      ]
+    },
+    {
+      "name": "k=3",
+      "args": [
+        [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        3
+      ],
+      "expected": [
+        3,
+        2,
+        1,
+        4,
+        5
+      ]
+    },
+    {
+      "name": "single",
+      "args": [
+        [
+          1
+        ],
+        1
+      ],
+      "expected": [
+        1
+      ]
+    },
+    {
+      "name": "exact two",
+      "args": [
+        [
+          1,
+          2
+        ],
+        2
+      ],
+      "expected": [
+        2,
+        1
+      ],
+      "hidden": true
+    },
+    {
+      "name": "k equals length",
+      "args": [
+        [
+          1,
+          2,
+          3
+        ],
+        3
+      ],
+      "expected": [
+        3,
+        2,
+        1
+      ],
+      "hidden": true
+    }
+  ],
+  "solutions": [
+    {
+      "approachName": "Recursive Group Reversal",
+      "summary": "Reverse the first k nodes, then recurse on the rest and link them.",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n / k)",
+      "technique": {
+        "primaryPattern": "recursion",
+        "optimal": true,
+        "signature": {
+          "maxLoopDepth": 1,
+          "usesHashStructure": false,
+          "usesSorting": false,
+          "usesRecursion": true,
+          "twoPointer": false
+        }
+      },
+      "steps": [
+        {
+          "title": "Check there are k nodes, then reverse them",
+          "explanation": "Walk k nodes ahead; if fewer remain, leave them. Otherwise reverse this group and connect it to the recursively processed remainder.",
+          "code": {
+            "python": "# Definition for singly-linked list node: node.val, node.next\ndef reverse_k_group(head, k):\n    node = head\n    count = 0\n    while node and count < k:\n        node = node.next\n        count += 1\n    if count < k:\n        return head\n    prev = reverse_k_group(node, k)\n    cur = head\n    for _ in range(k):\n        nxt = cur.next\n        cur.next = prev\n        prev = cur\n        cur = nxt\n    return prev\n",
+            "javascript": "// Singly-linked list node shape: { val, next }\nfunction reverseKGroup(head, k) {\n  let node = head;\n  let count = 0;\n  while (node && count < k) {\n    node = node.next;\n    count++;\n  }\n  if (count < k) return head;\n  let prev = reverseKGroup(node, k);\n  let cur = head;\n  for (let i = 0; i < k; i++) {\n    const nxt = cur.next;\n    cur.next = prev;\n    prev = cur;\n    cur = nxt;\n  }\n  return prev;\n}\n",
+            "typescript": "// Singly-linked list node shape: { val, next }\nfunction reverseKGroup(head: any, k: number): any {\n  let node = head;\n  let count = 0;\n  while (node && count < k) {\n    node = node.next;\n    count++;\n  }\n  if (count < k) return head;\n  let prev = reverseKGroup(node, k);\n  let cur = head;\n  for (let i = 0; i < k; i++) {\n    const nxt = cur.next;\n    cur.next = prev;\n    prev = cur;\n    cur = nxt;\n  }\n  return prev;\n}\n"
+          }
+        }
+      ]
+    }
+  ]
+}

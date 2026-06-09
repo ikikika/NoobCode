@@ -17,7 +17,10 @@ self.onmessage = (e: MessageEvent<WorkerRequest>) => {
   if (msg.type !== 'run') return
 
   try {
-    const result = runJsTests(msg.userCode, msg.functionName, msg.tests)
+    const result = runJsTests(msg.userCode, msg.functionName, msg.tests, {
+      kind: msg.kind,
+      io: msg.io,
+    })
     post({ type: 'result', id: msg.id, result })
   } catch (err) {
     post({ type: 'error', id: msg.id, message: err instanceof Error ? err.message : String(err) })

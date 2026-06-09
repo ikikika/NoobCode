@@ -1,0 +1,160 @@
+{
+  "slug": "add-two-numbers",
+  "title": "Add Two Numbers",
+  "difficulty": "medium",
+  "tags": [
+    "linked-list",
+    "math"
+  ],
+  "patterns": [
+    "two-pointers"
+  ],
+  "io": {
+    "args": [
+      "list",
+      "list"
+    ],
+    "result": "list"
+  },
+  "description": "You are given two non-empty linked lists representing two non-negative integers.\nThe digits are stored in **reverse order**, one digit per node. Add the two\nnumbers and return the sum as a linked list, also in reverse order.\n\nLists are given/returned as arrays of digits.",
+  "constraints": [
+    "1 <= list length <= 100",
+    "0 <= Node.val <= 9",
+    "No leading zeros except the number 0 itself."
+  ],
+  "examples": [
+    {
+      "input": "l1 = [2,4,3], l2 = [5,6,4]",
+      "output": "[7,0,8]",
+      "explanation": "342 + 465 = 807."
+    },
+    {
+      "input": "l1 = [0], l2 = [0]",
+      "output": "[0]"
+    }
+  ],
+  "functionName": {
+    "python": "add_two_numbers",
+    "javascript": "addTwoNumbers",
+    "typescript": "addTwoNumbers"
+  },
+  "starterCode": {
+    "python": "class ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\n\ndef add_two_numbers(l1, l2):\n    # Return the digit-wise sum as a linked list.\n    pass\n",
+    "javascript": "class ListNode {\n  constructor(val = 0, next = null) {\n    this.val = val;\n    this.next = next;\n  }\n}\n\nfunction addTwoNumbers(l1, l2) {\n  // Return the digit-wise sum as a linked list.\n}\n",
+    "typescript": "class ListNode {\n  val: number;\n  next: ListNode | null;\n  constructor(val = 0, next: ListNode | null = null) {\n    this.val = val;\n    this.next = next;\n  }\n}\n\nfunction addTwoNumbers(l1: ListNode | null, l2: ListNode | null): ListNode | null {\n  // Return the digit-wise sum as a linked list.\n  return null;\n}\n"
+  },
+  "tests": [
+    {
+      "name": "example 1",
+      "args": [
+        [
+          2,
+          4,
+          3
+        ],
+        [
+          5,
+          6,
+          4
+        ]
+      ],
+      "expected": [
+        7,
+        0,
+        8
+      ]
+    },
+    {
+      "name": "zeros",
+      "args": [
+        [
+          0
+        ],
+        [
+          0
+        ]
+      ],
+      "expected": [
+        0
+      ]
+    },
+    {
+      "name": "carry out",
+      "args": [
+        [
+          9,
+          9
+        ],
+        [
+          1
+        ]
+      ],
+      "expected": [
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "name": "different lengths",
+      "args": [
+        [
+          9,
+          9,
+          9,
+          9
+        ],
+        [
+          1
+        ]
+      ],
+      "expected": [
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "hidden": true
+    }
+  ],
+  "solutions": [
+    {
+      "approachName": "Elementary Addition",
+      "summary": "Walk both lists once, tracking a carry like grade-school addition.",
+      "timeComplexity": "O(max(m, n))",
+      "spaceComplexity": "O(max(m, n))",
+      "technique": {
+        "primaryPattern": "two-pointers",
+        "optimal": true,
+        "signature": {
+          "maxLoopDepth": 1,
+          "usesHashStructure": false,
+          "usesSorting": false,
+          "usesRecursion": false,
+          "twoPointer": false
+        }
+      },
+      "steps": [
+        {
+          "title": "Set up a dummy head and carry",
+          "explanation": "A dummy node simplifies appending; `carry` holds the overflow between digits.",
+          "code": {
+            "python": "class ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\n\ndef add_two_numbers(l1, l2):\n    dummy = ListNode(0)\n    tail = dummy\n    carry = 0\n    return dummy.next\n",
+            "javascript": "class ListNode {\n  constructor(val = 0, next = null) {\n    this.val = val;\n    this.next = next;\n  }\n}\n\nfunction addTwoNumbers(l1, l2) {\n  const dummy = new ListNode(0);\n  let tail = dummy;\n  let carry = 0;\n  return dummy.next;\n}\n",
+            "typescript": "class ListNode {\n  val: number;\n  next: ListNode | null;\n  constructor(val = 0, next: ListNode | null = null) {\n    this.val = val;\n    this.next = next;\n  }\n}\n\nfunction addTwoNumbers(l1: ListNode | null, l2: ListNode | null): ListNode | null {\n  const dummy = new ListNode(0);\n  let tail = dummy;\n  let carry = 0;\n  return dummy.next;\n}\n"
+          }
+        },
+        {
+          "title": "Add digit by digit",
+          "explanation": "While either list or a carry remains, sum the two digits plus carry, append `total % 10`, and keep `total // 10`.",
+          "code": {
+            "python": "class ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\n\ndef add_two_numbers(l1, l2):\n    dummy = ListNode(0)\n    tail = dummy\n    carry = 0\n    while l1 or l2 or carry:\n        x = l1.val if l1 else 0\n        y = l2.val if l2 else 0\n        total = x + y + carry\n        carry = total // 10\n        tail.next = ListNode(total % 10)\n        tail = tail.next\n        if l1:\n            l1 = l1.next\n        if l2:\n            l2 = l2.next\n    return dummy.next\n",
+            "javascript": "class ListNode {\n  constructor(val = 0, next = null) {\n    this.val = val;\n    this.next = next;\n  }\n}\n\nfunction addTwoNumbers(l1, l2) {\n  const dummy = new ListNode(0);\n  let tail = dummy;\n  let carry = 0;\n  while (l1 || l2 || carry) {\n    const x = l1 ? l1.val : 0;\n    const y = l2 ? l2.val : 0;\n    const total = x + y + carry;\n    carry = Math.floor(total / 10);\n    tail.next = new ListNode(total % 10);\n    tail = tail.next;\n    if (l1) l1 = l1.next;\n    if (l2) l2 = l2.next;\n  }\n  return dummy.next;\n}\n",
+            "typescript": "class ListNode {\n  val: number;\n  next: ListNode | null;\n  constructor(val = 0, next: ListNode | null = null) {\n    this.val = val;\n    this.next = next;\n  }\n}\n\nfunction addTwoNumbers(l1: ListNode | null, l2: ListNode | null): ListNode | null {\n  const dummy = new ListNode(0);\n  let tail = dummy;\n  let carry = 0;\n  while (l1 || l2 || carry) {\n    const x = l1 ? l1.val : 0;\n    const y = l2 ? l2.val : 0;\n    const total = x + y + carry;\n    carry = Math.floor(total / 10);\n    tail.next = new ListNode(total % 10);\n    tail = tail.next;\n    if (l1) l1 = l1.next;\n    if (l2) l2 = l2.next;\n  }\n  return dummy.next;\n}\n"
+          }
+        }
+      ]
+    }
+  ]
+}

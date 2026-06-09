@@ -1,0 +1,157 @@
+{
+  "slug": "binary-tree-level-order-traversal",
+  "title": "Binary Tree Level Order Traversal",
+  "difficulty": "medium",
+  "tags": [
+    "tree",
+    "breadth-first-search"
+  ],
+  "patterns": [
+    "breadth-first-search"
+  ],
+  "io": {
+    "args": [
+      "tree"
+    ]
+  },
+  "description": "Given the `root` of a binary tree, return its level-order traversal: the\nnodes' values grouped level by level, from left to right.\n\nThe tree input is given in level-order array form (with `null` for missing\nchildren).",
+  "constraints": [
+    "0 <= number of nodes <= 2000",
+    "-1000 <= Node.val <= 1000"
+  ],
+  "examples": [
+    {
+      "input": "root = [3,9,20,null,null,15,7]",
+      "output": "[[3],[9,20],[15,7]]"
+    },
+    {
+      "input": "root = [1]",
+      "output": "[[1]]"
+    },
+    {
+      "input": "root = []",
+      "output": "[]"
+    }
+  ],
+  "functionName": {
+    "python": "level_order",
+    "javascript": "levelOrder",
+    "typescript": "levelOrder"
+  },
+  "starterCode": {
+    "python": "# Definition for a binary tree node:\n# class TreeNode:\n#     def __init__(self, val=0, left=None, right=None):\n#         self.val, self.left, self.right = val, left, right\ndef level_order(root):\n    # Return values grouped by level.\n    pass\n",
+    "javascript": "// Binary tree node shape: { val, left, right }\nfunction levelOrder(root) {\n  // Return values grouped by level.\n}\n",
+    "typescript": "// Binary tree node shape: { val, left, right }\nfunction levelOrder(root) {\n  // Return values grouped by level.\n  return [];\n}\n"
+  },
+  "tests": [
+    {
+      "name": "three levels",
+      "args": [
+        [
+          3,
+          9,
+          20,
+          null,
+          null,
+          15,
+          7
+        ]
+      ],
+      "expected": [
+        [
+          3
+        ],
+        [
+          9,
+          20
+        ],
+        [
+          15,
+          7
+        ]
+      ]
+    },
+    {
+      "name": "single node",
+      "args": [
+        [
+          1
+        ]
+      ],
+      "expected": [
+        [
+          1
+        ]
+      ]
+    },
+    {
+      "name": "empty",
+      "args": [
+        []
+      ],
+      "expected": []
+    },
+    {
+      "name": "left chain",
+      "args": [
+        [
+          1,
+          2,
+          null,
+          3
+        ]
+      ],
+      "expected": [
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "hidden": true
+    }
+  ],
+  "solutions": [
+    {
+      "approachName": "BFS by Level",
+      "summary": "Process the queue one full level at a time.",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "technique": {
+        "primaryPattern": "breadth-first-search",
+        "optimal": true,
+        "signature": {
+          "maxLoopDepth": 2,
+          "usesHashStructure": false,
+          "usesSorting": false,
+          "usesRecursion": false,
+          "twoPointer": false
+        }
+      },
+      "steps": [
+        {
+          "title": "Guard the empty tree, seed the queue",
+          "explanation": "An empty root yields `[]`; otherwise begin the queue with the root.",
+          "code": {
+            "python": "# Definition for a binary tree node:\n# class TreeNode:\n#     def __init__(self, val=0, left=None, right=None):\n#         self.val, self.left, self.right = val, left, right\ndef level_order(root):\n    if root is None:\n        return []\n    from collections import deque\n    result = []\n    queue = deque([root])\n    return result\n",
+            "javascript": "// Binary tree node shape: { val, left, right }\nfunction levelOrder(root) {\n  if (!root) return [];\n  const result = [];\n  let queue = [root];\n  return result;\n}\n",
+            "typescript": "// Binary tree node shape: { val, left, right }\nfunction levelOrder(root) {\n  if (!root) return [];\n  const result = [];\n  let queue = [root];\n  return result;\n}\n"
+          }
+        },
+        {
+          "title": "Drain one level per iteration",
+          "explanation": "Snapshot the current queue length, pop exactly that many nodes into a level, and enqueue their children.",
+          "code": {
+            "python": "# Definition for a binary tree node:\n# class TreeNode:\n#     def __init__(self, val=0, left=None, right=None):\n#         self.val, self.left, self.right = val, left, right\ndef level_order(root):\n    if root is None:\n        return []\n    from collections import deque\n    result = []\n    queue = deque([root])\n    while queue:\n        level = []\n        for _ in range(len(queue)):\n            node = queue.popleft()\n            level.append(node.val)\n            if node.left:\n                queue.append(node.left)\n            if node.right:\n                queue.append(node.right)\n        result.append(level)\n    return result\n",
+            "javascript": "// Binary tree node shape: { val, left, right }\nfunction levelOrder(root) {\n  if (!root) return [];\n  const result = [];\n  let queue = [root];\n  while (queue.length) {\n    const level = [];\n    const next = [];\n    for (const node of queue) {\n      level.push(node.val);\n      if (node.left) next.push(node.left);\n      if (node.right) next.push(node.right);\n    }\n    result.push(level);\n    queue = next;\n  }\n  return result;\n}\n",
+            "typescript": "// Binary tree node shape: { val, left, right }\nfunction levelOrder(root) {\n  if (!root) return [];\n  const result = [];\n  let queue = [root];\n  while (queue.length) {\n    const level = [];\n    const next = [];\n    for (const node of queue) {\n      level.push(node.val);\n      if (node.left) next.push(node.left);\n      if (node.right) next.push(node.right);\n    }\n    result.push(level);\n    queue = next;\n  }\n  return result;\n}\n"
+          }
+        }
+      ]
+    }
+  ]
+}

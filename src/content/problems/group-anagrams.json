@@ -1,0 +1,153 @@
+{
+  "slug": "group-anagrams",
+  "title": "Group Anagrams",
+  "difficulty": "medium",
+  "tags": [
+    "string",
+    "hash-map"
+  ],
+  "patterns": [
+    "hash-map",
+    "sorting"
+  ],
+  "description": "Given an array of strings `strs`, group the anagrams together. Return the\ngroups with each group sorted alphabetically and the list of groups sorted as\nwell (so the output is deterministic).",
+  "constraints": [
+    "1 <= strs.length <= 10^4",
+    "0 <= strs[i].length <= 100",
+    "strs[i] is lowercase English letters."
+  ],
+  "examples": [
+    {
+      "input": "strs = [\"eat\",\"tea\",\"tan\",\"ate\",\"nat\",\"bat\"]",
+      "output": "[[\"ate\",\"eat\",\"tea\"],[\"bat\"],[\"nat\",\"tan\"]]"
+    },
+    {
+      "input": "strs = [\"\"]",
+      "output": "[[\"\"]]"
+    }
+  ],
+  "functionName": {
+    "python": "group_anagrams",
+    "javascript": "groupAnagrams",
+    "typescript": "groupAnagrams"
+  },
+  "starterCode": {
+    "python": "def group_anagrams(strs):\n    # Group anagrams; return sorted groups.\n    pass\n",
+    "javascript": "function groupAnagrams(strs) {\n  // Group anagrams; return sorted groups.\n}\n",
+    "typescript": "function groupAnagrams(strs: string[]): string[][] {\n  // Group anagrams; return sorted groups.\n  return [];\n}\n"
+  },
+  "tests": [
+    {
+      "name": "example 1",
+      "args": [
+        [
+          "eat",
+          "tea",
+          "tan",
+          "ate",
+          "nat",
+          "bat"
+        ]
+      ],
+      "expected": [
+        [
+          "ate",
+          "eat",
+          "tea"
+        ],
+        [
+          "bat"
+        ],
+        [
+          "nat",
+          "tan"
+        ]
+      ]
+    },
+    {
+      "name": "empty string",
+      "args": [
+        [
+          ""
+        ]
+      ],
+      "expected": [
+        [
+          ""
+        ]
+      ]
+    },
+    {
+      "name": "single",
+      "args": [
+        [
+          "a"
+        ]
+      ],
+      "expected": [
+        [
+          "a"
+        ]
+      ]
+    },
+    {
+      "name": "two groups",
+      "args": [
+        [
+          "abc",
+          "bca",
+          "xyz"
+        ]
+      ],
+      "expected": [
+        [
+          "abc",
+          "bca"
+        ],
+        [
+          "xyz"
+        ]
+      ],
+      "hidden": true
+    }
+  ],
+  "solutions": [
+    {
+      "approachName": "Sorted-Key Hash Map",
+      "summary": "Anagrams share the same sorted letters; use that as a map key.",
+      "timeComplexity": "O(n · k log k)",
+      "spaceComplexity": "O(n · k)",
+      "technique": {
+        "primaryPattern": "hash-map",
+        "optimal": true,
+        "signature": {
+          "maxLoopDepth": 1,
+          "usesHashStructure": true,
+          "usesSorting": true,
+          "usesRecursion": false,
+          "twoPointer": false
+        }
+      },
+      "steps": [
+        {
+          "title": "Bucket by sorted letters",
+          "explanation": "Two words are anagrams exactly when their sorted characters match, so use that string as the key.",
+          "code": {
+            "python": "def group_anagrams(strs):\n    groups = {}\n    for s in strs:\n        key = \"\".join(sorted(s))\n        groups.setdefault(key, []).append(s)\n    return list(groups.values())\n",
+            "javascript": "function groupAnagrams(strs) {\n  const groups = new Map();\n  for (const s of strs) {\n    const key = s.split(\"\").sort().join(\"\");\n    if (!groups.has(key)) groups.set(key, []);\n    groups.get(key).push(s);\n  }\n  return [...groups.values()];\n}\n",
+            "typescript": "function groupAnagrams(strs: string[]): string[][] {\n  const groups = new Map<string, string[]>();\n  for (const s of strs) {\n    const key = s.split(\"\").sort().join(\"\");\n    if (!groups.has(key)) groups.set(key, []);\n    groups.get(key)!.push(s);\n  }\n  return [...groups.values()];\n}\n"
+          }
+        },
+        {
+          "title": "Sort for a stable output",
+          "explanation": "Sort within each group and then sort the groups so the result is deterministic.",
+          "code": {
+            "python": "def group_anagrams(strs):\n    groups = {}\n    for s in strs:\n        key = \"\".join(sorted(s))\n        groups.setdefault(key, []).append(s)\n    result = [sorted(g) for g in groups.values()]\n    result.sort()\n    return result\n",
+            "javascript": "function groupAnagrams(strs) {\n  const groups = new Map();\n  for (const s of strs) {\n    const key = s.split(\"\").sort().join(\"\");\n    if (!groups.has(key)) groups.set(key, []);\n    groups.get(key).push(s);\n  }\n  const result = [...groups.values()].map((g) => g.sort());\n  result.sort((a, b) => (a.join() < b.join() ? -1 : a.join() > b.join() ? 1 : 0));\n  return result;\n}\n",
+            "typescript": "function groupAnagrams(strs: string[]): string[][] {\n  const groups = new Map<string, string[]>();\n  for (const s of strs) {\n    const key = s.split(\"\").sort().join(\"\");\n    if (!groups.has(key)) groups.set(key, []);\n    groups.get(key)!.push(s);\n  }\n  const result = [...groups.values()].map((g) => g.sort());\n  result.sort((a, b) => (a.join() < b.join() ? -1 : a.join() > b.join() ? 1 : 0));\n  return result;\n}\n"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,139 @@
+{
+  "slug": "sliding-window-maximum",
+  "title": "Sliding Window Maximum",
+  "difficulty": "hard",
+  "tags": [
+    "array",
+    "sliding-window"
+  ],
+  "patterns": [
+    "sliding-window",
+    "queue"
+  ],
+  "description": "Given an array `nums` and a window size `k`, return an array of the maximum of\neach contiguous window of size `k` as it slides from left to right.",
+  "constraints": [
+    "1 <= nums.length <= 10^5",
+    "-10^4 <= nums[i] <= 10^4",
+    "1 <= k <= nums.length"
+  ],
+  "examples": [
+    {
+      "input": "nums = [1,3,-1,-3,5,3,6,7], k = 3",
+      "output": "[3,3,5,5,6,7]"
+    },
+    {
+      "input": "nums = [1], k = 1",
+      "output": "[1]"
+    }
+  ],
+  "functionName": {
+    "python": "max_sliding_window",
+    "javascript": "maxSlidingWindow",
+    "typescript": "maxSlidingWindow"
+  },
+  "starterCode": {
+    "python": "def max_sliding_window(nums, k):\n    # Return the maximum of each window of size k.\n    pass\n",
+    "javascript": "function maxSlidingWindow(nums, k) {\n  // Return the maximum of each window of size k.\n}\n",
+    "typescript": "function maxSlidingWindow(nums: number[], k: number): number[] {\n  // Return the maximum of each window of size k.\n  return [];\n}\n"
+  },
+  "tests": [
+    {
+      "name": "example 1",
+      "args": [
+        [
+          1,
+          3,
+          -1,
+          -3,
+          5,
+          3,
+          6,
+          7
+        ],
+        3
+      ],
+      "expected": [
+        3,
+        3,
+        5,
+        5,
+        6,
+        7
+      ]
+    },
+    {
+      "name": "single",
+      "args": [
+        [
+          1
+        ],
+        1
+      ],
+      "expected": [
+        1
+      ]
+    },
+    {
+      "name": "window two",
+      "args": [
+        [
+          9,
+          11
+        ],
+        2
+      ],
+      "expected": [
+        11
+      ],
+      "hidden": true
+    },
+    {
+      "name": "descending",
+      "args": [
+        [
+          4,
+          3,
+          2,
+          1
+        ],
+        2
+      ],
+      "expected": [
+        4,
+        3,
+        2
+      ],
+      "hidden": true
+    }
+  ],
+  "solutions": [
+    {
+      "approachName": "Monotonic Deque",
+      "summary": "Keep indices of a decreasing deque; its front is always the window maximum.",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(k)",
+      "technique": {
+        "primaryPattern": "sliding-window",
+        "optimal": true,
+        "signature": {
+          "maxLoopDepth": 2,
+          "usesHashStructure": false,
+          "usesSorting": false,
+          "usesRecursion": false,
+          "twoPointer": false
+        }
+      },
+      "steps": [
+        {
+          "title": "Maintain a decreasing deque of indices",
+          "explanation": "Drop smaller trailing values (they can never be a max), evict indices that fall out of the window, and read the front once the window is full.",
+          "code": {
+            "python": "def max_sliding_window(nums, k):\n    from collections import deque\n    dq = deque()\n    result = []\n    for i, n in enumerate(nums):\n        while dq and nums[dq[-1]] <= n:\n            dq.pop()\n        dq.append(i)\n        if dq[0] <= i - k:\n            dq.popleft()\n        if i >= k - 1:\n            result.append(nums[dq[0]])\n    return result\n",
+            "javascript": "function maxSlidingWindow(nums, k) {\n  const dq = [];\n  const result = [];\n  for (let i = 0; i < nums.length; i++) {\n    while (dq.length && nums[dq[dq.length - 1]] <= nums[i]) dq.pop();\n    dq.push(i);\n    if (dq[0] <= i - k) dq.shift();\n    if (i >= k - 1) result.push(nums[dq[0]]);\n  }\n  return result;\n}\n",
+            "typescript": "function maxSlidingWindow(nums: number[], k: number): number[] {\n  const dq: number[] = [];\n  const result: number[] = [];\n  for (let i = 0; i < nums.length; i++) {\n    while (dq.length && nums[dq[dq.length - 1]] <= nums[i]) dq.pop();\n    dq.push(i);\n    if (dq[0] <= i - k) dq.shift();\n    if (i >= k - 1) result.push(nums[dq[0]]);\n  }\n  return result;\n}\n"
+          }
+        }
+      ]
+    }
+  ]
+}

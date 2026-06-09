@@ -1,0 +1,141 @@
+{
+  "slug": "median-of-two-sorted-arrays",
+  "title": "Median of Two Sorted Arrays",
+  "difficulty": "hard",
+  "tags": [
+    "array",
+    "binary-search"
+  ],
+  "patterns": [
+    "binary-search",
+    "divide-and-conquer"
+  ],
+  "description": "Given two sorted arrays `nums1` and `nums2`, return the median of the combined\nsorted array in O(log(m+n)) time.",
+  "constraints": [
+    "0 <= m, n <= 1000",
+    "1 <= m + n <= 2000",
+    "-10^6 <= nums[i] <= 10^6"
+  ],
+  "examples": [
+    {
+      "input": "nums1 = [1,3], nums2 = [2]",
+      "output": "2.0"
+    },
+    {
+      "input": "nums1 = [1,2], nums2 = [3,4]",
+      "output": "2.5"
+    }
+  ],
+  "functionName": {
+    "python": "find_median_sorted_arrays",
+    "javascript": "findMedianSortedArrays",
+    "typescript": "findMedianSortedArrays"
+  },
+  "starterCode": {
+    "python": "def find_median_sorted_arrays(nums1, nums2):\n    # Return the median of the merged arrays.\n    pass\n",
+    "javascript": "function findMedianSortedArrays(nums1, nums2) {\n  // Return the median of the merged arrays.\n}\n",
+    "typescript": "function findMedianSortedArrays(nums1: number[], nums2: number[]): number {\n  // Return the median of the merged arrays.\n  return 0;\n}\n"
+  },
+  "tests": [
+    {
+      "name": "odd total",
+      "args": [
+        [
+          1,
+          3
+        ],
+        [
+          2
+        ]
+      ],
+      "expected": 2
+    },
+    {
+      "name": "even total",
+      "args": [
+        [
+          1,
+          2
+        ],
+        [
+          3,
+          4
+        ]
+      ],
+      "expected": 2.5
+    },
+    {
+      "name": "one empty",
+      "args": [
+        [],
+        [
+          1
+        ]
+      ],
+      "expected": 1,
+      "hidden": true
+    },
+    {
+      "name": "all equal",
+      "args": [
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          2
+        ]
+      ],
+      "expected": 2,
+      "hidden": true
+    },
+    {
+      "name": "disjoint",
+      "args": [
+        [
+          1,
+          2,
+          3
+        ],
+        [
+          7,
+          8,
+          9
+        ]
+      ],
+      "expected": 5,
+      "hidden": true
+    }
+  ],
+  "solutions": [
+    {
+      "approachName": "Binary Search the Partition",
+      "summary": "Binary-search a split of the smaller array so left halves hold exactly half the elements.",
+      "timeComplexity": "O(log(min(m, n)))",
+      "spaceComplexity": "O(1)",
+      "technique": {
+        "primaryPattern": "binary-search",
+        "optimal": true,
+        "signature": {
+          "maxLoopDepth": 1,
+          "usesHashStructure": false,
+          "usesSorting": false,
+          "usesRecursion": false,
+          "twoPointer": false
+        }
+      },
+      "steps": [
+        {
+          "title": "Search the partition of the smaller array",
+          "explanation": "Pick a cut in the smaller array; the cut in the other is forced. Adjust until the left maxes do not exceed the right mins, then read the median off the boundary.",
+          "code": {
+            "python": "def find_median_sorted_arrays(nums1, nums2):\n    a, b = nums1, nums2\n    if len(a) > len(b):\n        a, b = b, a\n    m, n = len(a), len(b)\n    lo, hi = 0, m\n    half = (m + n + 1) // 2\n    while lo <= hi:\n        i = (lo + hi) // 2\n        j = half - i\n        a_left = a[i - 1] if i > 0 else float(\"-inf\")\n        a_right = a[i] if i < m else float(\"inf\")\n        b_left = b[j - 1] if j > 0 else float(\"-inf\")\n        b_right = b[j] if j < n else float(\"inf\")\n        if a_left <= b_right and b_left <= a_right:\n            if (m + n) % 2 == 1:\n                return float(max(a_left, b_left))\n            return (max(a_left, b_left) + min(a_right, b_right)) / 2\n        elif a_left > b_right:\n            hi = i - 1\n        else:\n            lo = i + 1\n    return 0.0\n",
+            "javascript": "function findMedianSortedArrays(nums1, nums2) {\n  let a = nums1, b = nums2;\n  if (a.length > b.length) [a, b] = [b, a];\n  const m = a.length, n = b.length;\n  let lo = 0, hi = m;\n  const half = Math.floor((m + n + 1) / 2);\n  while (lo <= hi) {\n    const i = Math.floor((lo + hi) / 2);\n    const j = half - i;\n    const aLeft = i > 0 ? a[i - 1] : -Infinity;\n    const aRight = i < m ? a[i] : Infinity;\n    const bLeft = j > 0 ? b[j - 1] : -Infinity;\n    const bRight = j < n ? b[j] : Infinity;\n    if (aLeft <= bRight && bLeft <= aRight) {\n      if ((m + n) % 2 === 1) return Math.max(aLeft, bLeft);\n      return (Math.max(aLeft, bLeft) + Math.min(aRight, bRight)) / 2;\n    } else if (aLeft > bRight) {\n      hi = i - 1;\n    } else {\n      lo = i + 1;\n    }\n  }\n  return 0;\n}\n",
+            "typescript": "function findMedianSortedArrays(nums1: number[], nums2: number[]): number {\n  let a = nums1, b = nums2;\n  if (a.length > b.length) [a, b] = [b, a];\n  const m = a.length, n = b.length;\n  let lo = 0, hi = m;\n  const half = Math.floor((m + n + 1) / 2);\n  while (lo <= hi) {\n    const i = Math.floor((lo + hi) / 2);\n    const j = half - i;\n    const aLeft = i > 0 ? a[i - 1] : -Infinity;\n    const aRight = i < m ? a[i] : Infinity;\n    const bLeft = j > 0 ? b[j - 1] : -Infinity;\n    const bRight = j < n ? b[j] : Infinity;\n    if (aLeft <= bRight && bLeft <= aRight) {\n      if ((m + n) % 2 === 1) return Math.max(aLeft, bLeft);\n      return (Math.max(aLeft, bLeft) + Math.min(aRight, bRight)) / 2;\n    } else if (aLeft > bRight) {\n      hi = i - 1;\n    } else {\n      lo = i + 1;\n    }\n  }\n  return 0;\n}\n"
+          }
+        }
+      ]
+    }
+  ]
+}
