@@ -1,8 +1,16 @@
 {
   "name": "noobcode",
   "private": true,
-  "version": "0.1.0",
+  "version": "1.0.0",
   "type": "module",
+  "description": "A client-side, backendless LeetCode-style trainer: solve problems in Python (Pyodide), JavaScript, or TypeScript in the browser, get a deterministic AST-based review, and track mastery with spaced repetition.",
+  "homepage": "https://audioisaac.github.io/NoobCode/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/audioisaac/NoobCode.git"
+  },
+  "license": "MIT",
+  "author": "audioisaac",
   "engines": {
     "node": ">=22.12"
   },

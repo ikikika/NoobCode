@@ -10,8 +10,11 @@ const crossOriginIsolationHeaders = {
   'Cross-Origin-Embedder-Policy': 'require-corp',
 }
 
-export default defineConfig({
-  base: '/',
+// GitHub Pages serves this project site under /<repo>/, so production assets
+// must be built with that base. Dev/preview stay at root. Override with
+// BASE_PATH (e.g. '/' for a custom domain or user-site deploy).
+export default defineConfig(({ command }) => ({
+  base: command === 'build' ? (process.env.BASE_PATH ?? '/NoobCode/') : '/',
   plugins: [
     react(),
     tailwindcss(),
@@ -33,4 +36,4 @@ export default defineConfig({
     globals: true,
     setupFiles: ['./src/test/setup.ts'],
   },
-})
+}))

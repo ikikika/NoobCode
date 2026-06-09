@@ -1,21 +1,44 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App'
+import { ErrorBoundary } from './components/ErrorBoundary'
 import './styles/index.css'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
+    <ErrorBoundary>
+      <App />
+    </ErrorBoundary>
   </StrictMode>,
 )
 
-// Register the service worker (production only) for offline support and to
-// cache the large Pyodide runtime across visits.
+// Register the service worker (production only) for offline support, to cache the
+// large Pyodide runtime, and to inject the COOP/COEP headers that make the page
+// cross-origin isolated on GitHub Pages (which can't serve headers itself).
 if (import.meta.env.PROD && 'serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register(import.meta.env.BASE_URL + 'sw.js').catch(() => {
-      // Registration failure is non-fatal — the app still works online.
-    })
+    navigator.serviceWorker
+      .register(import.meta.env.BASE_URL + 'sw.js')
+      .then(() => {
+        // The first load isn't controlled by the worker yet, so the document
+        // lacks the isolation headers. Reload once (guarded) so the now-active
+        // worker can serve them and SharedArrayBuffer/Pyodide work.
+        if (!window.crossOriginIsolated && !sessionStorage.getItem('coiReloaded')) {
+          sessionStorage.setItem('coiReloaded', '1')
+          if (navigator.serviceWorker.controller) {
+            window.location.reload()
+          } else {
+            navigator.serviceWorker.addEventListener(
+              'controllerchange',
+              () => window.location.reload(),
+              { once: true },
+            )
+          }
+        }
+      })
+      .catch(() => {
+        // Registration failure is non-fatal — the app still works online.
+      })
   })
 } else if (import.meta.env.DEV && 'serviceWorker' in navigator) {
   // A service worker left over from a previous production build/preview on this

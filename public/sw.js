@@ -1,11 +1,14 @@
-/* NoobCode service worker — offline support + Pyodide caching.
+/* NoobCode service worker — cross-origin isolation + offline caching.
  *
- * Strategies:
+ * GitHub Pages can't serve the COOP/COEP response headers that Pyodide's
+ * SharedArrayBuffer (hard-interrupt) requires. This worker injects them on every
+ * response (the proven coi-serviceworker technique), which makes the page
+ * `crossOriginIsolated` on a static host — while also caching:
  *  - /pyodide/*  → cache-first (large, immutable WASM/stdlib; expensive to refetch)
  *  - /assets/*   → cache-first (content-hashed by Vite, so safe to cache forever)
  *  - navigations → network-first with cached-shell fallback (avoids stale HTML)
  */
-const VERSION = 'v2'
+const VERSION = 'v3'
 const SHELL_CACHE = `noobcode-shell-${VERSION}`
 const ASSET_CACHE = `noobcode-assets-${VERSION}`
 const PYODIDE_CACHE = 'noobcode-pyodide' // unversioned: pinned to a Pyodide release
@@ -25,13 +28,29 @@ self.addEventListener('activate', (event) => {
   )
 })
 
+// Re-emit a response with the cross-origin isolation headers added. COOP/COEP on
+// the document enable `crossOriginIsolated`; CORP keeps same-origin subresources
+// loadable under COEP: require-corp.
+function withCoi(response) {
+  if (!response || response.status === 0) return response // opaque — leave as-is
+  const headers = new Headers(response.headers)
+  headers.set('Cross-Origin-Opener-Policy', 'same-origin')
+  headers.set('Cross-Origin-Embedder-Policy', 'require-corp')
+  headers.set('Cross-Origin-Resource-Policy', 'same-origin')
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  })
+}
+
 async function cacheFirst(request, cacheName) {
   const cache = await caches.open(cacheName)
   const hit = await cache.match(request)
-  if (hit) return hit
+  if (hit) return withCoi(hit)
   const res = await fetch(request)
   if (res && res.ok) cache.put(request, res.clone())
-  return res
+  return withCoi(res)
 }
 
 async function networkFirst(request, cacheName) {
@@ -39,10 +58,10 @@ async function networkFirst(request, cacheName) {
   try {
     const res = await fetch(request)
     if (res && res.ok) cache.put(request, res.clone())
-    return res
+    return withCoi(res)
   } catch (err) {
     const hit = (await cache.match(request)) || (await cache.match('./index.html'))
-    if (hit) return hit
+    if (hit) return withCoi(hit)
     throw err
   }
 }
@@ -64,5 +83,9 @@ self.addEventListener('fetch', (event) => {
   }
   if (request.mode === 'navigate') {
     event.respondWith(networkFirst(request, SHELL_CACHE))
+    return
   }
+  // Other same-origin GETs (favicon, manifest, etc.): pass through but still add
+  // the isolation headers so nothing breaks COEP.
+  event.respondWith(fetch(request).then(withCoi))
 })
