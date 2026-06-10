@@ -38,6 +38,9 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
   const setLastRun = useProgressStore((s) => s.setLastRun)
   const rewardSolve = useRewardsStore((s) => s.rewardSolve)
 
+  // When the problem opened — used to time solves for the Speed Demon award.
+  const openedAt = useRef(Date.now())
+
   const language = useSolutionStore((s) => s.activeLanguage)
   const setLanguage = useSolutionStore((s) => s.setLanguage)
   const resetForProblem = useSolutionStore((s) => s.resetForProblem)
@@ -51,6 +54,7 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
   // On problem mount, reset the solution viewer to the persisted language.
   useEffect(() => {
     resetForProblem(lastLanguage)
+    openedAt.current = Date.now()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [problem.slug])
 
@@ -105,6 +109,7 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
           approachUsed: heuristicReview.approachUsed,
           language,
           code: userCode,
+          solveMs: passed ? Date.now() - openedAt.current : undefined,
         })
         // First solve pays coins (by difficulty, +bonus when optimal); guarded
         // so re-runs of an already-solved problem don't farm coins.

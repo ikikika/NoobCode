@@ -35,6 +35,9 @@ export function Layout() {
           <NavLink to="/skills" className={navClass}>
             Skills
           </NavLink>
+          <NavLink to="/achievements" className={navClass}>
+            Achievements
+          </NavLink>
         </nav>
         <div className="nc-head-actions">
           <CoinBalance />

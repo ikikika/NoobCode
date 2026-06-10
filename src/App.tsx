@@ -1,13 +1,13 @@
-import { lazy, Suspense, useEffect } from 'react'
+import { lazy, Suspense } from 'react'
 import { createHashRouter, Navigate, RouterProvider } from 'react-router-dom'
 import { Layout } from './components/Layout'
 import { ProblemListPage } from './routes/ProblemListPage'
 import { CreateProblemPage } from './routes/CreateProblemPage'
 import { SkillsPage } from './routes/SkillsPage'
+import { AchievementsPage } from './routes/AchievementsPage'
 import { Spinner } from './components/Spinner'
 import { ErrorBoundary } from './components/ErrorBoundary'
-import { useRewardsStore } from './store/useRewardsStore'
-import { useTheme } from './store/useTheme'
+import { useGamificationEffects } from './features/achievements/useAchievements'
 
 // The problem detail page pulls in Monaco — load it lazily so the list and
 // skills pages stay small and Monaco only downloads when a problem is opened.
@@ -41,6 +41,7 @@ const router = createHashRouter([
         ),
       },
       { path: 'skills', element: <SkillsPage /> },
+      { path: 'achievements', element: <AchievementsPage /> },
       { path: 'new', element: <CreateProblemPage /> },
       { path: '*', element: <Navigate to="/" replace /> },
     ],
@@ -48,14 +49,6 @@ const router = createHashRouter([
 ])
 
 export default function App() {
-  const theme = useTheme((s) => s.theme)
-  // Seed owned themes (grandfather the current theme) and grant the daily-login
-  // bonus once per calendar day.
-  useEffect(() => {
-    const rewards = useRewardsStore.getState()
-    rewards.ensureSeed(theme)
-    rewards.claimDaily(Date.now())
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  useGamificationEffects()
   return <RouterProvider router={router} />
 }
