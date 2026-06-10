@@ -1,0 +1,137 @@
+{
+  "slug": "house-robber",
+  "title": "House Robber",
+  "difficulty": "medium",
+  "tags": [
+    "array",
+    "dynamic-programming"
+  ],
+  "patterns": [
+    "dynamic-programming"
+  ],
+  "description": "You are a robber planning to rob houses along a street. Each house has some\nmoney, but adjacent houses have connected alarms, so you cannot rob two\nadjacent houses. Given an integer array `nums`, return the **maximum** amount\nyou can rob without alerting the police.",
+  "constraints": [
+    "1 <= nums.length <= 100",
+    "0 <= nums[i] <= 400"
+  ],
+  "examples": [
+    {
+      "input": "nums = [1,2,3,1]",
+      "output": "4",
+      "explanation": "Rob house 0 (1) and house 2 (3): total 4."
+    },
+    {
+      "input": "nums = [2,7,9,3,1]",
+      "output": "12",
+      "explanation": "Rob houses 0, 2, 4: 2 + 9 + 1 = 12."
+    }
+  ],
+  "functionName": {
+    "python": "rob",
+    "javascript": "rob",
+    "typescript": "rob"
+  },
+  "starterCode": {
+    "python": "def rob(nums):\n    # Return the maximum money you can rob.\n    pass\n",
+    "javascript": "function rob(nums) {\n  // Return the maximum money you can rob.\n}\n",
+    "typescript": "function rob(nums: number[]): number {\n  // Return the maximum money you can rob.\n  return 0;\n}\n"
+  },
+  "tests": [
+    {
+      "name": "example 1",
+      "args": [
+        [
+          1,
+          2,
+          3,
+          1
+        ]
+      ],
+      "expected": 4
+    },
+    {
+      "name": "example 2",
+      "args": [
+        [
+          2,
+          7,
+          9,
+          3,
+          1
+        ]
+      ],
+      "expected": 12
+    },
+    {
+      "name": "single",
+      "args": [
+        [
+          5
+        ]
+      ],
+      "expected": 5,
+      "hidden": true
+    },
+    {
+      "name": "two",
+      "args": [
+        [
+          2,
+          1,
+          1,
+          2
+        ]
+      ],
+      "expected": 4,
+      "hidden": true
+    }
+  ],
+  "solutions": [
+    {
+      "approachName": "Rolling DP",
+      "summary": "At each house keep the best totals \"including\" vs \"skipping\" it.",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "technique": {
+        "primaryPattern": "dynamic-programming",
+        "optimal": true,
+        "signature": {
+          "maxLoopDepth": 1,
+          "usesHashStructure": false,
+          "usesSorting": false,
+          "usesRecursion": false,
+          "twoPointer": false
+        }
+      },
+      "steps": [
+        {
+          "title": "Start from the function shape",
+          "explanation": "Signature plus a default `0` return.",
+          "code": {
+            "python": "def rob(nums):\n    return 0\n",
+            "javascript": "function rob(nums) {\n  return 0;\n}\n",
+            "typescript": "function rob(nums: number[]): number {\n  return 0;\n}\n"
+          }
+        },
+        {
+          "title": "Track the two best totals",
+          "explanation": "`prev` is the best up to two houses back, `curr` the best up to the previous house.",
+          "code": {
+            "python": "def rob(nums):\n    prev, curr = 0, 0\n    return curr\n",
+            "javascript": "function rob(nums) {\n  let prev = 0;\n  let curr = 0;\n  return curr;\n}\n",
+            "typescript": "function rob(nums: number[]): number {\n  let prev = 0;\n  let curr = 0;\n  return curr;\n}\n"
+          }
+        },
+        {
+          "title": "Choose to rob or skip each house",
+          "explanation": "The new best is the larger of skipping (`curr`) or robbing this house plus `prev`.",
+          "code": {
+            "python": "def rob(nums):\n    prev, curr = 0, 0\n    for n in nums:\n        prev, curr = curr, max(curr, prev + n)\n    return curr\n",
+            "javascript": "function rob(nums) {\n  let prev = 0;\n  let curr = 0;\n  for (const n of nums) {\n    const next = Math.max(curr, prev + n);\n    prev = curr;\n    curr = next;\n  }\n  return curr;\n}\n",
+            "typescript": "function rob(nums: number[]): number {\n  let prev = 0;\n  let curr = 0;\n  for (const n of nums) {\n    const next = Math.max(curr, prev + n);\n    prev = curr;\n    curr = next;\n  }\n  return curr;\n}\n"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,150 @@
+{
+  "slug": "single-number",
+  "title": "Single Number",
+  "difficulty": "easy",
+  "tags": [
+    "array",
+    "hash-set"
+  ],
+  "patterns": [
+    "hash-set"
+  ],
+  "description": "Given a non-empty array `nums` where every element appears **twice** except for\none, find that single element.",
+  "constraints": [
+    "1 <= nums.length <= 3 * 10^4",
+    "Each element appears twice except for one which appears once."
+  ],
+  "examples": [
+    {
+      "input": "nums = [2,2,1]",
+      "output": "1"
+    },
+    {
+      "input": "nums = [4,1,2,1,2]",
+      "output": "4"
+    },
+    {
+      "input": "nums = [1]",
+      "output": "1"
+    }
+  ],
+  "functionName": {
+    "python": "single_number",
+    "javascript": "singleNumber",
+    "typescript": "singleNumber"
+  },
+  "starterCode": {
+    "python": "def single_number(nums):\n    # Return the element that appears only once.\n    pass\n",
+    "javascript": "function singleNumber(nums) {\n  // Return the element that appears only once.\n}\n",
+    "typescript": "function singleNumber(nums: number[]): number {\n  // Return the element that appears only once.\n  return 0;\n}\n"
+  },
+  "tests": [
+    {
+      "name": "example 1",
+      "args": [
+        [
+          2,
+          2,
+          1
+        ]
+      ],
+      "expected": 1
+    },
+    {
+      "name": "example 2",
+      "args": [
+        [
+          4,
+          1,
+          2,
+          1,
+          2
+        ]
+      ],
+      "expected": 4
+    },
+    {
+      "name": "single",
+      "args": [
+        [
+          1
+        ]
+      ],
+      "expected": 1
+    },
+    {
+      "name": "negatives",
+      "args": [
+        [
+          -3,
+          5,
+          5
+        ]
+      ],
+      "expected": -3,
+      "hidden": true
+    },
+    {
+      "name": "larger",
+      "args": [
+        [
+          7,
+          3,
+          7,
+          9,
+          3
+        ]
+      ],
+      "expected": 9,
+      "hidden": true
+    }
+  ],
+  "solutions": [
+    {
+      "approachName": "Hash Set Toggle",
+      "summary": "Add a value on first sight, remove it on the second; the loner is left.",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "technique": {
+        "primaryPattern": "hash-set",
+        "optimal": true,
+        "signature": {
+          "maxLoopDepth": 1,
+          "usesHashStructure": true,
+          "usesSorting": false,
+          "usesRecursion": false,
+          "twoPointer": false
+        }
+      },
+      "steps": [
+        {
+          "title": "Start from the function shape",
+          "explanation": "Signature plus a default `0` return.",
+          "code": {
+            "python": "def single_number(nums):\n    return 0\n",
+            "javascript": "function singleNumber(nums) {\n  return 0;\n}\n",
+            "typescript": "function singleNumber(nums: number[]): number {\n  return 0;\n}\n"
+          }
+        },
+        {
+          "title": "Toggle membership in a set",
+          "explanation": "For each value, remove it if present, otherwise add it. Pairs cancel out.",
+          "code": {
+            "python": "def single_number(nums):\n    seen = set()\n    for n in nums:\n        if n in seen:\n            seen.discard(n)\n        else:\n            seen.add(n)\n    return 0\n",
+            "javascript": "function singleNumber(nums) {\n  const seen = new Set();\n  for (const n of nums) {\n    if (seen.has(n)) {\n      seen.delete(n);\n    } else {\n      seen.add(n);\n    }\n  }\n  return 0;\n}\n",
+            "typescript": "function singleNumber(nums: number[]): number {\n  const seen = new Set<number>();\n  for (const n of nums) {\n    if (seen.has(n)) {\n      seen.delete(n);\n    } else {\n      seen.add(n);\n    }\n  }\n  return 0;\n}\n"
+          }
+        },
+        {
+          "title": "Return the lone survivor",
+          "explanation": "Exactly one value never got cancelled — return it.",
+          "code": {
+            "python": "def single_number(nums):\n    seen = set()\n    for n in nums:\n        if n in seen:\n            seen.discard(n)\n        else:\n            seen.add(n)\n    return next(iter(seen))\n",
+            "javascript": "function singleNumber(nums) {\n  const seen = new Set();\n  for (const n of nums) {\n    if (seen.has(n)) {\n      seen.delete(n);\n    } else {\n      seen.add(n);\n    }\n  }\n  return seen.values().next().value;\n}\n",
+            "typescript": "function singleNumber(nums: number[]): number {\n  const seen = new Set<number>();\n  for (const n of nums) {\n    if (seen.has(n)) {\n      seen.delete(n);\n    } else {\n      seen.add(n);\n    }\n  }\n  return seen.values().next().value as number;\n}\n"
+          }
+        }
+      ]
+    }
+  ]
+}

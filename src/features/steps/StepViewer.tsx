@@ -19,7 +19,7 @@ interface StepViewerProps {
 }
 
 export function StepViewer({ solutions, language, problemTitle }: StepViewerProps) {
-  const isDark = useTheme((s) => s.isDark)
+  const theme = useTheme((s) => s.theme)
   const diffLayout = useUiPrefs((s) => s.diffLayout)
   const toggleDiffLayout = useUiPrefs((s) => s.toggleDiffLayout)
 
@@ -81,7 +81,7 @@ export function StepViewer({ solutions, language, problemTitle }: StepViewerProp
         <DiffEditor
           height="100%"
           language={MONACO_LANGUAGE[language]}
-          theme={monacoThemeName(isDark)}
+          theme={monacoThemeName(theme)}
           original={original}
           modified={modified}
           options={{

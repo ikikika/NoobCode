@@ -20,7 +20,7 @@ self.onmessage = (e: MessageEvent<WorkerRequest>) => {
   try {
     // Strip types, then reuse the JavaScript harness verbatim.
     const js = transpileTs(msg.userCode)
-    const result = runJsTests(js, msg.functionName, msg.tests)
+    const result = runJsTests(js, msg.functionName, msg.tests, { kind: msg.kind, io: msg.io })
     post({ type: 'result', id: msg.id, result })
   } catch (err) {
     post({ type: 'error', id: msg.id, message: err instanceof Error ? err.message : String(err) })

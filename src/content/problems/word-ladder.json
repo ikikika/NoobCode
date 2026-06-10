@@ -1,0 +1,130 @@
+{
+  "slug": "word-ladder",
+  "title": "Word Ladder",
+  "difficulty": "hard",
+  "tags": [
+    "graph",
+    "breadth-first-search"
+  ],
+  "patterns": [
+    "breadth-first-search"
+  ],
+  "description": "Given `beginWord`, `endWord`, and a `wordList`, return the number of words in\nthe shortest transformation sequence from `beginWord` to `endWord`, changing one\nletter at a time, where every intermediate word is in `wordList`. Return `0` if\nthere is no such sequence. The sequence length counts both endpoints.",
+  "constraints": [
+    "1 <= beginWord.length <= 10",
+    "endWord.length == beginWord.length",
+    "1 <= wordList.length <= 5000",
+    "All words are lowercase and the same length."
+  ],
+  "examples": [
+    {
+      "input": "beginWord = \"hit\", endWord = \"cog\", wordList = [\"hot\",\"dot\",\"dog\",\"lot\",\"log\",\"cog\"]",
+      "output": "5"
+    },
+    {
+      "input": "beginWord = \"hit\", endWord = \"cog\", wordList = [\"hot\",\"dot\",\"dog\",\"lot\",\"log\"]",
+      "output": "0"
+    }
+  ],
+  "functionName": {
+    "python": "ladder_length",
+    "javascript": "ladderLength",
+    "typescript": "ladderLength"
+  },
+  "starterCode": {
+    "python": "def ladder_length(begin_word, end_word, word_list):\n    # Return the shortest transformation length, or 0.\n    pass\n",
+    "javascript": "function ladderLength(beginWord, endWord, wordList) {\n  // Return the shortest transformation length, or 0.\n}\n",
+    "typescript": "function ladderLength(beginWord: string, endWord: string, wordList: string[]): number {\n  // Return the shortest transformation length, or 0.\n  return 0;\n}\n"
+  },
+  "tests": [
+    {
+      "name": "reachable",
+      "args": [
+        "hit",
+        "cog",
+        [
+          "hot",
+          "dot",
+          "dog",
+          "lot",
+          "log",
+          "cog"
+        ]
+      ],
+      "expected": 5
+    },
+    {
+      "name": "unreachable",
+      "args": [
+        "hit",
+        "cog",
+        [
+          "hot",
+          "dot",
+          "dog",
+          "lot",
+          "log"
+        ]
+      ],
+      "expected": 0
+    },
+    {
+      "name": "adjacent",
+      "args": [
+        "a",
+        "c",
+        [
+          "a",
+          "b",
+          "c"
+        ]
+      ],
+      "expected": 2,
+      "hidden": true
+    },
+    {
+      "name": "same start in list",
+      "args": [
+        "hot",
+        "dog",
+        [
+          "hot",
+          "dog",
+          "dot"
+        ]
+      ],
+      "expected": 3,
+      "hidden": true
+    }
+  ],
+  "solutions": [
+    {
+      "approachName": "BFS over One-letter Edits",
+      "summary": "Each word is a node; edges connect words differing by one letter. BFS gives the shortest path.",
+      "timeComplexity": "O(N · L · 26)",
+      "spaceComplexity": "O(N · L)",
+      "technique": {
+        "primaryPattern": "breadth-first-search",
+        "optimal": true,
+        "signature": {
+          "maxLoopDepth": 3,
+          "usesHashStructure": true,
+          "usesSorting": false,
+          "usesRecursion": false,
+          "twoPointer": false
+        }
+      },
+      "steps": [
+        {
+          "title": "BFS, generating neighbors by letter swaps",
+          "explanation": "From each word, try every position × every letter; enqueue valid, unvisited words and count levels until `endWord`.",
+          "code": {
+            "python": "def ladder_length(begin_word, end_word, word_list):\n    from collections import deque\n    words = set(word_list)\n    if end_word not in words:\n        return 0\n    queue = deque([(begin_word, 1)])\n    visited = {begin_word}\n    while queue:\n        word, steps = queue.popleft()\n        if word == end_word:\n            return steps\n        for i in range(len(word)):\n            for c in \"abcdefghijklmnopqrstuvwxyz\":\n                nxt = word[:i] + c + word[i + 1:]\n                if nxt in words and nxt not in visited:\n                    visited.add(nxt)\n                    queue.append((nxt, steps + 1))\n    return 0\n",
+            "javascript": "function ladderLength(beginWord, endWord, wordList) {\n  const words = new Set(wordList);\n  if (!words.has(endWord)) return 0;\n  let queue = [beginWord];\n  const visited = new Set([beginWord]);\n  let steps = 1;\n  while (queue.length) {\n    const next = [];\n    for (const word of queue) {\n      if (word === endWord) return steps;\n      for (let i = 0; i < word.length; i++) {\n        for (let c = 97; c < 123; c++) {\n          const cand = word.slice(0, i) + String.fromCharCode(c) + word.slice(i + 1);\n          if (words.has(cand) && !visited.has(cand)) {\n            visited.add(cand);\n            next.push(cand);\n          }\n        }\n      }\n    }\n    queue = next;\n    steps++;\n  }\n  return 0;\n}\n",
+            "typescript": "function ladderLength(beginWord: string, endWord: string, wordList: string[]): number {\n  const words = new Set(wordList);\n  if (!words.has(endWord)) return 0;\n  let queue: string[] = [beginWord];\n  const visited = new Set([beginWord]);\n  let steps = 1;\n  while (queue.length) {\n    const next: string[] = [];\n    for (const word of queue) {\n      if (word === endWord) return steps;\n      for (let i = 0; i < word.length; i++) {\n        for (let c = 97; c < 123; c++) {\n          const cand = word.slice(0, i) + String.fromCharCode(c) + word.slice(i + 1);\n          if (words.has(cand) && !visited.has(cand)) {\n            visited.add(cand);\n            next.push(cand);\n          }\n        }\n      }\n    }\n    queue = next;\n    steps++;\n  }\n  return 0;\n}\n"
+          }
+        }
+      ]
+    }
+  ]
+}

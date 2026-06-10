@@ -25,7 +25,7 @@ interface HistoryPanelProps {
 }
 
 export function HistoryPanel({ problem, language }: HistoryPanelProps) {
-  const isDark = useTheme((s) => s.isDark)
+  const theme = useTheme((s) => s.theme)
   const diffLayout = useUiPrefs((s) => s.diffLayout)
   const attempts = useProgressStore((s) => s.attempts)
   const savedCode = useProgressStore((s) => s.savedCode)
@@ -93,7 +93,7 @@ export function HistoryPanel({ problem, language }: HistoryPanelProps) {
         <DiffEditor
           height="100%"
           language={MONACO_LANGUAGE[attemptLanguage]}
-          theme={monacoThemeName(isDark)}
+          theme={monacoThemeName(theme)}
           original={original}
           modified={current}
           options={{

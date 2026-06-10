@@ -1,0 +1,142 @@
+{
+  "slug": "coin-change",
+  "title": "Coin Change",
+  "difficulty": "medium",
+  "tags": [
+    "array",
+    "dynamic-programming"
+  ],
+  "patterns": [
+    "dynamic-programming"
+  ],
+  "description": "You are given coins of different denominations `coins` and a total `amount`.\nReturn the fewest number of coins needed to make up that amount. If it cannot be\nmade, return `-1`. You have an unlimited number of each coin.",
+  "constraints": [
+    "1 <= coins.length <= 12",
+    "1 <= coins[i] <= 2^31 - 1",
+    "0 <= amount <= 10^4"
+  ],
+  "examples": [
+    {
+      "input": "coins = [1,2,5], amount = 11",
+      "output": "3",
+      "explanation": "11 = 5 + 5 + 1."
+    },
+    {
+      "input": "coins = [2], amount = 3",
+      "output": "-1"
+    },
+    {
+      "input": "coins = [1], amount = 0",
+      "output": "0"
+    }
+  ],
+  "functionName": {
+    "python": "coin_change",
+    "javascript": "coinChange",
+    "typescript": "coinChange"
+  },
+  "starterCode": {
+    "python": "def coin_change(coins, amount):\n    # Return the fewest coins to make amount, or -1.\n    pass\n",
+    "javascript": "function coinChange(coins, amount) {\n  // Return the fewest coins to make amount, or -1.\n}\n",
+    "typescript": "function coinChange(coins: number[], amount: number): number {\n  // Return the fewest coins to make amount, or -1.\n  return -1;\n}\n"
+  },
+  "tests": [
+    {
+      "name": "example 1",
+      "args": [
+        [
+          1,
+          2,
+          5
+        ],
+        11
+      ],
+      "expected": 3
+    },
+    {
+      "name": "impossible",
+      "args": [
+        [
+          2
+        ],
+        3
+      ],
+      "expected": -1
+    },
+    {
+      "name": "zero",
+      "args": [
+        [
+          1
+        ],
+        0
+      ],
+      "expected": 0
+    },
+    {
+      "name": "larger",
+      "args": [
+        [
+          2,
+          5,
+          10,
+          1
+        ],
+        27
+      ],
+      "expected": 4,
+      "hidden": true
+    },
+    {
+      "name": "no ones",
+      "args": [
+        [
+          5,
+          7
+        ],
+        1
+      ],
+      "expected": -1,
+      "hidden": true
+    }
+  ],
+  "solutions": [
+    {
+      "approachName": "Bottom-up DP",
+      "summary": "dp[a] = fewest coins to make `a`; build it up from 0.",
+      "timeComplexity": "O(amount · coins)",
+      "spaceComplexity": "O(amount)",
+      "technique": {
+        "primaryPattern": "dynamic-programming",
+        "optimal": true,
+        "signature": {
+          "maxLoopDepth": 2,
+          "usesHashStructure": false,
+          "usesSorting": false,
+          "usesRecursion": false,
+          "twoPointer": false
+        }
+      },
+      "steps": [
+        {
+          "title": "Seed the dp table",
+          "explanation": "Use a sentinel of `amount + 1` (an impossible count) for every total, with `dp[0] = 0`.",
+          "code": {
+            "python": "def coin_change(coins, amount):\n    dp = [amount + 1] * (amount + 1)\n    dp[0] = 0\n    return dp[amount] if dp[amount] <= amount else -1\n",
+            "javascript": "function coinChange(coins, amount) {\n  const dp = new Array(amount + 1).fill(amount + 1);\n  dp[0] = 0;\n  return dp[amount] <= amount ? dp[amount] : -1;\n}\n",
+            "typescript": "function coinChange(coins: number[], amount: number): number {\n  const dp = new Array<number>(amount + 1).fill(amount + 1);\n  dp[0] = 0;\n  return dp[amount] <= amount ? dp[amount] : -1;\n}\n"
+          }
+        },
+        {
+          "title": "Relax each total over every coin",
+          "explanation": "For each total `a`, try each coin: using it costs one more than `dp[a - coin]`.",
+          "code": {
+            "python": "def coin_change(coins, amount):\n    dp = [amount + 1] * (amount + 1)\n    dp[0] = 0\n    for a in range(1, amount + 1):\n        for c in coins:\n            if c <= a:\n                dp[a] = min(dp[a], dp[a - c] + 1)\n    return dp[amount] if dp[amount] <= amount else -1\n",
+            "javascript": "function coinChange(coins, amount) {\n  const dp = new Array(amount + 1).fill(amount + 1);\n  dp[0] = 0;\n  for (let a = 1; a <= amount; a++) {\n    for (const c of coins) {\n      if (c <= a) dp[a] = Math.min(dp[a], dp[a - c] + 1);\n    }\n  }\n  return dp[amount] <= amount ? dp[amount] : -1;\n}\n",
+            "typescript": "function coinChange(coins: number[], amount: number): number {\n  const dp = new Array<number>(amount + 1).fill(amount + 1);\n  dp[0] = 0;\n  for (let a = 1; a <= amount; a++) {\n    for (const c of coins) {\n      if (c <= a) dp[a] = Math.min(dp[a], dp[a - c] + 1);\n    }\n  }\n  return dp[amount] <= amount ? dp[amount] : -1;\n}\n"
+          }
+        }
+      ]
+    }
+  ]
+}

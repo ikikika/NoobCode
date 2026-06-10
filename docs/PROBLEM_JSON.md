@@ -176,6 +176,56 @@ A valid, copy-pasteable problem (`add` returns `a + b`):
 
 ---
 
+## Structured inputs (trees & linked lists)
+
+By default every argument and the return value are passed through as plain JSON.
+For binary-tree and linked-list problems, declare an `io` codec so tests stay
+readable as arrays while the solution receives real node objects:
+
+```jsonc
+{
+  "io": { "args": ["tree"], "result": "json" }, // per-arg + return codec
+  // ...
+  "tests": [{ "name": "t", "args": [[3, 9, 20, null, null, 15, 7]], "expected": [[3], [9, 20], [15, 7]] }]
+}
+```
+
+- `"tree"` — the array is **level-order** with `null` for missing children; it is
+  decoded into nodes with `.val` / `.left` / `.right`. A returned tree is
+  re-encoded to the same level-order array (trailing `null`s trimmed).
+- `"list"` — the array is decoded into a singly linked list of `.val` / `.next`
+  nodes, and a returned list is encoded back to an array.
+- `"json"` (default) — passed through untouched.
+
+`io.args[i]` applies to the i-th argument; omit an entry (or the whole `io`
+block) to leave it as JSON. The runner injects nothing into your code's scope, so
+include any `TreeNode` / `ListNode` class your solution constructs in the
+`starterCode` (see `add-two-numbers.json`).
+
+## Design (class) problems
+
+Set `"kind": "design"` for "implement a class" problems (e.g. `min-stack`,
+`lru-cache`). `functionName` then names the **class**, and each test drives a
+sequence of method calls:
+
+```jsonc
+{
+  "kind": "design",
+  "functionName": { "python": "MinStack", "javascript": "MinStack", "typescript": "MinStack" },
+  "tests": [
+    {
+      "name": "sequence",
+      "ops": ["MinStack", "push", "getMin"], // first op constructs the instance
+      "args": [[], [-2], []],                  // per-op argument lists
+      "expected": [null, null, -2]             // per-op results (constructor → null)
+    }
+  ]
+}
+```
+
+Void methods report `null`. The first `op` is always the constructor and its
+`expected` entry is `null`.
+
 ## Common pitfalls
 
 - **All three languages are required.** Omitting `typescript` (or any language)

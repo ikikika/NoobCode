@@ -1,0 +1,138 @@
+{
+  "slug": "min-stack",
+  "title": "Min Stack",
+  "difficulty": "medium",
+  "tags": [
+    "stack",
+    "design"
+  ],
+  "patterns": [
+    "stack"
+  ],
+  "kind": "design",
+  "description": "Design a stack that supports `push`, `pop`, `top`, and retrieving the minimum\nelement in constant time.\n\nImplement the `MinStack` class: `push(val)`, `pop()`, `top()`, and `getMin()`.",
+  "constraints": [
+    "-2^31 <= val <= 2^31 - 1",
+    "pop, top, getMin are only called on a non-empty stack.",
+    "At most 3 * 10^4 calls total."
+  ],
+  "examples": [
+    {
+      "input": "[\"MinStack\",\"push\",\"push\",\"push\",\"getMin\",\"pop\",\"top\",\"getMin\"], [[],[-2],[0],[-3],[],[],[],[]]",
+      "output": "[null,null,null,null,-3,null,0,-2]"
+    }
+  ],
+  "functionName": {
+    "python": "MinStack",
+    "javascript": "MinStack",
+    "typescript": "MinStack"
+  },
+  "starterCode": {
+    "python": "class MinStack:\n    def __init__(self):\n        pass\n\n    def push(self, val):\n        pass\n\n    def pop(self):\n        pass\n\n    def top(self):\n        pass\n\n    def getMin(self):\n        pass\n",
+    "javascript": "class MinStack {\n  constructor() {}\n  push(val) {}\n  pop() {}\n  top() {}\n  getMin() {}\n}\n",
+    "typescript": "class MinStack {\n  constructor() {}\n  push(val: number): void {}\n  pop(): void {}\n  top(): number {\n    return 0;\n  }\n  getMin(): number {\n    return 0;\n  }\n}\n"
+  },
+  "tests": [
+    {
+      "name": "example sequence",
+      "ops": [
+        "MinStack",
+        "push",
+        "push",
+        "push",
+        "getMin",
+        "pop",
+        "top",
+        "getMin"
+      ],
+      "args": [
+        [],
+        [
+          -2
+        ],
+        [
+          0
+        ],
+        [
+          -3
+        ],
+        [],
+        [],
+        [],
+        []
+      ],
+      "expected": [
+        null,
+        null,
+        null,
+        null,
+        -3,
+        null,
+        0,
+        -2
+      ]
+    },
+    {
+      "name": "duplicates at min",
+      "ops": [
+        "MinStack",
+        "push",
+        "push",
+        "getMin",
+        "pop",
+        "getMin"
+      ],
+      "args": [
+        [],
+        [
+          1
+        ],
+        [
+          1
+        ],
+        [],
+        [],
+        []
+      ],
+      "expected": [
+        null,
+        null,
+        null,
+        1,
+        null,
+        1
+      ],
+      "hidden": true
+    }
+  ],
+  "solutions": [
+    {
+      "approachName": "Paired Min Stack",
+      "summary": "Alongside each value, store the minimum seen so far.",
+      "timeComplexity": "O(1) per operation",
+      "spaceComplexity": "O(n)",
+      "technique": {
+        "primaryPattern": "stack",
+        "optimal": true,
+        "signature": {
+          "maxLoopDepth": 0,
+          "usesHashStructure": false,
+          "usesSorting": false,
+          "usesRecursion": false,
+          "twoPointer": false
+        }
+      },
+      "steps": [
+        {
+          "title": "Keep a parallel minimum stack",
+          "explanation": "Push the running minimum next to each value so `getMin` is just a peek.",
+          "code": {
+            "python": "class MinStack:\n    def __init__(self):\n        self.stack = []\n        self.mins = []\n\n    def push(self, val):\n        self.stack.append(val)\n        self.mins.append(val if not self.mins else min(val, self.mins[-1]))\n\n    def pop(self):\n        self.stack.pop()\n        self.mins.pop()\n\n    def top(self):\n        return self.stack[-1]\n\n    def getMin(self):\n        return self.mins[-1]\n",
+            "javascript": "class MinStack {\n  constructor() {\n    this.stack = [];\n    this.mins = [];\n  }\n  push(val) {\n    this.stack.push(val);\n    this.mins.push(this.mins.length === 0 ? val : Math.min(val, this.mins[this.mins.length - 1]));\n  }\n  pop() {\n    this.stack.pop();\n    this.mins.pop();\n  }\n  top() {\n    return this.stack[this.stack.length - 1];\n  }\n  getMin() {\n    return this.mins[this.mins.length - 1];\n  }\n}\n",
+            "typescript": "class MinStack {\n  stack: number[];\n  mins: number[];\n  constructor() {\n    this.stack = [];\n    this.mins = [];\n  }\n  push(val: number): void {\n    this.stack.push(val);\n    this.mins.push(this.mins.length === 0 ? val : Math.min(val, this.mins[this.mins.length - 1]));\n  }\n  pop(): void {\n    this.stack.pop();\n    this.mins.pop();\n  }\n  top(): number {\n    return this.stack[this.stack.length - 1];\n  }\n  getMin(): number {\n    return this.mins[this.mins.length - 1];\n  }\n}\n"
+          }
+        }
+      ]
+    }
+  ]
+}

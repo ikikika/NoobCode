@@ -11,11 +11,23 @@ export const langCodeSchema = z.object({
 })
 export type LangCode = z.infer<typeof langCodeSchema>
 
+// How a single argument or the return value is encoded in the JSON tests.
+// 'json' (default) is passed through untouched; 'tree' and 'list' are written as
+// arrays in the JSON and decoded into binary-tree / linked-list structures by the
+// runner before the user's function sees them (and the result is re-encoded back
+// to an array for comparison). See src/features/runner/io.ts.
+export const ioKindSchema = z.enum(['json', 'tree', 'list'])
+export type IoKind = z.infer<typeof ioKindSchema>
+
 export const testCaseSchema = z.object({
   name: z.string(),
   args: z.array(z.unknown()),
   expected: z.unknown(),
   hidden: z.boolean().default(false),
+  // Design problems only: the parallel sequence of method names to invoke. When
+  // present, `args` is an array of per-call argument lists and `expected` is the
+  // array of per-call results (first entry is the constructor → null).
+  ops: z.array(z.string()).optional(),
 })
 export type TestCase = z.infer<typeof testCaseSchema>
 
@@ -71,6 +83,18 @@ export const problemSchema = z.object({
   description: z.string(),
   constraints: z.array(z.string()),
   examples: z.array(exampleSchema),
+  // 'function' (default): the runner calls functionName(...args). 'design': the
+  // runner instantiates the class named by functionName and replays each test's
+  // `ops` against it (LeetCode-style design problems, e.g. Min Stack, LRU Cache).
+  kind: z.enum(['function', 'design']).default('function'),
+  // Optional structured-I/O codec. `args[i]` decodes the i-th argument; `result`
+  // encodes the return value. Omitted entries default to 'json'.
+  io: z
+    .object({
+      args: z.array(ioKindSchema).optional(),
+      result: ioKindSchema.optional(),
+    })
+    .optional(),
   functionName: z.object({
     python: z.string(),
     javascript: z.string(),

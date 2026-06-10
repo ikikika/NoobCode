@@ -1,0 +1,151 @@
+{
+  "slug": "missing-number",
+  "title": "Missing Number",
+  "difficulty": "easy",
+  "tags": [
+    "array",
+    "hash-set"
+  ],
+  "patterns": [
+    "hash-set"
+  ],
+  "description": "Given an array `nums` containing `n` distinct numbers in the range `[0, n]`,\nreturn the only number in the range that is missing from the array.",
+  "constraints": [
+    "n == nums.length",
+    "1 <= n <= 10^4",
+    "0 <= nums[i] <= n",
+    "All numbers are distinct."
+  ],
+  "examples": [
+    {
+      "input": "nums = [3,0,1]",
+      "output": "2"
+    },
+    {
+      "input": "nums = [0,1]",
+      "output": "2"
+    },
+    {
+      "input": "nums = [9,6,4,2,3,5,7,0,1]",
+      "output": "8"
+    }
+  ],
+  "functionName": {
+    "python": "missing_number",
+    "javascript": "missingNumber",
+    "typescript": "missingNumber"
+  },
+  "starterCode": {
+    "python": "def missing_number(nums):\n    # Return the missing number in [0, n].\n    pass\n",
+    "javascript": "function missingNumber(nums) {\n  // Return the missing number in [0, n].\n}\n",
+    "typescript": "function missingNumber(nums: number[]): number {\n  // Return the missing number in [0, n].\n  return 0;\n}\n"
+  },
+  "tests": [
+    {
+      "name": "example 1",
+      "args": [
+        [
+          3,
+          0,
+          1
+        ]
+      ],
+      "expected": 2
+    },
+    {
+      "name": "example 2",
+      "args": [
+        [
+          0,
+          1
+        ]
+      ],
+      "expected": 2
+    },
+    {
+      "name": "example 3",
+      "args": [
+        [
+          9,
+          6,
+          4,
+          2,
+          3,
+          5,
+          7,
+          0,
+          1
+        ]
+      ],
+      "expected": 8
+    },
+    {
+      "name": "missing zero",
+      "args": [
+        [
+          1
+        ]
+      ],
+      "expected": 0,
+      "hidden": true
+    },
+    {
+      "name": "single",
+      "args": [
+        [
+          0
+        ]
+      ],
+      "expected": 1,
+      "hidden": true
+    }
+  ],
+  "solutions": [
+    {
+      "approachName": "Hash Set",
+      "summary": "Store every value, then find the first index in `[0, n]` that is absent.",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "technique": {
+        "primaryPattern": "hash-set",
+        "optimal": true,
+        "signature": {
+          "maxLoopDepth": 1,
+          "usesHashStructure": true,
+          "usesSorting": false,
+          "usesRecursion": false,
+          "twoPointer": false
+        }
+      },
+      "steps": [
+        {
+          "title": "Start from the function shape",
+          "explanation": "Signature plus a default `0` return.",
+          "code": {
+            "python": "def missing_number(nums):\n    return 0\n",
+            "javascript": "function missingNumber(nums) {\n  return 0;\n}\n",
+            "typescript": "function missingNumber(nums: number[]): number {\n  return 0;\n}\n"
+          }
+        },
+        {
+          "title": "Put the values in a set",
+          "explanation": "A set gives O(1) \"is this number present?\" checks.",
+          "code": {
+            "python": "def missing_number(nums):\n    present = set(nums)\n    return 0\n",
+            "javascript": "function missingNumber(nums) {\n  const present = new Set(nums);\n  return 0;\n}\n",
+            "typescript": "function missingNumber(nums: number[]): number {\n  const present = new Set(nums);\n  return 0;\n}\n"
+          }
+        },
+        {
+          "title": "Find the first absent index",
+          "explanation": "Check every candidate from `0` to `n`; return the one missing from the set.",
+          "code": {
+            "python": "def missing_number(nums):\n    present = set(nums)\n    for i in range(len(nums) + 1):\n        if i not in present:\n            return i\n    return -1\n",
+            "javascript": "function missingNumber(nums) {\n  const present = new Set(nums);\n  for (let i = 0; i <= nums.length; i++) {\n    if (!present.has(i)) {\n      return i;\n    }\n  }\n  return -1;\n}\n",
+            "typescript": "function missingNumber(nums: number[]): number {\n  const present = new Set(nums);\n  for (let i = 0; i <= nums.length; i++) {\n    if (!present.has(i)) {\n      return i;\n    }\n  }\n  return -1;\n}\n"
+          }
+        }
+      ]
+    }
+  ]
+}

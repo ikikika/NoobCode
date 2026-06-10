@@ -7,6 +7,8 @@ import 'monaco-editor/esm/vs/basic-languages/python/python.contribution'
 import 'monaco-editor/esm/vs/basic-languages/javascript/javascript.contribution'
 import 'monaco-editor/esm/vs/basic-languages/typescript/typescript.contribution'
 import EditorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
+import { THEMES, DEFAULT_THEME, type ThemeId } from './themes'
+import { readCustomTheme, isDarkColor, type CustomColors } from '../features/theme/customTheme'
 
 // We register only the generic editor worker — the basic-language
 // contributions are tokenizer-only and need no dedicated language service.
@@ -18,59 +20,72 @@ import EditorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
 
 let done = false
 
-// Define custom Monaco themes that match the CSS token palette. The theme
-// names are simply 'light' and 'dark'.
+// Register one Monaco theme per selectable app theme, named by its id. Colors
+// are derived from the shared registry in `./themes` so the editor matches the
+// surrounding CSS token palette.
 export function monacoSetup() {
   if (done) return
   done = true
 
   loader.config({ monaco })
 
-  monaco.editor.defineTheme('dark', {
-    base: 'vs-dark',
-    inherit: true,
-    rules: [
-      { token: 'comment', foreground: '8c8069', fontStyle: 'italic' },
-      { token: 'keyword', foreground: 'd98a4e' },
-      { token: 'string', foreground: '9ec27a' },
-      { token: 'number', foreground: 'e0b85e' },
-    ],
-    colors: {
-      'editor.background': '#211c16',
-      'editor.foreground': '#f0e6d2',
-      'editorLineNumber.foreground': '#877c66',
-      'editor.lineHighlightBackground': '#2c261e',
-      'editorCursor.foreground': '#d98a4e',
-      'diffEditor.insertedTextBackground': '#1f2a1880',
-      'diffEditor.removedTextBackground': '#2e1c1680',
-      'diffEditor.insertedLineBackground': '#1f2a1840',
-      'diffEditor.removedLineBackground': '#2e1c1640',
-    },
-  })
+  for (const theme of THEMES) {
+    const m = theme.monaco
+    monaco.editor.defineTheme(theme.id, {
+      base: theme.dark ? 'vs-dark' : 'vs',
+      inherit: true,
+      rules: [
+        { token: 'comment', foreground: m.comment, fontStyle: 'italic' },
+        { token: 'keyword', foreground: m.keyword },
+        { token: 'string', foreground: m.string },
+        { token: 'number', foreground: m.number },
+      ],
+      colors: {
+        'editor.background': m.bg,
+        'editor.foreground': m.fg,
+        'editorLineNumber.foreground': m.lineNumber,
+        'editor.lineHighlightBackground': m.lineHighlight,
+        'editorCursor.foreground': m.cursor,
+        'diffEditor.insertedTextBackground': `#${m.diffInsert}80`,
+        'diffEditor.removedTextBackground': `#${m.diffRemove}80`,
+        'diffEditor.insertedLineBackground': `#${m.diffInsert}40`,
+        'diffEditor.removedLineBackground': `#${m.diffRemove}40`,
+      },
+    })
+  }
 
-  monaco.editor.defineTheme('light', {
-    base: 'vs',
+  const custom = readCustomTheme()
+  if (custom) defineCustomMonacoTheme(custom)
+}
+
+const noHash = (hex: string) => (hex || '#000000').replace('#', '')
+
+/** Build (or rebuild) the 'custom' Monaco theme from a user palette. */
+export function defineCustomMonacoTheme(c: CustomColors) {
+  monaco.editor.defineTheme('custom', {
+    base: isDarkColor(c.surface || '#ffffff') ? 'vs-dark' : 'vs',
     inherit: true,
     rules: [
-      { token: 'comment', foreground: '9c8f76', fontStyle: 'italic' },
-      { token: 'keyword', foreground: 'a85c2e' },
-      { token: 'string', foreground: '4a7c3f' },
-      { token: 'number', foreground: 'b07d1a' },
+      { token: 'comment', foreground: noHash(c['fg-subtle']), fontStyle: 'italic' },
+      { token: 'keyword', foreground: noHash(c.accent) },
+      { token: 'string', foreground: noHash(c.pass) },
+      { token: 'number', foreground: noHash(c.medium) },
     ],
     colors: {
-      'editor.background': '#faf4e6',
-      'editor.foreground': '#3b352a',
-      'editorLineNumber.foreground': '#9c8f76',
-      'editor.lineHighlightBackground': '#fffdf5',
-      'editorCursor.foreground': '#c2703d',
-      'diffEditor.insertedTextBackground': '#e9efd680',
-      'diffEditor.removedTextBackground': '#f6e2dc80',
-      'diffEditor.insertedLineBackground': '#e9efd640',
-      'diffEditor.removedLineBackground': '#f6e2dc40',
+      'editor.background': c.surface,
+      'editor.foreground': c.fg,
+      'editorLineNumber.foreground': c['fg-subtle'],
+      'editor.lineHighlightBackground': c['surface-raised'],
+      'editorCursor.foreground': c.accent,
+      'diffEditor.insertedTextBackground': `#${noHash(c['pass-surface'])}80`,
+      'diffEditor.removedTextBackground': `#${noHash(c['fail-surface'])}80`,
+      'diffEditor.insertedLineBackground': `#${noHash(c['pass-surface'])}40`,
+      'diffEditor.removedLineBackground': `#${noHash(c['fail-surface'])}40`,
     },
   })
 }
 
-export function monacoThemeName(isDark: boolean): 'dark' | 'light' {
-  return isDark ? 'dark' : 'light'
+export function monacoThemeName(theme: ThemeId | 'custom'): string {
+  if (theme === 'custom') return readCustomTheme() ? 'custom' : DEFAULT_THEME
+  return THEMES.some((t) => t.id === theme) ? theme : DEFAULT_THEME
 }

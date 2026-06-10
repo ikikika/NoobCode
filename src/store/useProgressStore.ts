@@ -31,6 +31,23 @@ interface ProgressState {
 
 const codeKey = (slug: string, language: LanguageId) => `${slug}:${language}`
 
+// Forward-migrate a persisted blob to the current schema. Exported so the
+// migration ladder can be unit-tested without rehydrating the live store.
+export function migrateProgress(persisted: unknown, version: number): ProgressState {
+  const state = (persisted ?? {}) as Partial<ProgressState>
+  if (version < 2) {
+    state.attempts = state.attempts ?? []
+    state.review = state.review ?? {}
+  }
+  if (version < 3) {
+    state.schedule = state.schedule ?? {}
+  }
+  if (version < 4) {
+    state.lastRun = state.lastRun ?? {}
+  }
+  return state as ProgressState
+}
+
 export const useProgressStore = create<ProgressState>()(
   persist(
     (set, get) => ({
@@ -68,20 +85,7 @@ export const useProgressStore = create<ProgressState>()(
     {
       name: 'noobcode-progress',
       version: 4,
-      migrate: (persisted, version) => {
-        const state = (persisted ?? {}) as Partial<ProgressState>
-        if (version < 2) {
-          state.attempts = state.attempts ?? []
-          state.review = state.review ?? {}
-        }
-        if (version < 3) {
-          state.schedule = state.schedule ?? {}
-        }
-        if (version < 4) {
-          state.lastRun = state.lastRun ?? {}
-        }
-        return state as ProgressState
-      },
+      migrate: (persisted, version) => migrateProgress(persisted, version),
     },
   ),
 )

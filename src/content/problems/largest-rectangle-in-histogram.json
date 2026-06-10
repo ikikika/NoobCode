@@ -1,0 +1,129 @@
+{
+  "slug": "largest-rectangle-in-histogram",
+  "title": "Largest Rectangle in Histogram",
+  "difficulty": "hard",
+  "tags": [
+    "array",
+    "stack"
+  ],
+  "patterns": [
+    "stack"
+  ],
+  "description": "Given an array `heights` of bar heights (each of width 1), return the area of\nthe largest rectangle that fits entirely within the histogram.",
+  "constraints": [
+    "1 <= heights.length <= 10^5",
+    "0 <= heights[i] <= 10^4"
+  ],
+  "examples": [
+    {
+      "input": "heights = [2,1,5,6,2,3]",
+      "output": "10"
+    },
+    {
+      "input": "heights = [2,4]",
+      "output": "4"
+    }
+  ],
+  "functionName": {
+    "python": "largest_rectangle_area",
+    "javascript": "largestRectangleArea",
+    "typescript": "largestRectangleArea"
+  },
+  "starterCode": {
+    "python": "def largest_rectangle_area(heights):\n    # Return the largest rectangle area.\n    pass\n",
+    "javascript": "function largestRectangleArea(heights) {\n  // Return the largest rectangle area.\n}\n",
+    "typescript": "function largestRectangleArea(heights: number[]): number {\n  // Return the largest rectangle area.\n  return 0;\n}\n"
+  },
+  "tests": [
+    {
+      "name": "example 1",
+      "args": [
+        [
+          2,
+          1,
+          5,
+          6,
+          2,
+          3
+        ]
+      ],
+      "expected": 10
+    },
+    {
+      "name": "example 2",
+      "args": [
+        [
+          2,
+          4
+        ]
+      ],
+      "expected": 4
+    },
+    {
+      "name": "flat",
+      "args": [
+        [
+          1,
+          1,
+          1
+        ]
+      ],
+      "expected": 3,
+      "hidden": true
+    },
+    {
+      "name": "single zero",
+      "args": [
+        [
+          0
+        ]
+      ],
+      "expected": 0,
+      "hidden": true
+    },
+    {
+      "name": "increasing",
+      "args": [
+        [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      ],
+      "expected": 9,
+      "hidden": true
+    }
+  ],
+  "solutions": [
+    {
+      "approachName": "Monotonic Stack",
+      "summary": "Keep an increasing stack of bar indices; when a shorter bar appears, settle the taller ones.",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "technique": {
+        "primaryPattern": "stack",
+        "optimal": true,
+        "signature": {
+          "maxLoopDepth": 2,
+          "usesHashStructure": false,
+          "usesSorting": false,
+          "usesRecursion": false,
+          "twoPointer": false
+        }
+      },
+      "steps": [
+        {
+          "title": "Settle bars as a shorter one arrives",
+          "explanation": "A virtual zero-height bar at the end flushes the stack; each popped bar spans from the new index back to the previous stack entry.",
+          "code": {
+            "python": "def largest_rectangle_area(heights):\n    stack = []\n    max_area = 0\n    for i in range(len(heights) + 1):\n        h = 0 if i == len(heights) else heights[i]\n        while stack and heights[stack[-1]] >= h:\n            height = heights[stack.pop()]\n            width = i if not stack else i - stack[-1] - 1\n            max_area = max(max_area, height * width)\n        stack.append(i)\n    return max_area\n",
+            "javascript": "function largestRectangleArea(heights) {\n  const stack = [];\n  let maxArea = 0;\n  for (let i = 0; i <= heights.length; i++) {\n    const h = i === heights.length ? 0 : heights[i];\n    while (stack.length && heights[stack[stack.length - 1]] >= h) {\n      const height = heights[stack.pop()];\n      const width = stack.length === 0 ? i : i - stack[stack.length - 1] - 1;\n      maxArea = Math.max(maxArea, height * width);\n    }\n    stack.push(i);\n  }\n  return maxArea;\n}\n",
+            "typescript": "function largestRectangleArea(heights: number[]): number {\n  const stack: number[] = [];\n  let maxArea = 0;\n  for (let i = 0; i <= heights.length; i++) {\n    const h = i === heights.length ? 0 : heights[i];\n    while (stack.length && heights[stack[stack.length - 1]] >= h) {\n      const height = heights[stack.pop()!];\n      const width = stack.length === 0 ? i : i - stack[stack.length - 1] - 1;\n      maxArea = Math.max(maxArea, height * width);\n    }\n    stack.push(i);\n  }\n  return maxArea;\n}\n"
+          }
+        }
+      ]
+    }
+  ]
+}

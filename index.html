@@ -7,8 +7,25 @@
     <meta name="theme-color" content="#faf4e6" />
     <title>NoobCode</title>
     <script>
-      // The app is cream light-only; ensure no stale dark class is applied.
-      document.documentElement.classList.remove('dark')
+      // Apply the saved color theme before first paint to avoid a flash. An
+      // unknown/absent id falls back to the cream defaults on :root. For a
+      // 'custom' theme, apply the saved per-token palette as inline vars too.
+      try {
+        var t = localStorage.getItem('noobcode-theme')
+        if (t) document.documentElement.dataset.theme = t
+        if (t === 'custom') {
+          var c = JSON.parse(localStorage.getItem('noobcode-custom-theme') || '{}')
+          var root = document.documentElement
+          for (var k in c) root.style.setProperty('--color-' + k, c[k])
+          if (c.accent) {
+            var h = c.accent.replace('#', '')
+            var r = parseInt(h.slice(0, 2), 16)
+            var g = parseInt(h.slice(2, 4), 16)
+            var b = parseInt(h.slice(4, 6), 16)
+            root.style.setProperty('--color-accent-soft', 'rgba(' + r + ',' + g + ',' + b + ',0.12)')
+          }
+        }
+      } catch (e) {}
     </script>
   </head>
   <body>

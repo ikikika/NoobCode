@@ -1,0 +1,132 @@
+{
+  "slug": "binary-tree-maximum-path-sum",
+  "title": "Binary Tree Maximum Path Sum",
+  "difficulty": "hard",
+  "tags": [
+    "tree",
+    "depth-first-search"
+  ],
+  "patterns": [
+    "depth-first-search",
+    "recursion"
+  ],
+  "io": {
+    "args": [
+      "tree"
+    ]
+  },
+  "description": "A path is any sequence of connected nodes (each appearing once) and need not\npass through the root. Given the `root` of a binary tree, return the maximum\nsum of values along any path. The tree input is in level-order array form.",
+  "constraints": [
+    "1 <= number of nodes <= 3 * 10^4",
+    "-1000 <= Node.val <= 1000"
+  ],
+  "examples": [
+    {
+      "input": "root = [1,2,3]",
+      "output": "6"
+    },
+    {
+      "input": "root = [-10,9,20,null,null,15,7]",
+      "output": "42"
+    }
+  ],
+  "functionName": {
+    "python": "max_path_sum",
+    "javascript": "maxPathSum",
+    "typescript": "maxPathSum"
+  },
+  "starterCode": {
+    "python": "# Definition for a binary tree node:\n# class TreeNode:\n#     def __init__(self, val=0, left=None, right=None):\n#         self.val, self.left, self.right = val, left, right\ndef max_path_sum(root):\n    # Return the maximum path sum.\n    pass\n",
+    "javascript": "// Binary tree node shape: { val, left, right }\nfunction maxPathSum(root) {\n  // Return the maximum path sum.\n}\n",
+    "typescript": "// Binary tree node shape: { val, left, right }\nfunction maxPathSum(root) {\n  // Return the maximum path sum.\n  return 0;\n}\n"
+  },
+  "tests": [
+    {
+      "name": "small",
+      "args": [
+        [
+          1,
+          2,
+          3
+        ]
+      ],
+      "expected": 6
+    },
+    {
+      "name": "negative root",
+      "args": [
+        [
+          -10,
+          9,
+          20,
+          null,
+          null,
+          15,
+          7
+        ]
+      ],
+      "expected": 42
+    },
+    {
+      "name": "single negative",
+      "args": [
+        [
+          -3
+        ]
+      ],
+      "expected": -3
+    },
+    {
+      "name": "two nodes",
+      "args": [
+        [
+          2,
+          -1
+        ]
+      ],
+      "expected": 2,
+      "hidden": true
+    },
+    {
+      "name": "all negative",
+      "args": [
+        [
+          -2,
+          -1
+        ]
+      ],
+      "expected": -1,
+      "hidden": true
+    }
+  ],
+  "solutions": [
+    {
+      "approachName": "Post-order with Best Tracker",
+      "summary": "Each node returns its best downward gain while updating a global best for paths that bend at it.",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(h)",
+      "technique": {
+        "primaryPattern": "depth-first-search",
+        "optimal": true,
+        "signature": {
+          "maxLoopDepth": 0,
+          "usesHashStructure": false,
+          "usesSorting": false,
+          "usesRecursion": true,
+          "twoPointer": false
+        }
+      },
+      "steps": [
+        {
+          "title": "Compute one-sided gains, fold in the bend",
+          "explanation": "Clamp negative child gains to 0. The best path through a node is `val + left + right`; the value it can pass up is `val + max(left, right)`.",
+          "code": {
+            "python": "# Definition for a binary tree node:\n# class TreeNode:\n#     def __init__(self, val=0, left=None, right=None):\n#         self.val, self.left, self.right = val, left, right\ndef max_path_sum(root):\n    best = float(\"-inf\")\n    def gain(node):\n        nonlocal best\n        if node is None:\n            return 0\n        left = max(gain(node.left), 0)\n        right = max(gain(node.right), 0)\n        best = max(best, node.val + left + right)\n        return node.val + max(left, right)\n    gain(root)\n    return best\n",
+            "javascript": "// Binary tree node shape: { val, left, right }\nfunction maxPathSum(root) {\n  let best = -Infinity;\n  function gain(node) {\n    if (!node) return 0;\n    const left = Math.max(gain(node.left), 0);\n    const right = Math.max(gain(node.right), 0);\n    best = Math.max(best, node.val + left + right);\n    return node.val + Math.max(left, right);\n  }\n  gain(root);\n  return best;\n}\n",
+            "typescript": "// Binary tree node shape: { val, left, right }\nfunction maxPathSum(root) {\n  let best = -Infinity;\n  function gain(node) {\n    if (!node) return 0;\n    const left = Math.max(gain(node.left), 0);\n    const right = Math.max(gain(node.right), 0);\n    best = Math.max(best, node.val + left + right);\n    return node.val + Math.max(left, right);\n  }\n  gain(root);\n  return best;\n}\n"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,134 @@
+{
+  "slug": "isomorphic-strings",
+  "title": "Isomorphic Strings",
+  "difficulty": "easy",
+  "tags": [
+    "string",
+    "hash-map"
+  ],
+  "patterns": [
+    "hash-map"
+  ],
+  "description": "Two strings `s` and `t` are **isomorphic** if the characters in `s` can be\nreplaced to get `t`, with a consistent one-to-one mapping: each character maps\nto exactly one other, and no two characters map to the same one. Return whether\n`s` and `t` are isomorphic.",
+  "constraints": [
+    "1 <= s.length <= 5 * 10^4",
+    "t.length == s.length",
+    "s and t consist of any valid ASCII characters."
+  ],
+  "examples": [
+    {
+      "input": "s = \"egg\", t = \"add\"",
+      "output": "true"
+    },
+    {
+      "input": "s = \"foo\", t = \"bar\"",
+      "output": "false"
+    },
+    {
+      "input": "s = \"paper\", t = \"title\"",
+      "output": "true"
+    }
+  ],
+  "functionName": {
+    "python": "is_isomorphic",
+    "javascript": "isIsomorphic",
+    "typescript": "isIsomorphic"
+  },
+  "starterCode": {
+    "python": "def is_isomorphic(s, t):\n    # Return True if s and t are isomorphic.\n    pass\n",
+    "javascript": "function isIsomorphic(s, t) {\n  // Return true if s and t are isomorphic.\n}\n",
+    "typescript": "function isIsomorphic(s: string, t: string): boolean {\n  // Return true if s and t are isomorphic.\n  return false;\n}\n"
+  },
+  "tests": [
+    {
+      "name": "egg/add",
+      "args": [
+        "egg",
+        "add"
+      ],
+      "expected": true
+    },
+    {
+      "name": "foo/bar",
+      "args": [
+        "foo",
+        "bar"
+      ],
+      "expected": false
+    },
+    {
+      "name": "paper/title",
+      "args": [
+        "paper",
+        "title"
+      ],
+      "expected": true
+    },
+    {
+      "name": "badc/baba",
+      "args": [
+        "badc",
+        "baba"
+      ],
+      "expected": false,
+      "hidden": true
+    },
+    {
+      "name": "single",
+      "args": [
+        "a",
+        "a"
+      ],
+      "expected": true,
+      "hidden": true
+    }
+  ],
+  "solutions": [
+    {
+      "approachName": "Two-Way Mapping",
+      "summary": "Track the mapping in both directions so it stays one-to-one.",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "technique": {
+        "primaryPattern": "hash-map",
+        "optimal": true,
+        "signature": {
+          "maxLoopDepth": 1,
+          "usesHashStructure": true,
+          "usesSorting": false,
+          "usesRecursion": false,
+          "twoPointer": false
+        }
+      },
+      "steps": [
+        {
+          "title": "Start from the function shape",
+          "explanation": "Signature plus a default `False` return.",
+          "code": {
+            "python": "def is_isomorphic(s, t):\n    return False\n",
+            "javascript": "function isIsomorphic(s, t) {\n  return false;\n}\n",
+            "typescript": "function isIsomorphic(s: string, t: string): boolean {\n  return false;\n}\n"
+          }
+        },
+        {
+          "title": "Create both mapping tables",
+          "explanation": "One map records `s → t`, the other `t → s`, so the relationship is consistent both ways.",
+          "code": {
+            "python": "def is_isomorphic(s, t):\n    st, ts = {}, {}\n    return True\n",
+            "javascript": "function isIsomorphic(s, t) {\n  const st = {};\n  const ts = {};\n  return true;\n}\n",
+            "typescript": "function isIsomorphic(s: string, t: string): boolean {\n  const st: Record<string, string> = {};\n  const ts: Record<string, string> = {};\n  return true;\n}\n"
+          }
+        },
+        {
+          "title": "Check each character pair",
+          "explanation": "For aligned characters `a` and `b`, any existing mapping must agree; a conflict means not isomorphic.",
+          "code": {
+            "python": "def is_isomorphic(s, t):\n    st, ts = {}, {}\n    for a, b in zip(s, t):\n        if a in st and st[a] != b:\n            return False\n        if b in ts and ts[b] != a:\n            return False\n        st[a] = b\n        ts[b] = a\n    return True\n",
+            "javascript": "function isIsomorphic(s, t) {\n  const st = {};\n  const ts = {};\n  for (let i = 0; i < s.length; i++) {\n    const a = s[i];\n    const b = t[i];\n    if (st[a] !== undefined && st[a] !== b) {\n      return false;\n    }\n    if (ts[b] !== undefined && ts[b] !== a) {\n      return false;\n    }\n    st[a] = b;\n    ts[b] = a;\n  }\n  return true;\n}\n",
+            "typescript": "function isIsomorphic(s: string, t: string): boolean {\n  const st: Record<string, string> = {};\n  const ts: Record<string, string> = {};\n  for (let i = 0; i < s.length; i++) {\n    const a = s[i];\n    const b = t[i];\n    if (st[a] !== undefined && st[a] !== b) {\n      return false;\n    }\n    if (ts[b] !== undefined && ts[b] !== a) {\n      return false;\n    }\n    st[a] = b;\n    ts[b] = a;\n  }\n  return true;\n}\n"
+          }
+        }
+      ]
+    }
+  ]
+}

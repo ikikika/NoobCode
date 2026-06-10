@@ -67,9 +67,11 @@ flowchart TD
   loaded); JavaScript in a worker; TypeScript transpiled via sucrase. All run in
   Web Workers with a timeout watchdog and a Stop button.
 - **JSON-defined problems** — every problem is a plain JSON file in
-  `src/content/problems/`, auto-discovered at build time. Add your own by dropping
-  a file in that directory (see below).
-- **Monaco editor** with custom `light` / `dark` themes and read-only diff views.
+  `src/content/problems/`, auto-discovered at build time. Function, binary-tree,
+  linked-list, and class-based "design" problems are all supported (see
+  [`docs/PROBLEM_JSON.md`](./docs/PROBLEM_JSON.md)). Add your own by dropping a
+  file in that directory (see below).
+- **Monaco editor** with eight selectable color themes and read-only diff views.
 - **Deterministic analysis** — an AST/heuristic engine classifies your approach
   and estimates time/space complexity, then compares it to the optimal solution.
 - **Optional AI coach (BYO key)** — add an Anthropic API key in Settings and the
