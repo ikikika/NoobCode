@@ -5,13 +5,15 @@ LeetCode-style coding trainer that runs entirely in the browser. **No backend, n
 server.** Solve problems in Python (via Pyodide), JavaScript, or TypeScript, get a
 deterministic review of your approach, and track mastery with spaced repetition.
 
-[![CI](https://github.com/audioisaac/NoobCode/actions/workflows/deploy.yml/badge.svg)](https://github.com/audioisaac/NoobCode/actions/workflows/deploy.yml)
+[![CI](https://github.com/audioisaac/NoobCode/actions/workflows/ci.yml/badge.svg)](https://github.com/audioisaac/NoobCode/actions/workflows/ci.yml)
+[![Deploy](https://github.com/audioisaac/NoobCode/actions/workflows/deploy.yml/badge.svg)](https://github.com/audioisaac/NoobCode/actions/workflows/deploy.yml)
 ![React 19](https://img.shields.io/badge/React-19-149ECA?logo=react&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)
 ![Vite 8](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)
 ![Tailwind v4](https://img.shields.io/badge/Tailwind-v4-38BDF8?logo=tailwindcss&logoColor=white)
 ![Pyodide](https://img.shields.io/badge/Pyodide-WASM-3776AB?logo=python&logoColor=white)
 ![Vitest](https://img.shields.io/badge/tested%20with-Vitest-6E9F18?logo=vitest&logoColor=white)
+![Playwright](https://img.shields.io/badge/E2E-Playwright-2EAD33?logo=playwright&logoColor=white)
 ![License: MIT](https://img.shields.io/badge/License-MIT-black)
 
 ## Highlights
@@ -103,6 +105,32 @@ rm -rf node_modules package-lock.json && npm install
 npm install
 npm run dev        # start the dev server (with COOP/COEP headers for Pyodide)
 ```
+
+## Testing
+
+A two-layer pyramid:
+
+- **Unit / component** — Vitest + Testing Library (jsdom) cover the pure logic and
+  React components: the analysis engine, the run harnesses + structured-I/O codec,
+  spaced-repetition and mastery math, the rewards economy, and achievement
+  derivation.
+- **End-to-end** — **Playwright** drives the production preview build in a real
+  browser, which is the only place the hard parts exist: **Web Workers, the Pyodide
+  WASM runtime, and the COOP/COEP cross-origin isolation behind the
+  `SharedArrayBuffer` interrupt**. The suite solves problems in all three languages,
+  exercises the tree/linked-list codec and the design-class executor, **kills a
+  runaway loop with the Stop interrupt**, and runs the theme economy/customizer.
+  See [`e2e/README.md`](./e2e/README.md).
+
+```bash
+npm run test           # unit / component (Vitest)
+npm run test:coverage  # + V8 coverage report (thresholds enforced)
+npm run test:e2e       # end-to-end (Playwright, builds & previews automatically)
+```
+
+CI runs the unit suite with coverage **and** the Playwright E2E suite on every PR
+([`ci.yml`](.github/workflows/ci.yml)); production deploys are gated on both
+([`deploy.yml`](.github/workflows/deploy.yml)).
 
 ## Quality gates
 

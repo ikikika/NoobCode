@@ -5,3 +5,8 @@ dist-ssr
 .DS_Store
 coverage
 .vite
+
+# Playwright
+/test-results
+/playwright-report
+/playwright/.cache

@@ -35,5 +35,31 @@ export default defineConfig(({ command }) => ({
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./src/test/setup.ts'],
+    // E2E specs run under Playwright, not Vitest.
+    exclude: ['e2e/**', 'node_modules/**', 'dist/**'],
+    coverage: {
+      provider: 'v8',
+      reporter: ['text-summary', 'html', 'lcov'],
+      // Coverage targets the pure logic that the unit suite owns. UI shells,
+      // editor/Monaco glue, workers, and entrypoints are exercised by the
+      // Playwright E2E suite instead, so they're left out of the % to keep the
+      // gate meaningful rather than diluted by untested view code.
+      include: [
+        'src/features/analysis/**/*.ts',
+        'src/features/achievements/achievements.ts',
+        'src/features/skills/mastery.ts',
+        'src/features/review/schedule.ts',
+        'src/features/review/aiReview.ts',
+        'src/features/runner/io.ts',
+        'src/lib/deepEqual.ts',
+        'src/lib/themes.ts',
+        'src/store/useRewardsStore.ts',
+        'src/content/newProblem.ts',
+        'src/content/schema.ts',
+        'src/content/patterns.ts',
+      ],
+      exclude: ['**/*.test.{ts,tsx}', '**/*.worker.ts', 'e2e/**'],
+      thresholds: { lines: 70, functions: 70, statements: 70, branches: 70 },
+    },
   },
 }))
