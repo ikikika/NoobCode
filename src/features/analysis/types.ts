@@ -33,4 +33,7 @@ export interface AttemptRecord {
   // Captured so past attempts can be diffed against the current code.
   language?: LanguageId
   code?: string
+  // Time from opening the problem to this run, in ms (set on the solving run).
+  // Powers the "Speed Demon" achievement.
+  solveMs?: number
 }

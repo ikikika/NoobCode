@@ -8,6 +8,7 @@ import 'monaco-editor/esm/vs/basic-languages/javascript/javascript.contribution'
 import 'monaco-editor/esm/vs/basic-languages/typescript/typescript.contribution'
 import EditorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
 import { THEMES, DEFAULT_THEME, type ThemeId } from './themes'
+import { readCustomTheme, isDarkColor, type CustomColors } from '../features/theme/customTheme'
 
 // We register only the generic editor worker — the basic-language
 // contributions are tokenizer-only and need no dedicated language service.
@@ -52,8 +53,39 @@ export function monacoSetup() {
       },
     })
   }
+
+  const custom = readCustomTheme()
+  if (custom) defineCustomMonacoTheme(custom)
 }
 
-export function monacoThemeName(theme: ThemeId): ThemeId {
+const noHash = (hex: string) => (hex || '#000000').replace('#', '')
+
+/** Build (or rebuild) the 'custom' Monaco theme from a user palette. */
+export function defineCustomMonacoTheme(c: CustomColors) {
+  monaco.editor.defineTheme('custom', {
+    base: isDarkColor(c.surface || '#ffffff') ? 'vs-dark' : 'vs',
+    inherit: true,
+    rules: [
+      { token: 'comment', foreground: noHash(c['fg-subtle']), fontStyle: 'italic' },
+      { token: 'keyword', foreground: noHash(c.accent) },
+      { token: 'string', foreground: noHash(c.pass) },
+      { token: 'number', foreground: noHash(c.medium) },
+    ],
+    colors: {
+      'editor.background': c.surface,
+      'editor.foreground': c.fg,
+      'editorLineNumber.foreground': c['fg-subtle'],
+      'editor.lineHighlightBackground': c['surface-raised'],
+      'editorCursor.foreground': c.accent,
+      'diffEditor.insertedTextBackground': `#${noHash(c['pass-surface'])}80`,
+      'diffEditor.removedTextBackground': `#${noHash(c['fail-surface'])}80`,
+      'diffEditor.insertedLineBackground': `#${noHash(c['pass-surface'])}40`,
+      'diffEditor.removedLineBackground': `#${noHash(c['fail-surface'])}40`,
+    },
+  })
+}
+
+export function monacoThemeName(theme: ThemeId | 'custom'): string {
+  if (theme === 'custom') return readCustomTheme() ? 'custom' : DEFAULT_THEME
   return THEMES.some((t) => t.id === theme) ? theme : DEFAULT_THEME
 }
