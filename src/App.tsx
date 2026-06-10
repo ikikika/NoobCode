@@ -5,6 +5,7 @@ import { ProblemListPage } from './routes/ProblemListPage'
 import { CreateProblemPage } from './routes/CreateProblemPage'
 import { SkillsPage } from './routes/SkillsPage'
 import { AchievementsPage } from './routes/AchievementsPage'
+import { CustomizePage } from './routes/CustomizePage'
 import { Spinner } from './components/Spinner'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { useGamificationEffects } from './features/achievements/useAchievements'
@@ -42,6 +43,7 @@ const router = createHashRouter([
       },
       { path: 'skills', element: <SkillsPage /> },
       { path: 'achievements', element: <AchievementsPage /> },
+      { path: 'customize', element: <CustomizePage /> },
       { path: 'new', element: <CreateProblemPage /> },
       { path: '*', element: <Navigate to="/" replace /> },
     ],

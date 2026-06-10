@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { AI_MODELS, useSettingsStore, type AiModelId } from '../store/useSettingsStore'
 import { useTheme } from '../store/useTheme'
 import { THEMES, themePrice } from '../lib/themes'
@@ -119,6 +120,15 @@ export function SettingsMenu() {
               )
             })}
           </div>
+
+          <Link
+            to="/customize"
+            onClick={() => setOpen(false)}
+            className="mt-3 flex items-center justify-between rounded-md border border-line px-3 py-2 text-xs font-medium text-fg transition-colors hover:border-accent"
+          >
+            <span>Customize theme…</span>
+            <span className="text-fg-subtle">{customThemeUnlocked ? 'Edit' : '300 ◆'}</span>
+          </Link>
 
           <div className="my-4 h-px bg-line-soft" />
 
