@@ -3,6 +3,7 @@ import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels'
 import type { LanguageId, Problem } from '../../content/schema'
 import { Tabs } from '../../components/Tabs'
 import { useProgressStore } from '../../store/useProgressStore'
+import { useRewardsStore } from '../../store/useRewardsStore'
 import { useSolutionStore } from '../../store/useSolutionStore'
 import { useSettingsStore } from '../../store/useSettingsStore'
 import { useRunner } from '../runner/useRunner'
@@ -35,6 +36,7 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
   const recordAttempt = useProgressStore((s) => s.recordAttempt)
   const storeReview = useProgressStore((s) => s.storeReview)
   const setLastRun = useProgressStore((s) => s.setLastRun)
+  const rewardSolve = useRewardsStore((s) => s.rewardSolve)
 
   const language = useSolutionStore((s) => s.activeLanguage)
   const setLanguage = useSolutionStore((s) => s.setLanguage)
@@ -104,6 +106,9 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
           language,
           code: userCode,
         })
+        // First solve pays coins (by difficulty, +bonus when optimal); guarded
+        // so re-runs of an already-solved problem don't farm coins.
+        if (passed) rewardSolve(problem.slug, problem.difficulty, heuristicReview.isOptimal)
         storeReview(problem.slug, heuristicReview)
         setRightTab('review')
 

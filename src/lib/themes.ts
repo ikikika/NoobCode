@@ -195,3 +195,12 @@ export const THEME_STORAGE_KEY = 'noobcode-theme'
 export function isThemeId(value: unknown): value is ThemeId {
   return typeof value === 'string' && THEME_IDS.includes(value)
 }
+
+/**
+ * Coin price to unlock a preset theme. Cream is free (default); dark themes are
+ * priced higher than light ones. Spent via the rewards store; see SettingsMenu.
+ */
+export function themePrice(theme: Theme): number {
+  if (theme.id === 'cream') return 0
+  return theme.dark ? 120 : 60
+}
