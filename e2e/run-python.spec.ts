@@ -16,7 +16,8 @@ test('solves a Python problem end-to-end on Pyodide, awards coins, shows review'
   // First solve pays coins…
   await expect.poll(() => readCoins(page)).toBeGreaterThan(before)
 
-  // …and the deterministic review is produced.
+  // …and the deterministic review is produced (the pattern chip; exact match
+  // avoids also resolving the "Reference approach: Hash Map" line).
   await page.getByRole('tab', { name: 'Review' }).click()
-  await expect(page.getByText('Hash Map')).toBeVisible()
+  await expect(page.getByText('Hash Map', { exact: true }).first()).toBeVisible()
 })

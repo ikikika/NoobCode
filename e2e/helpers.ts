@@ -17,6 +17,11 @@ export interface SeedOptions {
 
 export async function seed(page: Page, opts: SeedOptions = {}): Promise<void> {
   await page.addInitScript((o: SeedOptions) => {
+    // addInitScript runs before page scripts on EVERY navigation, including
+    // page.reload(). Only seed when storage is empty so a reload doesn't clobber
+    // state the test changed mid-flow (e.g. an applied custom theme, or swapped
+    // saved code) back to these defaults.
+    if (localStorage.getItem('noobcode-progress')) return
     localStorage.setItem(
       'noobcode-progress',
       JSON.stringify({
