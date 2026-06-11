@@ -20,4 +20,21 @@ export const test = base.extend({
   },
 })
 
+// On failure, dump what the results panel actually shows (banner / error / the
+// loading message) so the CI log reveals the end state instead of just a
+// "results-banner not found" timeout.
+test.afterEach(async ({ page }, testInfo) => {
+  if (testInfo.status === testInfo.expectedStatus) return
+  try {
+    const dump = await page.evaluate(() => ({
+      banner: document.querySelector('[data-testid="results-banner"]')?.textContent ?? null,
+      error: document.querySelector('[data-testid="results-error"]')?.textContent ?? null,
+      body: document.body.innerText.replace(/\s+/g, ' ').trim().slice(0, 500),
+    }))
+    console.log(`[panel-dump:${testInfo.title}] ${JSON.stringify(dump)}`)
+  } catch (e) {
+    console.log(`[panel-dump:${testInfo.title}] failed: ${String(e)}`)
+  }
+})
+
 export { expect }
