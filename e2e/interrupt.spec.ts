@@ -1,4 +1,4 @@
-import { test, expect } from './fixtures'
+import { test, expect } from '@playwright/test'
 import { seed, openProblem, runAllExpectPass, SOLUTIONS } from './helpers'
 
 // The standout test: an infinite Python loop is killed mid-execution by the

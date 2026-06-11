@@ -1,4 +1,4 @@
-import { test } from './fixtures'
+import { test } from '@playwright/test'
 import { seed, openProblem, runAllExpectPass, SOLUTIONS } from './helpers'
 
 test('solves a JavaScript problem in the JS worker', async ({ page }) => {

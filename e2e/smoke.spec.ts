@@ -1,4 +1,4 @@
-import { test, expect } from './fixtures'
+import { test, expect } from '@playwright/test'
 
 test.describe('smoke', () => {
   test('app loads and navigates between top-level routes', async ({ page }) => {

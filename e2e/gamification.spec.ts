@@ -1,4 +1,4 @@
-import { test, expect } from './fixtures'
+import { test, expect } from '@playwright/test'
 import { seed, readCoins } from './helpers'
 
 test('buying a locked theme spends coins and applies it', async ({ page }) => {

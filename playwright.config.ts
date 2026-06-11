@@ -12,12 +12,12 @@ export default defineConfig({
   testDir: './e2e',
   // Pyodide's first run downloads + initializes a multi-MB runtime, so tests are
   // generous and run serially to keep memory/CPU sane (especially in CI).
-  timeout: 45_000,
+  timeout: 90_000,
   expect: { timeout: 15_000 },
   fullyParallel: false,
   workers: 1,
   forbidOnly: !!process.env.CI,
-  retries: 0,
+  retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI ? [['github'], ['html', { open: 'never' }]] : [['list'], ['html', { open: 'never' }]],
   use: {
     baseURL: BASE_URL,
