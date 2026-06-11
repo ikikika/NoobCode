@@ -26,11 +26,18 @@ export const test = base.extend({
 test.afterEach(async ({ page }, testInfo) => {
   if (testInfo.status === testInfo.expectedStatus) return
   try {
-    const dump = await page.evaluate(() => ({
-      banner: document.querySelector('[data-testid="results-banner"]')?.textContent ?? null,
-      error: document.querySelector('[data-testid="results-error"]')?.textContent ?? null,
-      body: document.body.innerText.replace(/\s+/g, ' ').trim().slice(0, 500),
-    }))
+    const dump = await page.evaluate(() => {
+      const main = (document.querySelector('main')?.innerText ?? '').replace(/\s+/g, ' ').trim()
+      return {
+        banner: document.querySelector('[data-testid="results-banner"]')?.textContent ?? null,
+        error: document.querySelector('[data-testid="results-error"]')?.textContent ?? null,
+        spinner: !!document.querySelector('[role="status"][aria-label="Loading"]'),
+        runAll: !!document.querySelector('button'),
+        // The results region renders after the description, so the tail of main
+        // captures the spinner text / idle message / banner.
+        tail: main.slice(-700),
+      }
+    })
     console.log(`[panel-dump:${testInfo.title}] ${JSON.stringify(dump)}`)
   } catch (e) {
     console.log(`[panel-dump:${testInfo.title}] failed: ${String(e)}`)
