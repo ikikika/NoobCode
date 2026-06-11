@@ -1,5 +1,5 @@
 import { test, expect } from './fixtures'
-import { seed, openProblem, SOLUTIONS } from './helpers'
+import { seed, openProblem, runAllExpectPass, SOLUTIONS } from './helpers'
 
 // The standout test: an infinite Python loop is killed mid-execution by the
 // SharedArrayBuffer cooperative interrupt (the Stop button), not the 10s
@@ -28,6 +28,5 @@ test('Stop interrupts a runaway Python loop via SharedArrayBuffer', async ({ pag
     localStorage.setItem('noobcode-progress', JSON.stringify(blob))
   }, SOLUTIONS.twoSumPython)
   await page.reload()
-  await page.getByRole('button', { name: 'Run All' }).click()
-  await expect(page.getByTestId('results-banner')).toContainText('All tests passed', { timeout: 90_000 })
+  await runAllExpectPass(page)
 })

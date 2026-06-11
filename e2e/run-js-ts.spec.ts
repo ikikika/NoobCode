@@ -1,13 +1,12 @@
-import { test, expect } from './fixtures'
-import { seed, openProblem, SOLUTIONS } from './helpers'
+import { test } from './fixtures'
+import { seed, openProblem, runAllExpectPass, SOLUTIONS } from './helpers'
 
 test('solves a JavaScript problem in the JS worker', async ({ page }) => {
   await seed(page, { savedCode: { 'two-sum:javascript': SOLUTIONS.twoSumJs } })
   await openProblem(page, 'two-sum')
 
   await page.getByRole('button', { name: 'JavaScript' }).click()
-  await page.getByRole('button', { name: 'Run All' }).click()
-  await expect(page.getByTestId('results-banner')).toContainText('All tests passed')
+  await runAllExpectPass(page)
 })
 
 test('solves a TypeScript problem (sucrase transpile path)', async ({ page }) => {
@@ -15,8 +14,7 @@ test('solves a TypeScript problem (sucrase transpile path)', async ({ page }) =>
   await openProblem(page, 'two-sum')
 
   await page.getByRole('button', { name: 'TypeScript' }).click()
-  await page.getByRole('button', { name: 'Run All' }).click()
-  await expect(page.getByTestId('results-banner')).toContainText('All tests passed')
+  await runAllExpectPass(page)
 })
 
 test('typing a solution into the Monaco editor runs and passes', async ({ page }) => {
@@ -31,6 +29,5 @@ test('typing a solution into the Monaco editor runs and passes', async ({ page }
   await page.evaluate((code) => navigator.clipboard.writeText(code), SOLUTIONS.twoSumJs)
   await page.keyboard.press('ControlOrMeta+V')
 
-  await page.getByRole('button', { name: 'Run All' }).click()
-  await expect(page.getByTestId('results-banner')).toContainText('All tests passed')
+  await runAllExpectPass(page)
 })

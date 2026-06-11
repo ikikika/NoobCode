@@ -1,5 +1,5 @@
 import { test, expect } from './fixtures'
-import { seed, openProblem, readCoins, SOLUTIONS } from './helpers'
+import { seed, openProblem, readCoins, runAllExpectPass, SOLUTIONS } from './helpers'
 
 // The headline path: real Python runs on Pyodide (WASM) inside a Web Worker.
 test('solves a Python problem end-to-end on Pyodide, awards coins, shows review', async ({
@@ -10,10 +10,8 @@ test('solves a Python problem end-to-end on Pyodide, awards coins, shows review'
 
   const before = await readCoins(page)
 
-  await page.getByRole('button', { name: 'Run All' }).click()
-
-  // Pyodide cold-loads on first run, so allow generous time for the verdict.
-  await expect(page.getByTestId('results-banner')).toContainText('All tests passed', { timeout: 90_000 })
+  // Pyodide cold-loads on first run; the helper allows generous time.
+  await runAllExpectPass(page)
 
   // First solve pays coins…
   await expect.poll(() => readCoins(page)).toBeGreaterThan(before)

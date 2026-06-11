@@ -28,14 +28,17 @@ test.afterEach(async ({ page }, testInfo) => {
   try {
     const dump = await page.evaluate(() => {
       const main = (document.querySelector('main')?.innerText ?? '').replace(/\s+/g, ' ').trim()
+      const root = document.documentElement
       return {
+        url: location.hash,
+        theme: root.dataset.theme ?? null,
+        accent: getComputedStyle(root).getPropertyValue('--color-accent').trim(),
         banner: document.querySelector('[data-testid="results-banner"]')?.textContent ?? null,
         error: document.querySelector('[data-testid="results-error"]')?.textContent ?? null,
         spinner: !!document.querySelector('[role="status"][aria-label="Loading"]'),
-        runAll: !!document.querySelector('button'),
         // The results region renders after the description, so the tail of main
         // captures the spinner text / idle message / banner.
-        tail: main.slice(-700),
+        tail: main.slice(-500),
       }
     })
     console.log(`[panel-dump:${testInfo.title}] ${JSON.stringify(dump)}`)
