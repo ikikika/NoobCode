@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './fixtures'
 import { seed, openProblem, SOLUTIONS } from './helpers'
 
 test('solves a JavaScript problem in the JS worker', async ({ page }) => {

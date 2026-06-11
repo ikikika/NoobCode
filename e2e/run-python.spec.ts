@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './fixtures'
 import { seed, openProblem, readCoins, SOLUTIONS } from './helpers'
 
 // The headline path: real Python runs on Pyodide (WASM) inside a Web Worker.

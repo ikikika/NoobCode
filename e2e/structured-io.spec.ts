@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './fixtures'
 import { seed, openProblem, SOLUTIONS } from './helpers'
 
 // These exercise the runner's structured-I/O codec and the design (class)
