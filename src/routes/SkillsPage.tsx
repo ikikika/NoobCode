@@ -6,6 +6,7 @@ import { useProgressStore } from '../store/useProgressStore'
 import { deriveMastery, MASTERY_ORDER, type MasteryLevel } from '../features/skills/mastery'
 import type { AttemptRecord } from '../features/analysis/types'
 import { MethodReference } from '../features/skills/MethodReference'
+import { useMediaQuery } from '../lib/useMediaQuery'
 import { Tabs } from '../components/Tabs'
 import { Bar, Kicker, MasteryChip, MasteryDot, Ring } from '../components/ui'
 
@@ -111,9 +112,12 @@ export function SkillsPage() {
     [stats],
   )
   const pct = total === 0 ? 0 : Math.round((solvedCount / total) * 100)
+  // Below the 768px panel breakpoint, stack the side-by-side summary cards and
+  // let the wide mastery table scroll horizontally instead of overflowing.
+  const isNarrow = useMediaQuery('(max-width: 767px)')
 
   return (
-    <div style={{ padding: '36px 48px 56px', maxWidth: 1180, margin: '0 auto' }}>
+    <div style={{ padding: isNarrow ? '24px 18px 40px' : '36px 48px 56px', maxWidth: 1180, margin: '0 auto' }}>
       <div style={{ marginBottom: 20, display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 16 }}>
         <div>
           <Kicker>Your skills</Kicker>
@@ -138,7 +142,7 @@ export function SkillsPage() {
       {tab === 'patterns' ? (
         <>
           {/* overall + where to focus */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1.15fr 1fr', gap: 20, marginBottom: 20 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: isNarrow ? '1fr' : '1.15fr 1fr', gap: 20, marginBottom: 20 }}>
             <div className="nc-card" style={{ padding: '24px 26px', display: 'flex', alignItems: 'center', gap: 30 }}>
               <Ring pct={pct} />
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px 28px', flex: 1 }}>
@@ -183,9 +187,10 @@ export function SkillsPage() {
             </div>
           </div>
 
-          {/* mastery matrix */}
-          <div className="nc-card" style={{ padding: '6px 26px 12px' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '230px 90px 1fr 130px', gap: 20, alignItems: 'center', padding: '14px 0 10px' }}>
+          {/* mastery matrix — wide fixed columns; scroll within the card on
+              narrow screens rather than overflowing the viewport */}
+          <div className="nc-card" style={{ padding: '6px 26px 12px', overflowX: 'auto' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '230px 90px 1fr 130px', gap: 20, alignItems: 'center', padding: '14px 0 10px', minWidth: 560 }}>
               {['Pattern', 'Solved', 'Problems', 'Mastery'].map((h) => (
                 <Kicker key={h}>{h}</Kicker>
               ))}
@@ -195,7 +200,7 @@ export function SkillsPage() {
                 <Link key={s.pattern} className="nc-reset" to={patternHref(s)}>
                   <div
                     className="nc-row-hover"
-                    style={{ display: 'grid', gridTemplateColumns: '230px 90px 1fr 130px', gap: 20, alignItems: 'center', padding: '12px', margin: '0 -12px' }}
+                    style={{ display: 'grid', gridTemplateColumns: '230px 90px 1fr 130px', gap: 20, alignItems: 'center', padding: '12px', margin: '0 -12px', minWidth: 560 }}
                   >
                     <span style={{ display: 'flex', alignItems: 'center', gap: 9, fontSize: 14.5, fontWeight: 500 }}>
                       <MasteryDot level={s.mastery} />

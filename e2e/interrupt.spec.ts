@@ -29,5 +29,5 @@ test('Stop interrupts a runaway Python loop via SharedArrayBuffer', async ({ pag
   }, SOLUTIONS.twoSumPython)
   await page.reload()
   await page.getByRole('button', { name: 'Run All' }).click()
-  await expect(page.getByRole('status')).toContainText('All tests passed', { timeout: 90_000 })
+  await expect(page.getByTestId('results-banner')).toContainText('All tests passed', { timeout: 90_000 })
 })

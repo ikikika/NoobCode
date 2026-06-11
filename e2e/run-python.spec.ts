@@ -13,7 +13,7 @@ test('solves a Python problem end-to-end on Pyodide, awards coins, shows review'
   await page.getByRole('button', { name: 'Run All' }).click()
 
   // Pyodide cold-loads on first run, so allow generous time for the verdict.
-  await expect(page.getByRole('status')).toContainText('All tests passed', { timeout: 90_000 })
+  await expect(page.getByTestId('results-banner')).toContainText('All tests passed', { timeout: 90_000 })
 
   // First solve pays coins…
   await expect.poll(() => readCoins(page)).toBeGreaterThan(before)

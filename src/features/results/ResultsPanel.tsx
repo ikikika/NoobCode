@@ -38,7 +38,7 @@ export function ResultsPanel({ status, result, loadingMessage }: ResultsPanelPro
   if (result.error && result.cases.length === 0) {
     return (
       <div className="p-4">
-        <div className="rounded-md bg-fail-surface p-3 text-sm text-fail">
+        <div data-testid="results-error" className="rounded-md bg-fail-surface p-3 text-sm text-fail">
           <div className="font-semibold">Error</div>
           <pre className="mt-1 whitespace-pre-wrap font-mono text-xs">{result.error}</pre>
         </div>
@@ -53,6 +53,7 @@ export function ResultsPanel({ status, result, loadingMessage }: ResultsPanelPro
       <div
         role="status"
         aria-live="polite"
+        data-testid="results-banner"
         className={`mb-3 flex items-center justify-between rounded-md px-3 py-2 text-sm font-semibold ${
           result.passed ? 'bg-pass-surface text-pass' : 'bg-fail-surface text-fail'
         }`}

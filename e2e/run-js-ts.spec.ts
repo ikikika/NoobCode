@@ -7,7 +7,7 @@ test('solves a JavaScript problem in the JS worker', async ({ page }) => {
 
   await page.getByRole('button', { name: 'JavaScript' }).click()
   await page.getByRole('button', { name: 'Run All' }).click()
-  await expect(page.getByRole('status')).toContainText('All tests passed')
+  await expect(page.getByTestId('results-banner')).toContainText('All tests passed')
 })
 
 test('solves a TypeScript problem (sucrase transpile path)', async ({ page }) => {
@@ -16,7 +16,7 @@ test('solves a TypeScript problem (sucrase transpile path)', async ({ page }) =>
 
   await page.getByRole('button', { name: 'TypeScript' }).click()
   await page.getByRole('button', { name: 'Run All' }).click()
-  await expect(page.getByRole('status')).toContainText('All tests passed')
+  await expect(page.getByTestId('results-banner')).toContainText('All tests passed')
 })
 
 test('typing a solution into the Monaco editor runs and passes', async ({ page }) => {
@@ -32,5 +32,5 @@ test('typing a solution into the Monaco editor runs and passes', async ({ page }
   await page.keyboard.press('ControlOrMeta+V')
 
   await page.getByRole('button', { name: 'Run All' }).click()
-  await expect(page.getByRole('status')).toContainText('All tests passed')
+  await expect(page.getByTestId('results-banner')).toContainText('All tests passed')
 })

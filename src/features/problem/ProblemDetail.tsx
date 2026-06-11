@@ -52,6 +52,10 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
   const { run, interrupt, status, result, loadingMessage } = useRunner()
 
   // On problem mount, reset the solution viewer to the persisted language.
+  // Intentionally keyed on `problem.slug` only: this should run once per problem,
+  // not every time `lastLanguage`/`resetForProblem` identity changes (which would
+  // clobber an in-progress language switch). Those are read fresh on each slug
+  // change, so omitting them is correct here.
   useEffect(() => {
     resetForProblem(lastLanguage)
     openedAt.current = Date.now()

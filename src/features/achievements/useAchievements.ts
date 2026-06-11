@@ -36,7 +36,10 @@ export function useGamificationEffects(): void {
   const attempts = useProgressStore((s) => s.attempts)
   const reviews = useProgressStore((s) => s.review)
 
-  // Seed + daily login, once on mount.
+  // Seed + daily login, deliberately once on mount (empty deps). `theme` is read
+  // for its value at mount only — re-running on theme change would re-seed owned
+  // themes and re-attempt the daily claim on every theme switch. State is read
+  // fresh via getState(), so a stale closure isn't a concern.
   useEffect(() => {
     const rewards = useRewardsStore.getState()
     rewards.ensureSeed(theme)

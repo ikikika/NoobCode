@@ -11,7 +11,7 @@ test('tree problem: level-order traversal passes (tree I/O codec)', async ({ pag
   await openProblem(page, 'binary-tree-level-order-traversal')
 
   await page.getByRole('button', { name: 'Run All' }).click()
-  await expect(page.getByRole('status')).toContainText('All tests passed', { timeout: 90_000 })
+  await expect(page.getByTestId('results-banner')).toContainText('All tests passed', { timeout: 90_000 })
 })
 
 test('design problem: Min Stack op-sequence passes (design executor)', async ({ page }) => {
@@ -19,5 +19,5 @@ test('design problem: Min Stack op-sequence passes (design executor)', async ({ 
   await openProblem(page, 'min-stack')
 
   await page.getByRole('button', { name: 'Run All' }).click()
-  await expect(page.getByRole('status')).toContainText('All tests passed', { timeout: 90_000 })
+  await expect(page.getByTestId('results-banner')).toContainText('All tests passed', { timeout: 90_000 })
 })

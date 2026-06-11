@@ -601,7 +601,9 @@ a.nc-reset {
   color: var(--color-fg);
 }
 
-@media (max-width: 720px) {
+/* Mobile boundary: keep this in lockstep with the 768px panel-stacking and
+   SkillsPage media queries so the whole app flips layout at one width. */
+@media (max-width: 767px) {
   .nc-head {
     padding: 16px 20px;
     gap: 14px 18px;
