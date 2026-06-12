@@ -5,7 +5,6 @@ export type DiffLayout = 'split' | 'inline'
 
 interface UiPrefsState {
   diffLayout: DiffLayout
-  setDiffLayout: (layout: DiffLayout) => void
   toggleDiffLayout: () => void
 }
 
@@ -13,7 +12,6 @@ export const useUiPrefs = create<UiPrefsState>()(
   persist(
     (set, get) => ({
       diffLayout: 'split',
-      setDiffLayout: (layout) => set({ diffLayout: layout }),
       toggleDiffLayout: () =>
         set({ diffLayout: get().diffLayout === 'split' ? 'inline' : 'split' }),
     }),

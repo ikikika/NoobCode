@@ -5,6 +5,11 @@ import type { LanguageRunner, RunOptions, RunResult } from './LanguageRunner'
 import type { WorkerRequest, WorkerResponse } from './workerProtocol'
 
 const DEFAULT_TIMEOUT_MS = 10_000
+// Backstop for init: a worker that fails to load (bad chunk URL, COEP block,
+// parse error) never posts `ready` and never throws on its own, which would hang
+// the UI forever. This caps that wait. It must sit well above a cold Pyodide
+// download, so it only trips on a genuinely stuck worker, not a slow runtime.
+const INIT_TIMEOUT_MS = 60_000
 const SIGINT = 2
 
 export abstract class WorkerLanguageRunner implements LanguageRunner {
@@ -14,6 +19,11 @@ export abstract class WorkerLanguageRunner implements LanguageRunner {
   private nextId = 1
   private initPromise: Promise<void> | null = null
   private interruptBuffer: Uint8Array | null = null
+  // Rejecters for every in-flight init/run/analyze. A worker `error` event
+  // (failed to load/parse) fires on the Worker itself, not as a protocol
+  // message, so without this the awaiting promises would hang. On failure we
+  // reject them all and discard the worker so the next call recreates it.
+  private readonly pending = new Set<(err: Error) => void>()
 
   /** Subclasses construct their concrete Worker here. */
   protected abstract createWorker(): Worker
@@ -31,12 +41,32 @@ export abstract class WorkerLanguageRunner implements LanguageRunner {
 
   private ensureWorker(): Worker {
     if (!this.worker) {
-      this.worker = this.createWorker()
+      const worker = this.createWorker()
+      // A module worker that fails to load (bad URL, COEP block, parse error)
+      // surfaces here rather than as a protocol message. Reject everything
+      // awaiting it with a real message instead of hanging.
+      worker.onerror = (e) => {
+        const detail = (e as ErrorEvent).message || 'worker error'
+        this.failAll(new Error(`Worker failed to load or crashed: ${detail}`))
+      }
+      worker.onmessageerror = () => {
+        this.failAll(new Error('Worker message could not be deserialized'))
+      }
+      this.worker = worker
       if (this.supportsHardInterrupt && canHardInterrupt) {
         this.interruptBuffer = new Uint8Array(new SharedArrayBuffer(1))
       }
     }
     return this.worker
+  }
+
+  /** Reject all in-flight operations and discard the worker so it's recreated. */
+  private failAll(err: Error): void {
+    const rejecters = [...this.pending]
+    this.pending.clear()
+    this.initPromise = null
+    this.terminate()
+    for (const reject of rejecters) reject(err)
   }
 
   private send(req: WorkerRequest): void {
@@ -50,20 +80,34 @@ export abstract class WorkerLanguageRunner implements LanguageRunner {
     const id = this.nextId++
 
     this.initPromise = new Promise<void>((resolve, reject) => {
+      const timer = setTimeout(() => {
+        cleanup()
+        this.initPromise = null
+        reject(new Error(`Worker init timed out after ${INIT_TIMEOUT_MS}ms`))
+      }, INIT_TIMEOUT_MS)
+
+      const cleanup = () => {
+        clearTimeout(timer)
+        this.pending.delete(reject)
+        worker.removeEventListener('message', onMessage)
+      }
+
       const onMessage = (e: MessageEvent<WorkerResponse>) => {
         const msg = e.data
         if (msg.id !== id) return
         if (msg.type === 'progress') {
           onProgress?.(msg.message)
         } else if (msg.type === 'ready') {
-          worker.removeEventListener('message', onMessage)
+          cleanup()
           resolve()
         } else if (msg.type === 'error') {
-          worker.removeEventListener('message', onMessage)
+          cleanup()
           this.initPromise = null
           reject(new Error(msg.message))
         }
       }
+      // Registered so a worker `error`/`messageerror` event rejects this too.
+      this.pending.add(reject)
       worker.addEventListener('message', onMessage)
       this.send({ type: 'init', id, interruptBuffer: this.interruptBuffer ?? undefined })
     })
@@ -101,6 +145,7 @@ export abstract class WorkerLanguageRunner implements LanguageRunner {
 
       const cleanup = () => {
         clearTimeout(watchdog)
+        this.pending.delete(reject)
         worker.removeEventListener('message', onMessage)
       }
 
@@ -129,6 +174,7 @@ export abstract class WorkerLanguageRunner implements LanguageRunner {
         }
       }
 
+      this.pending.add(reject)
       worker.addEventListener('message', onMessage)
       this.send({
         type: 'run',
@@ -148,18 +194,23 @@ export abstract class WorkerLanguageRunner implements LanguageRunner {
     const id = this.nextId++
 
     return new Promise<CodeFeatures>((resolve, reject) => {
+      const cleanup = () => {
+        this.pending.delete(reject)
+        worker.removeEventListener('message', onMessage)
+      }
       const onMessage = (e: MessageEvent<WorkerResponse>) => {
         const msg = e.data
         if (msg.id !== id) return
         if (msg.type === 'features') {
-          worker.removeEventListener('message', onMessage)
+          cleanup()
           if (msg.features) resolve(msg.features)
           else reject(new Error(msg.error ?? 'Analysis failed'))
         } else if (msg.type === 'error') {
-          worker.removeEventListener('message', onMessage)
+          cleanup()
           reject(new Error(msg.message))
         }
       }
+      this.pending.add(reject)
       worker.addEventListener('message', onMessage)
       this.send({ type: 'analyze', id, userCode, functionName })
     })

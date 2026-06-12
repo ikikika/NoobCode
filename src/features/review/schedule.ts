@@ -28,10 +28,3 @@ export function isDue(entry: ScheduleEntry | undefined, now: number): boolean {
   if (!entry) return false
   return entry.dueAt <= now
 }
-
-export function dueLabel(entry: ScheduleEntry | undefined, now: number): string {
-  if (!entry) return 'Not scheduled'
-  if (entry.dueAt <= now) return 'Due now'
-  const days = Math.ceil((entry.dueAt - now) / DAY_MS)
-  return `Due in ${days} day${days === 1 ? '' : 's'}`
-}

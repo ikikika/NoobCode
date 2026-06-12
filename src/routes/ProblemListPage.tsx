@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { builtinMeta } from '../content'
 import { PATTERNS, PATTERN_LABELS, type PatternId } from '../content/patterns'
@@ -13,7 +13,7 @@ export function ProblemListPage() {
   const attempts = useProgressStore((s) => s.attempts)
   const schedule = useProgressStore((s) => s.schedule)
   const lastRun = useProgressStore((s) => s.lastRun)
-  const now = Date.now()
+  const [now] = useState(() => Date.now())
 
   const solvedCount = builtinMeta.filter((p) => solved[p.slug]).length
   const total = builtinMeta.length

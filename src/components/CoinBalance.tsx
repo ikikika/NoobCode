@@ -10,6 +10,7 @@ export function CoinBalance() {
       to="/achievements"
       title="Coins — view achievements"
       aria-label={`${coins} coins`}
+      data-testid="coin-balance"
       className="flex h-[34px] items-center gap-1.5 rounded-[9px] border border-line bg-surface-raised px-2.5 text-sm font-medium text-fg transition-colors hover:border-accent"
     >
       <span
@@ -17,7 +18,9 @@ export function CoinBalance() {
         className="inline-block h-3.5 w-3.5 rounded-full"
         style={{ background: '#c79a3d', boxShadow: 'inset 0 1px 1px rgba(255,255,255,.45)' }}
       />
-      <span className="nc-mono tabular-nums">{coins}</span>
+      <span className="nc-mono tabular-nums" data-testid="coin-count">
+        {coins}
+      </span>
     </Link>
   )
 }

@@ -61,7 +61,7 @@ export function monacoSetup() {
 const noHash = (hex: string) => (hex || '#000000').replace('#', '')
 
 /** Build (or rebuild) the 'custom' Monaco theme from a user palette. */
-export function defineCustomMonacoTheme(c: CustomColors) {
+function defineCustomMonacoTheme(c: CustomColors) {
   monaco.editor.defineTheme('custom', {
     base: isDarkColor(c.surface || '#ffffff') ? 'vs-dark' : 'vs',
     inherit: true,
