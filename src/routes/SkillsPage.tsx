@@ -70,7 +70,8 @@ function patternHref(s: PatternStat): string {
 export function SkillsPage() {
   const solved = useProgressStore((s) => s.solved)
   const attempts = useProgressStore((s) => s.attempts)
-  const now = Date.now()
+  // Fixed at mount: used as a stable useMemo dependency for mastery decay.
+  const [now] = useState(() => Date.now())
 
   const [tab, setTab] = useState<SkillsTab>('patterns')
 
@@ -115,6 +116,8 @@ export function SkillsPage() {
   // Below the 768px panel breakpoint, stack the side-by-side summary cards and
   // let the wide mastery table scroll horizontally instead of overflowing.
   const isNarrow = useMediaQuery('(max-width: 767px)')
+
+  const MASTERY_GRID_COLS = '230px 90px 1fr 130px'
 
   return (
     <div style={{ padding: isNarrow ? '24px 18px 40px' : '36px 48px 56px', maxWidth: 1180, margin: '0 auto' }}>
@@ -190,7 +193,7 @@ export function SkillsPage() {
           {/* mastery matrix — wide fixed columns; scroll within the card on
               narrow screens rather than overflowing the viewport */}
           <div className="nc-card" style={{ padding: '6px 26px 12px', overflowX: 'auto' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '230px 90px 1fr 130px', gap: 20, alignItems: 'center', padding: '14px 0 10px', minWidth: 560 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: MASTERY_GRID_COLS, gap: 20, alignItems: 'center', padding: '14px 0 10px', minWidth: 560 }}>
               {['Pattern', 'Solved', 'Problems', 'Mastery'].map((h) => (
                 <Kicker key={h}>{h}</Kicker>
               ))}
@@ -200,7 +203,7 @@ export function SkillsPage() {
                 <Link key={s.pattern} className="nc-reset" to={patternHref(s)}>
                   <div
                     className="nc-row-hover"
-                    style={{ display: 'grid', gridTemplateColumns: '230px 90px 1fr 130px', gap: 20, alignItems: 'center', padding: '12px', margin: '0 -12px', minWidth: 560 }}
+                    style={{ display: 'grid', gridTemplateColumns: MASTERY_GRID_COLS, gap: 20, alignItems: 'center', padding: '12px', margin: '0 -12px', minWidth: 560 }}
                   >
                     <span style={{ display: 'flex', alignItems: 'center', gap: 9, fontSize: 14.5, fontWeight: 500 }}>
                       <MasteryDot level={s.mastery} />

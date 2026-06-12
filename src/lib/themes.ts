@@ -186,7 +186,7 @@ export const THEMES: Theme[] = [
   },
 ]
 
-export const THEME_IDS = THEMES.map((t) => t.id)
+const THEME_IDS = THEMES.map((t) => t.id)
 export type ThemeId = (typeof THEMES)[number]['id']
 
 export const DEFAULT_THEME: ThemeId = 'cream'

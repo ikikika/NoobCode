@@ -3,19 +3,11 @@ import type { LanguageId, Problem } from '../../content/schema'
 import { useProgressStore } from '../../store/useProgressStore'
 import { getRunner } from '../runner/runnerRegistry'
 import { Spinner } from '../../components/Spinner'
+import { formatValue } from '../../lib/formatValue'
 
 interface ScratchPanelProps {
   problem: Problem
   language: LanguageId
-}
-
-function formatValue(value: unknown): string {
-  if (value === undefined) return 'undefined'
-  try {
-    return JSON.stringify(value, null, 2)
-  } catch {
-    return String(value)
-  }
 }
 
 export function ScratchPanel({ problem, language }: ScratchPanelProps) {
@@ -100,7 +92,7 @@ export function ScratchPanel({ problem, language }: ScratchPanelProps) {
             <div className="rounded-md border border-line bg-surface-raised p-3">
               <div className="text-xs text-fg-subtle">Returned</div>
               <pre className="mt-1 overflow-auto whitespace-pre-wrap font-mono text-xs text-fg">
-                {formatValue(output.actual)}
+                {formatValue(output.actual, true)}
               </pre>
             </div>
           )}

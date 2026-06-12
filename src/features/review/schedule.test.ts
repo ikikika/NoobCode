@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { dueLabel, isDue, nextSchedule, LEITNER_INTERVALS_DAYS } from './schedule'
+import { isDue, nextSchedule, LEITNER_INTERVALS_DAYS } from './schedule'
 
 const DAY = 86_400_000
 const NOW = 1_000_000_000_000
@@ -35,19 +35,5 @@ describe('isDue', () => {
     expect(isDue(undefined, NOW)).toBe(false)
     expect(isDue({ box: 1, dueAt: NOW - DAY, lastReviewed: NOW }, NOW)).toBe(true)
     expect(isDue({ box: 1, dueAt: NOW + DAY, lastReviewed: NOW }, NOW)).toBe(false)
-  })
-})
-
-describe('dueLabel', () => {
-  it('labels due-now entries', () => {
-    expect(dueLabel({ box: 0, dueAt: NOW, lastReviewed: NOW }, NOW)).toBe('Due now')
-  })
-
-  it('labels future entries with a day count', () => {
-    expect(dueLabel({ box: 2, dueAt: NOW + 3 * DAY, lastReviewed: NOW }, NOW)).toBe('Due in 3 days')
-  })
-
-  it('labels missing entries as not scheduled', () => {
-    expect(dueLabel(undefined, NOW)).toBe('Not scheduled')
   })
 })

@@ -1,15 +1,7 @@
 import { Spinner } from '../../components/Spinner'
+import { formatValue } from '../../lib/formatValue'
 import type { RunResult } from '../runner/LanguageRunner'
 import type { RunnerStatus } from '../../store/useRunnerStore'
-
-function formatValue(value: unknown): string {
-  if (value === undefined) return 'undefined'
-  try {
-    return JSON.stringify(value)
-  } catch {
-    return String(value)
-  }
-}
 
 interface ResultsPanelProps {
   status: RunnerStatus
