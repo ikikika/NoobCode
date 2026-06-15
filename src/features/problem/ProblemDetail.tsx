@@ -20,12 +20,11 @@ import { HistoryPanel } from '../review/HistoryPanel'
 import { ScratchPanel } from '../scratch/ScratchPanel'
 import { useMediaQuery } from '../../lib/useMediaQuery'
 
-type LeftTab = 'description' | 'solution'
-type RightTab = 'code' | 'results' | 'review' | 'compare' | 'history' | 'scratch'
+type RightTab = 'code' | 'walkthrough' | 'results' | 'review' | 'compare' | 'history' | 'scratch'
 
 export function ProblemDetail({ problem }: { problem: Problem }) {
-  const [leftTab, setLeftTab] = useState<LeftTab>('description')
   const [rightTab, setRightTab] = useState<RightTab>('code')
+  const [walkthroughFullscreen, setWalkthroughFullscreen] = useState(false)
 
   const lastLanguage = useProgressStore((s) => s.lastLanguage)
   const setLastLanguage = useProgressStore((s) => s.setLastLanguage)
@@ -151,28 +150,35 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
     return () => window.removeEventListener('keydown', onKey)
   }, [status])
 
+  // Escape exits the fullscreen Walkthrough.
+  useEffect(() => {
+    if (!walkthroughFullscreen) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setWalkthroughFullscreen(false)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [walkthroughFullscreen])
+
+  // The Walkthrough renders the step-by-step solution viewer. It can be popped
+  // into a full-viewport overlay (desktop + mobile) via the fullscreen toggle.
+  const walkthrough = (
+    <StepViewer
+      solutions={problem.solutions}
+      language={language}
+      problemTitle={problem.title}
+      isFullscreen={walkthroughFullscreen}
+      onToggleFullscreen={() => setWalkthroughFullscreen((f) => !f)}
+    />
+  )
+
   return (
+    <>
     <PanelGroup key={direction} direction={direction} className="h-full">
       <Panel defaultSize={48} minSize={20}>
         <div className="flex h-full flex-col">
-          <Tabs
-            tabs={[
-              { id: 'description', label: 'Description' },
-              { id: 'solution', label: 'Solution' },
-            ]}
-            active={leftTab}
-            onChange={(id) => setLeftTab(id as LeftTab)}
-          />
           <div className="min-h-0 flex-1">
-            {leftTab === 'description' ? (
-              <ProblemDescription problem={problem} />
-            ) : (
-              <StepViewer
-                solutions={problem.solutions}
-                language={language}
-                problemTitle={problem.title}
-              />
-            )}
+            <ProblemDescription problem={problem} />
           </div>
         </div>
       </Panel>
@@ -224,6 +230,7 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
           <Tabs
             tabs={[
               { id: 'code', label: 'Code' },
+              { id: 'walkthrough', label: 'Walkthrough' },
               { id: 'results', label: 'Results' },
               { id: 'review', label: 'Review' },
               { id: 'compare', label: 'Compare' },
@@ -238,6 +245,7 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
             {rightTab === 'code' && (
               <CodeEditor value={code} language={language} onChange={onChangeCode} />
             )}
+            {rightTab === 'walkthrough' && !walkthroughFullscreen && walkthrough}
             {rightTab === 'results' && (
               <ResultsPanel status={status} result={result} loadingMessage={loadingMessage} />
             )}
@@ -249,5 +257,10 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
         </div>
       </Panel>
     </PanelGroup>
+
+    {walkthroughFullscreen && (
+      <div className="fixed inset-0 z-50 flex flex-col bg-surface">{walkthrough}</div>
+    )}
+    </>
   )
 }
