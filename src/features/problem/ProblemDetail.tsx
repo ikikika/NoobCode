@@ -15,12 +15,11 @@ import { ResultsPanel } from '../results/ResultsPanel'
 import { StepViewer } from '../steps/StepViewer'
 import { ProblemDescription } from './ProblemDescription'
 import { ReviewPanel } from '../review/ReviewPanel'
-import { ComparePanel } from '../review/ComparePanel'
 import { HistoryPanel } from '../review/HistoryPanel'
 import { ScratchPanel } from '../scratch/ScratchPanel'
 import { useMediaQuery } from '../../lib/useMediaQuery'
 
-type RightTab = 'code' | 'walkthrough' | 'results' | 'review' | 'compare' | 'history' | 'scratch'
+type RightTab = 'code' | 'walkthrough' | 'results' | 'review' | 'history' | 'scratch'
 
 export function ProblemDetail({ problem }: { problem: Problem }) {
   const [rightTab, setRightTab] = useState<RightTab>('code')
@@ -233,7 +232,6 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
               { id: 'walkthrough', label: 'Walkthrough' },
               { id: 'results', label: 'Results' },
               { id: 'review', label: 'Review' },
-              { id: 'compare', label: 'Compare' },
               { id: 'history', label: 'History' },
               { id: 'scratch', label: 'Scratch' },
             ]}
@@ -250,7 +248,6 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
               <ResultsPanel status={status} result={result} loadingMessage={loadingMessage} />
             )}
             {rightTab === 'review' && <ReviewPanel slug={problem.slug} />}
-            {rightTab === 'compare' && <ComparePanel problem={problem} language={language} />}
             {rightTab === 'history' && <HistoryPanel problem={problem} language={language} />}
             {rightTab === 'scratch' && <ScratchPanel problem={problem} language={language} />}
           </div>

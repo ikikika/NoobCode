@@ -10,18 +10,16 @@ interface LanguageSelectProps {
 
 export function LanguageSelect({ value, onChange }: LanguageSelectProps) {
   return (
-    <div className="inline-flex rounded-md border border-line p-0.5">
+    <select
+      value={value}
+      onChange={(e) => onChange(e.target.value as LanguageId)}
+      className="rounded-md border border-line bg-surface px-2.5 py-1 text-xs text-fg focus:outline-none focus:ring-1 focus:ring-accent"
+    >
       {LANGUAGES.map((lang) => (
-        <button
-          key={lang}
-          onClick={() => onChange(lang)}
-          className={`rounded px-2.5 py-1 text-xs font-medium transition-colors ${
-            value === lang ? 'bg-accent text-accent-contrast' : 'text-fg-muted hover:text-fg'
-          }`}
-        >
+        <option key={lang} value={lang}>
           {LANGUAGE_LABELS[lang]}
-        </button>
+        </option>
       ))}
-    </div>
+    </select>
   )
 }
