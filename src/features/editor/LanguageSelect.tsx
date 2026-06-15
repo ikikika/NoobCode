@@ -13,6 +13,7 @@ export function LanguageSelect({ value, onChange }: LanguageSelectProps) {
     <select
       value={value}
       onChange={(e) => onChange(e.target.value as LanguageId)}
+      aria-label="Language"
       className="rounded-md border border-line bg-surface px-2.5 py-1 text-xs text-fg focus:outline-none focus:ring-1 focus:ring-accent"
     >
       {LANGUAGES.map((lang) => (
