@@ -3,7 +3,6 @@ import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels'
 import type { LanguageId, Problem } from '../../content/schema'
 import { Tabs } from '../../components/Tabs'
 import { useProgressStore } from '../../store/useProgressStore'
-import { useRewardsStore } from '../../store/useRewardsStore'
 import { useSolutionStore } from '../../store/useSolutionStore'
 import { useSettingsStore } from '../../store/useSettingsStore'
 import { useRunner } from '../runner/useRunner'
@@ -36,9 +35,8 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
   const recordAttempt = useProgressStore((s) => s.recordAttempt)
   const storeReview = useProgressStore((s) => s.storeReview)
   const setLastRun = useProgressStore((s) => s.setLastRun)
-  const rewardSolve = useRewardsStore((s) => s.rewardSolve)
 
-  // When the problem opened — used to time solves for the Speed Demon award.
+  // When the problem opened — recorded as solveMs on a passing attempt.
   const openedAt = useRef(Date.now())
 
   const language = useSolutionStore((s) => s.activeLanguage)
@@ -115,9 +113,6 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
           code: userCode,
           solveMs: passed ? Date.now() - openedAt.current : undefined,
         })
-        // First solve pays coins (by difficulty, +bonus when optimal); guarded
-        // so re-runs of an already-solved problem don't farm coins.
-        if (passed) rewardSolve(problem.slug, problem.difficulty, heuristicReview.isOptimal)
         storeReview(problem.slug, heuristicReview)
         setRightTab('review')
 

@@ -46,14 +46,12 @@ export default defineConfig(({ command }) => ({
       // gate meaningful rather than diluted by untested view code.
       include: [
         'src/features/analysis/**/*.ts',
-        'src/features/achievements/achievements.ts',
         'src/features/skills/mastery.ts',
         'src/features/review/schedule.ts',
         'src/features/review/aiReview.ts',
         'src/features/runner/io.ts',
         'src/lib/deepEqual.ts',
         'src/lib/themes.ts',
-        'src/store/useRewardsStore.ts',
         'src/content/newProblem.ts',
         'src/content/schema.ts',
         'src/content/patterns.ts',

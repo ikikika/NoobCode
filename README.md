@@ -112,14 +112,13 @@ A two-layer pyramid:
 
 - **Unit / component** — Vitest + Testing Library (jsdom) cover the pure logic and
   React components: the analysis engine, the run harnesses + structured-I/O codec,
-  spaced-repetition and mastery math, the rewards economy, and achievement
-  derivation.
+  and spaced-repetition and mastery math.
 - **End-to-end** — **Playwright** drives the production preview build in a real
   browser, which is the only place the hard parts exist: **Web Workers, the Pyodide
   WASM runtime, and the COOP/COEP cross-origin isolation behind the
   `SharedArrayBuffer` interrupt**. The suite solves problems in all three languages,
   exercises the tree/linked-list codec and the design-class executor, **kills a
-  runaway loop with the Stop interrupt**, and runs the theme economy/customizer.
+  runaway loop with the Stop interrupt**, and runs the theme customizer.
   See [`e2e/README.md`](./e2e/README.md).
 
 ```bash

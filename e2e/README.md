@@ -26,12 +26,12 @@ First time only: `npx playwright install --with-deps chromium`.
 | Spec | Proves |
 | --- | --- |
 | `smoke` | App boots, routes work, and the page is `crossOriginIsolated` (SAB available). |
-| `run-python` | Python solves end-to-end on Pyodide; coins are paid; the review renders. |
+| `run-python` | Python solves end-to-end on Pyodide; the review renders. |
 | `run-js-ts` | JS + TS run in their workers (incl. sucrase transpile) and a real Monaco edit → run. |
 | `structured-io` | The tree I/O codec and the design (class) executor work in a real runtime. |
 | `interrupt` | The `SharedArrayBuffer` Stop kills a runaway loop; the worker stays warm. |
-| `gamification` | Buying a theme spends coins; the custom-theme creator applies + persists. |
+| `customize` | The custom-theme creator edits a token, applies, and persists across reload. |
 
-Determinism: specs seed the persisted `localStorage` (progress / rewards / theme)
+Determinism: specs seed the persisted `localStorage` (progress / theme)
 via `addInitScript` (see `helpers.ts`) instead of relying on flaky editor typing —
 except one spec that pastes into Monaco on purpose to cover the editor path.

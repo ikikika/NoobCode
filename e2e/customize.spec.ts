@@ -1,24 +1,11 @@
 import { test, expect } from '@playwright/test'
-import { seed, readCoins } from './helpers'
-
-test('buying a locked theme spends coins and applies it', async ({ page }) => {
-  await seed(page, { coins: 500, unlockedThemes: ['cream'], theme: 'cream' })
-  await page.goto('/')
-
-  const before = await readCoins(page)
-
-  await page.getByRole('button', { name: 'Settings' }).click()
-  await page.getByRole('button', { name: /Ocean.*locked/i }).click()
-
-  await expect(page.locator('html')).toHaveAttribute('data-theme', 'ocean')
-  await expect.poll(() => readCoins(page)).toBe(before - 60)
-})
+import { seed } from './helpers'
 
 test('custom theme creator edits a token, applies, and persists across reload', async ({ page }) => {
-  await seed(page, { coins: 500, customThemeUnlocked: true, theme: 'cream' })
+  await seed(page, { theme: 'cream' })
   await page.goto('/#/customize')
 
-  // Editor is unlocked; change the accent token via its hex field.
+  // The editor is open directly (no paywall); change the accent token via its hex field.
   const accentHex = page.getByLabel('Accent hex')
   await expect(accentHex).toBeVisible()
   await accentHex.fill('#ff0000')

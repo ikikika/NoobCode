@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useRewardsStore, CUSTOM_THEME_PRICE } from '../store/useRewardsStore'
 import { useTheme } from '../store/useTheme'
 import {
   TOKEN_GROUPS,
@@ -14,41 +13,7 @@ import {
 } from '../features/theme/customTheme'
 
 export function CustomizePage() {
-  const unlocked = useRewardsStore((s) => s.customThemeUnlocked)
-  if (!unlocked) return <UnlockGate />
   return <Editor />
-}
-
-function UnlockGate() {
-  const coins = useRewardsStore((s) => s.coins)
-  const unlockCustomTheme = useRewardsStore((s) => s.unlockCustomTheme)
-  const affordable = coins >= CUSTOM_THEME_PRICE
-  return (
-    <div className="mx-auto h-full max-w-xl overflow-auto px-6 py-16 text-center">
-      <span className="nc-kicker">Premium</span>
-      <h1 className="nc-serif mt-3 text-3xl font-medium text-fg">Theme Creator</h1>
-      <p className="mx-auto mt-4 max-w-md text-sm text-fg-muted">
-        Build your own palette — tune the color of every surface, text, accent, and status in the
-        app, then apply it as your personal theme.
-      </p>
-      <div className="nc-card mt-8 p-6">
-        <div className="nc-serif text-2xl font-medium text-fg">{CUSTOM_THEME_PRICE} coins</div>
-        <div className="mt-1 text-xs text-fg-subtle">You have {coins} coins</div>
-        <button
-          onClick={() => unlockCustomTheme()}
-          disabled={!affordable}
-          className="mt-5 rounded-lg bg-accent px-5 py-2 text-sm font-semibold text-accent-contrast transition-opacity disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          {affordable ? 'Unlock the Theme Creator' : 'Not enough coins yet'}
-        </button>
-        {!affordable && (
-          <p className="mt-3 text-xs text-fg-subtle">
-            Earn coins by solving problems, logging in daily, and unlocking achievements.
-          </p>
-        )}
-      </div>
-    </div>
-  )
 }
 
 function Editor() {
@@ -90,7 +55,7 @@ function Editor() {
     <div className="mx-auto h-full max-w-3xl overflow-auto px-6 py-10 sm:px-10">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <span className="nc-kicker">Premium</span>
+          <span className="nc-kicker">Theme</span>
           <h1 className="nc-serif mt-2 text-3xl font-medium text-fg">Theme Creator</h1>
           <p className="mt-2 text-sm text-fg-muted">
             Changes preview live across the app. Apply to save it as your theme.
