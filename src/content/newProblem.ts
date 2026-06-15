@@ -9,7 +9,7 @@
 import type { Difficulty, ProblemInput } from './schema'
 
 /** Slugs are lowercase letters, digits, and hyphens only. */
-export const SLUG_RE = /^[a-z0-9-]+$/
+const SLUG_RE = /^[a-z0-9-]+$/
 
 export function isValidSlug(slug: string): boolean {
   return SLUG_RE.test(slug)

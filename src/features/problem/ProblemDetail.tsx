@@ -36,9 +36,6 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
   const storeReview = useProgressStore((s) => s.storeReview)
   const setLastRun = useProgressStore((s) => s.setLastRun)
 
-  // When the problem opened — recorded as solveMs on a passing attempt.
-  const openedAt = useRef(Date.now())
-
   const language = useSolutionStore((s) => s.activeLanguage)
   const setLanguage = useSolutionStore((s) => s.setLanguage)
   const resetForProblem = useSolutionStore((s) => s.resetForProblem)
@@ -56,7 +53,6 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
   // change, so omitting them is correct here.
   useEffect(() => {
     resetForProblem(lastLanguage)
-    openedAt.current = Date.now()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [problem.slug])
 
@@ -111,7 +107,6 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
           approachUsed: heuristicReview.approachUsed,
           language,
           code: userCode,
-          solveMs: passed ? Date.now() - openedAt.current : undefined,
         })
         storeReview(problem.slug, heuristicReview)
         setRightTab('review')

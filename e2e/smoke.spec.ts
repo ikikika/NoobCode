@@ -7,10 +7,6 @@ test.describe('smoke', () => {
 
     await page.getByRole('link', { name: 'Skills' }).click()
     await expect(page).toHaveURL(/#\/skills$/)
-
-    await page.getByRole('link', { name: 'Achievements' }).click()
-    await expect(page).toHaveURL(/#\/achievements$/)
-    await expect(page.getByRole('heading', { name: /achievements/i })).toBeVisible()
   })
 
   test('page is cross-origin isolated (COOP/COEP) for SharedArrayBuffer', async ({ page }) => {
