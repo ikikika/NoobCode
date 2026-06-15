@@ -3,7 +3,6 @@ import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels'
 import type { LanguageId, Problem } from '../../content/schema'
 import { Tabs } from '../../components/Tabs'
 import { useProgressStore } from '../../store/useProgressStore'
-import { useRewardsStore } from '../../store/useRewardsStore'
 import { useSolutionStore } from '../../store/useSolutionStore'
 import { useSettingsStore } from '../../store/useSettingsStore'
 import { useRunner } from '../runner/useRunner'
@@ -16,17 +15,15 @@ import { ResultsPanel } from '../results/ResultsPanel'
 import { StepViewer } from '../steps/StepViewer'
 import { ProblemDescription } from './ProblemDescription'
 import { ReviewPanel } from '../review/ReviewPanel'
-import { ComparePanel } from '../review/ComparePanel'
 import { HistoryPanel } from '../review/HistoryPanel'
 import { ScratchPanel } from '../scratch/ScratchPanel'
 import { useMediaQuery } from '../../lib/useMediaQuery'
 
-type LeftTab = 'description' | 'solution'
-type RightTab = 'code' | 'results' | 'review' | 'compare' | 'history' | 'scratch'
+type RightTab = 'code' | 'walkthrough' | 'results' | 'review' | 'history' | 'scratch'
 
 export function ProblemDetail({ problem }: { problem: Problem }) {
-  const [leftTab, setLeftTab] = useState<LeftTab>('description')
   const [rightTab, setRightTab] = useState<RightTab>('code')
+  const [walkthroughFullscreen, setWalkthroughFullscreen] = useState(false)
 
   const lastLanguage = useProgressStore((s) => s.lastLanguage)
   const setLastLanguage = useProgressStore((s) => s.setLastLanguage)
@@ -36,10 +33,6 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
   const recordAttempt = useProgressStore((s) => s.recordAttempt)
   const storeReview = useProgressStore((s) => s.storeReview)
   const setLastRun = useProgressStore((s) => s.setLastRun)
-  const rewardSolve = useRewardsStore((s) => s.rewardSolve)
-
-  // When the problem opened — used to time solves for the Speed Demon award.
-  const openedAt = useRef(Date.now())
 
   const language = useSolutionStore((s) => s.activeLanguage)
   const setLanguage = useSolutionStore((s) => s.setLanguage)
@@ -58,7 +51,6 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
   // change, so omitting them is correct here.
   useEffect(() => {
     resetForProblem(lastLanguage)
-    openedAt.current = Date.now()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [problem.slug])
 
@@ -113,11 +105,7 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
           approachUsed: heuristicReview.approachUsed,
           language,
           code: userCode,
-          solveMs: passed ? Date.now() - openedAt.current : undefined,
         })
-        // First solve pays coins (by difficulty, +bonus when optimal); guarded
-        // so re-runs of an already-solved problem don't farm coins.
-        if (passed) rewardSolve(problem.slug, problem.difficulty, heuristicReview.isOptimal)
         storeReview(problem.slug, heuristicReview)
         setRightTab('review')
 
@@ -161,28 +149,35 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
     return () => window.removeEventListener('keydown', onKey)
   }, [status])
 
+  // Escape exits the fullscreen Walkthrough.
+  useEffect(() => {
+    if (!walkthroughFullscreen) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setWalkthroughFullscreen(false)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [walkthroughFullscreen])
+
+  // The Walkthrough renders the step-by-step solution viewer. It can be popped
+  // into a full-viewport overlay (desktop + mobile) via the fullscreen toggle.
+  const walkthrough = (
+    <StepViewer
+      solutions={problem.solutions}
+      language={language}
+      problemTitle={problem.title}
+      isFullscreen={walkthroughFullscreen}
+      onToggleFullscreen={() => setWalkthroughFullscreen((f) => !f)}
+    />
+  )
+
   return (
+    <>
     <PanelGroup key={direction} direction={direction} className="h-full">
       <Panel defaultSize={48} minSize={20}>
         <div className="flex h-full flex-col">
-          <Tabs
-            tabs={[
-              { id: 'description', label: 'Description' },
-              { id: 'solution', label: 'Solution' },
-            ]}
-            active={leftTab}
-            onChange={(id) => setLeftTab(id as LeftTab)}
-          />
           <div className="min-h-0 flex-1">
-            {leftTab === 'description' ? (
-              <ProblemDescription problem={problem} />
-            ) : (
-              <StepViewer
-                solutions={problem.solutions}
-                language={language}
-                problemTitle={problem.title}
-              />
-            )}
+            <ProblemDescription problem={problem} />
           </div>
         </div>
       </Panel>
@@ -234,9 +229,9 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
           <Tabs
             tabs={[
               { id: 'code', label: 'Code' },
+              { id: 'walkthrough', label: 'Walkthrough' },
               { id: 'results', label: 'Results' },
               { id: 'review', label: 'Review' },
-              { id: 'compare', label: 'Compare' },
               { id: 'history', label: 'History' },
               { id: 'scratch', label: 'Scratch' },
             ]}
@@ -248,16 +243,21 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
             {rightTab === 'code' && (
               <CodeEditor value={code} language={language} onChange={onChangeCode} />
             )}
+            {rightTab === 'walkthrough' && !walkthroughFullscreen && walkthrough}
             {rightTab === 'results' && (
               <ResultsPanel status={status} result={result} loadingMessage={loadingMessage} />
             )}
             {rightTab === 'review' && <ReviewPanel slug={problem.slug} />}
-            {rightTab === 'compare' && <ComparePanel problem={problem} language={language} />}
             {rightTab === 'history' && <HistoryPanel problem={problem} language={language} />}
             {rightTab === 'scratch' && <ScratchPanel problem={problem} language={language} />}
           </div>
         </div>
       </Panel>
     </PanelGroup>
+
+    {walkthroughFullscreen && (
+      <div className="fixed inset-0 z-50 flex flex-col bg-surface">{walkthrough}</div>
+    )}
+    </>
   )
 }

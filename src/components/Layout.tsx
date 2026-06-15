@@ -1,7 +1,6 @@
 import type { MouseEvent } from 'react'
 import { Link, NavLink, Outlet } from 'react-router-dom'
 import { SettingsMenu } from './SettingsMenu'
-import { CoinBalance } from './CoinBalance'
 
 function navClass({ isActive }: { isActive: boolean }) {
   return isActive ? 'on' : undefined
@@ -35,12 +34,8 @@ export function Layout() {
           <NavLink to="/skills" className={navClass}>
             Skills
           </NavLink>
-          <NavLink to="/achievements" className={navClass}>
-            Achievements
-          </NavLink>
         </nav>
         <div className="nc-head-actions">
-          <CoinBalance />
           <Link to="/new" className="nc-iconbtn" aria-label="New problem" title="New problem">
             +
           </Link>

@@ -16,9 +16,17 @@ interface StepViewerProps {
   solutions: Solution[]
   language: LanguageId
   problemTitle: string
+  isFullscreen?: boolean
+  onToggleFullscreen?: () => void
 }
 
-export function StepViewer({ solutions, language, problemTitle }: StepViewerProps) {
+export function StepViewer({
+  solutions,
+  language,
+  problemTitle,
+  isFullscreen,
+  onToggleFullscreen,
+}: StepViewerProps) {
   const theme = useTheme((s) => s.theme)
   const diffLayout = useUiPrefs((s) => s.diffLayout)
   const toggleDiffLayout = useUiPrefs((s) => s.toggleDiffLayout)
@@ -75,6 +83,16 @@ export function StepViewer({ solutions, language, problemTitle }: StepViewerProp
         >
           {diffLayout === 'split' ? 'Inline diff' : 'Split diff'}
         </button>
+        {onToggleFullscreen && (
+          <button
+            onClick={onToggleFullscreen}
+            aria-label={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
+            title={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
+            className="rounded-md border border-line px-2 py-1 text-xs text-fg-muted hover:text-fg"
+          >
+            {isFullscreen ? 'Exit fullscreen ✕' : 'Fullscreen ⤢'}
+          </button>
+        )}
       </div>
 
       <div className="min-h-0 flex-1">

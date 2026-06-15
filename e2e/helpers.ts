@@ -2,16 +2,13 @@ import { type Page, expect } from '@playwright/test'
 
 // Deterministic E2E setup: seed the persisted zustand blobs before the app loads
 // (via addInitScript) so flows don't depend on flaky editor typing. Shapes match
-// the persist format `{ state, version }` used by useProgressStore (v4) and
-// useRewardsStore (v1); `noobcode-theme` is a raw string.
+// the persist format `{ state, version }` used by useProgressStore (v4);
+// `noobcode-theme` is a raw string.
 
 export interface SeedOptions {
   /** Pre-saved editor code, keyed "slug:language". */
   savedCode?: Record<string, string>
   lastLanguage?: 'python' | 'javascript' | 'typescript'
-  coins?: number
-  unlockedThemes?: string[]
-  customThemeUnlocked?: boolean
   theme?: string
 }
 
@@ -37,23 +34,6 @@ export async function seed(page: Page, opts: SeedOptions = {}): Promise<void> {
         version: 4,
       }),
     )
-    localStorage.setItem(
-      'noobcode-rewards',
-      JSON.stringify({
-        state: {
-          coins: o.coins ?? 0,
-          ledger: [],
-          lastDailyClaim: null,
-          loginStreak: 0,
-          unlockedThemes: o.unlockedThemes ?? ['cream'],
-          rewardedSolves: {},
-          achievementsEarnedAt: {},
-          customThemeUnlocked: o.customThemeUnlocked ?? false,
-          seeded: true,
-        },
-        version: 1,
-      }),
-    )
     if (o.theme) localStorage.setItem('noobcode-theme', o.theme)
   }, opts)
 }
@@ -75,11 +55,6 @@ export async function runAllExpectPass(page: Page): Promise<void> {
   })
   await page.getByRole('tab', { name: 'Results' }).click()
   await expect(page.getByTestId('results-banner')).toContainText('All tests passed')
-}
-
-export async function readCoins(page: Page): Promise<number> {
-  const text = await page.getByTestId('coin-count').innerText()
-  return Number.parseInt(text.trim(), 10)
 }
 
 // Correct reference solutions used as fixtures.

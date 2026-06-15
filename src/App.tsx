@@ -4,11 +4,9 @@ import { Layout } from './components/Layout'
 import { ProblemListPage } from './routes/ProblemListPage'
 import { CreateProblemPage } from './routes/CreateProblemPage'
 import { SkillsPage } from './routes/SkillsPage'
-import { AchievementsPage } from './routes/AchievementsPage'
 import { CustomizePage } from './routes/CustomizePage'
 import { Spinner } from './components/Spinner'
 import { ErrorBoundary } from './components/ErrorBoundary'
-import { useGamificationEffects } from './features/achievements/useAchievements'
 
 // The problem detail page pulls in Monaco — load it lazily so the list and
 // skills pages stay small and Monaco only downloads when a problem is opened.
@@ -42,7 +40,6 @@ const router = createHashRouter([
         ),
       },
       { path: 'skills', element: <SkillsPage /> },
-      { path: 'achievements', element: <AchievementsPage /> },
       { path: 'customize', element: <CustomizePage /> },
       { path: 'new', element: <CreateProblemPage /> },
       { path: '*', element: <Navigate to="/" replace /> },
@@ -51,6 +48,5 @@ const router = createHashRouter([
 ])
 
 export default function App() {
-  useGamificationEffects()
   return <RouterProvider router={router} />
 }
