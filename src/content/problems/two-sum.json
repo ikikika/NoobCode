@@ -2,8 +2,15 @@
   "slug": "two-sum",
   "title": "Two Sum",
   "difficulty": "easy",
-  "tags": ["array", "hash-map"],
-  "patterns": ["brute-force", "hash-map"],
+  "tags": [
+    "array",
+    "hash-map"
+  ],
+  "patterns": [
+    "uncurated-questions",
+    "brute-force",
+    "hash-map"
+  ],
   "description": "Given an array of integers `nums` and an integer `target`, return the\nindices of the two numbers such that they add up to `target`.\n\nYou may assume that each input has **exactly one solution**, and you may not\nuse the same element twice. You can return the answer in any order.",
   "constraints": [
     "2 <= nums.length <= 10^4",
@@ -17,21 +24,106 @@
       "output": "[0,1]",
       "explanation": "Because nums[0] + nums[1] == 9, we return [0, 1]."
     },
-    { "input": "nums = [3,2,4], target = 6", "output": "[1,2]" },
-    { "input": "nums = [3,3], target = 6", "output": "[0,1]" }
+    {
+      "input": "nums = [3,2,4], target = 6",
+      "output": "[1,2]"
+    },
+    {
+      "input": "nums = [3,3], target = 6",
+      "output": "[0,1]"
+    }
   ],
-  "functionName": { "python": "two_sum", "javascript": "twoSum", "typescript": "twoSum" },
+  "functionName": {
+    "python": "two_sum",
+    "javascript": "twoSum",
+    "typescript": "twoSum"
+  },
   "starterCode": {
     "python": "def two_sum(nums, target):\n    # Return the indices of the two numbers that add up to target.\n    pass\n",
     "javascript": "function twoSum(nums, target) {\n  // Return the indices of the two numbers that add up to target.\n}\n",
     "typescript": "function twoSum(nums: number[], target: number): number[] {\n  // Return the indices of the two numbers that add up to target.\n  return [];\n}\n"
   },
   "tests": [
-    { "name": "example 1", "args": [[2, 7, 11, 15], 9], "expected": [0, 1] },
-    { "name": "example 2", "args": [[3, 2, 4], 6], "expected": [1, 2] },
-    { "name": "duplicate values", "args": [[3, 3], 6], "expected": [0, 1] },
-    { "name": "negatives", "args": [[-1, -2, -3, -4, -5], -8], "expected": [2, 4], "hidden": true },
-    { "name": "large gap", "args": [[0, 4, 3, 0], 0], "expected": [0, 3], "hidden": true }
+    {
+      "name": "example 1",
+      "args": [
+        [
+          2,
+          7,
+          11,
+          15
+        ],
+        9
+      ],
+      "expected": [
+        0,
+        1
+      ]
+    },
+    {
+      "name": "example 2",
+      "args": [
+        [
+          3,
+          2,
+          4
+        ],
+        6
+      ],
+      "expected": [
+        1,
+        2
+      ]
+    },
+    {
+      "name": "duplicate values",
+      "args": [
+        [
+          3,
+          3
+        ],
+        6
+      ],
+      "expected": [
+        0,
+        1
+      ]
+    },
+    {
+      "name": "negatives",
+      "args": [
+        [
+          -1,
+          -2,
+          -3,
+          -4,
+          -5
+        ],
+        -8
+      ],
+      "expected": [
+        2,
+        4
+      ],
+      "hidden": true
+    },
+    {
+      "name": "large gap",
+      "args": [
+        [
+          0,
+          4,
+          3,
+          0
+        ],
+        0
+      ],
+      "expected": [
+        0,
+        3
+      ],
+      "hidden": true
+    }
   ],
   "solutions": [
     {

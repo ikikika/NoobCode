@@ -7,6 +7,7 @@
     "math"
   ],
   "patterns": [
+    "uncurated-questions",
     "brute-force"
   ],
   "description": "You are given a large integer represented as an array of digits `digits`,\nmost significant digit first. Increment the integer by one and return the\nresulting array of digits.",

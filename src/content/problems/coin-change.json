@@ -7,6 +7,7 @@
     "dynamic-programming"
   ],
   "patterns": [
+    "uncurated-questions",
     "dynamic-programming"
   ],
   "description": "You are given coins of different denominations `coins` and a total `amount`.\nReturn the fewest number of coins needed to make up that amount. If it cannot be\nmade, return `-1`. You have an unlimited number of each coin.",

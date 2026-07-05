@@ -7,6 +7,7 @@
     "backtracking"
   ],
   "patterns": [
+    "uncurated-questions",
     "backtracking",
     "depth-first-search"
   ],

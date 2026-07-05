@@ -7,6 +7,7 @@
     "depth-first-search"
   ],
   "patterns": [
+    "uncurated-questions",
     "depth-first-search"
   ],
   "description": "Given a 2D grid of `\"1\"` (land) and `\"0\"` (water), return the number of\nislands. An island is surrounded by water and formed by connecting adjacent\nland horizontally or vertically.",

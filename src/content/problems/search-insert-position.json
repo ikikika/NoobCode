@@ -7,6 +7,7 @@
     "binary-search"
   ],
   "patterns": [
+    "uncurated-questions",
     "binary-search"
   ],
   "description": "Given a sorted array of distinct integers `nums` and a `target`, return the\nindex if the target is found. If not, return the index where it would be\ninserted to keep the array sorted. Aim for `O(log n)`.",

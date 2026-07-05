@@ -2,14 +2,35 @@
   "slug": "contains-duplicate",
   "title": "Contains Duplicate",
   "difficulty": "easy",
-  "tags": ["array", "hash-set", "sorting"],
-  "patterns": ["hash-set", "sorting"],
+  "tags": [
+    "array",
+    "hash-set",
+    "sorting"
+  ],
+  "patterns": [
+    "uncurated-questions",
+    "hash-set",
+    "sorting"
+  ],
   "description": "Given an integer array `nums`, return `true` if any value appears **at\nleast twice** in the array, and return `false` if every element is distinct.",
-  "constraints": ["1 <= nums.length <= 10^5", "-10^9 <= nums[i] <= 10^9"],
+  "constraints": [
+    "1 <= nums.length <= 10^5",
+    "-10^9 <= nums[i] <= 10^9"
+  ],
   "examples": [
-    { "input": "nums = [1,2,3,1]", "output": "true", "explanation": "The value 1 appears twice." },
-    { "input": "nums = [1,2,3,4]", "output": "false" },
-    { "input": "nums = [1,1,1,3,3,4,3,2,4,2]", "output": "true" }
+    {
+      "input": "nums = [1,2,3,1]",
+      "output": "true",
+      "explanation": "The value 1 appears twice."
+    },
+    {
+      "input": "nums = [1,2,3,4]",
+      "output": "false"
+    },
+    {
+      "input": "nums = [1,1,1,3,3,4,3,2,4,2]",
+      "output": "true"
+    }
   ],
   "functionName": {
     "python": "contains_duplicate",
@@ -22,11 +43,70 @@
     "typescript": "function containsDuplicate(nums: number[]): boolean {\n  // Return true if any value appears at least twice.\n  return false;\n}\n"
   },
   "tests": [
-    { "name": "has duplicate", "args": [[1, 2, 3, 1]], "expected": true },
-    { "name": "all distinct", "args": [[1, 2, 3, 4]], "expected": false },
-    { "name": "many duplicates", "args": [[1, 1, 1, 3, 3, 4, 3, 2, 4, 2]], "expected": true },
-    { "name": "single element", "args": [[7]], "expected": false, "hidden": true },
-    { "name": "negatives distinct", "args": [[-1, -2, -3]], "expected": false, "hidden": true }
+    {
+      "name": "has duplicate",
+      "args": [
+        [
+          1,
+          2,
+          3,
+          1
+        ]
+      ],
+      "expected": true
+    },
+    {
+      "name": "all distinct",
+      "args": [
+        [
+          1,
+          2,
+          3,
+          4
+        ]
+      ],
+      "expected": false
+    },
+    {
+      "name": "many duplicates",
+      "args": [
+        [
+          1,
+          1,
+          1,
+          3,
+          3,
+          4,
+          3,
+          2,
+          4,
+          2
+        ]
+      ],
+      "expected": true
+    },
+    {
+      "name": "single element",
+      "args": [
+        [
+          7
+        ]
+      ],
+      "expected": false,
+      "hidden": true
+    },
+    {
+      "name": "negatives distinct",
+      "args": [
+        [
+          -1,
+          -2,
+          -3
+        ]
+      ],
+      "expected": false,
+      "hidden": true
+    }
   ],
   "solutions": [
     {

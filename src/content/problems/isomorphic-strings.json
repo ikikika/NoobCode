@@ -7,6 +7,7 @@
     "hash-map"
   ],
   "patterns": [
+    "uncurated-questions",
     "hash-map"
   ],
   "description": "Two strings `s` and `t` are **isomorphic** if the characters in `s` can be\nreplaced to get `t`, with a consistent one-to-one mapping: each character maps\nto exactly one other, and no two characters map to the same one. Return whether\n`s` and `t` are isomorphic.",

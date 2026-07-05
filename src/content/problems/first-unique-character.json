@@ -7,6 +7,7 @@
     "hash-map"
   ],
   "patterns": [
+    "uncurated-questions",
     "hash-map"
   ],
   "description": "Given a string `s`, find the **first non-repeating character** and return its\nindex. If it does not exist, return `-1`.",

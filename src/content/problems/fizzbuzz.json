@@ -8,6 +8,7 @@
     "simulation"
   ],
   "patterns": [
+    "uncurated-questions",
     "brute-force"
   ],
   "description": "Given an integer `n`, return a string array `answer` (1-indexed) where for\neach `i` from 1 to `n`: `\"FizzBuzz\"` if `i` is divisible by 3 and 5, `\"Fizz\"`\nif divisible by 3, `\"Buzz\"` if divisible by 5, otherwise the number as a\nstring.",

@@ -6,6 +6,7 @@
     "string"
   ],
   "patterns": [
+    "uncurated-questions",
     "brute-force"
   ],
   "description": "Given a string `s` consisting of words separated by spaces, return the length\nof the **last word**. A word is a maximal substring of non-space characters.",

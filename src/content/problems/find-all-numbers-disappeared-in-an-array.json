@@ -7,6 +7,7 @@
     "hash-set"
   ],
   "patterns": [
+    "uncurated-questions",
     "hash-set"
   ],
   "description": "Given an array `nums` of `n` integers where each value is in the range\n`[1, n]`, return an array of all the integers in `[1, n]` that **do not appear**\nin `nums`.",

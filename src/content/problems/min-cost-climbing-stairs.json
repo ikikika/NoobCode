@@ -7,6 +7,7 @@
     "dynamic-programming"
   ],
   "patterns": [
+    "uncurated-questions",
     "dynamic-programming"
   ],
   "description": "You are given an array `cost` where `cost[i]` is the cost of step `i`. Once you\npay, you may climb one or two steps. You can start at step `0` or step `1`.\nReturn the **minimum cost** to reach the top (just past the last step).",

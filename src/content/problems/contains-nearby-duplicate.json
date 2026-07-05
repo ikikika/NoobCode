@@ -8,6 +8,7 @@
     "sliding-window"
   ],
   "patterns": [
+    "uncurated-questions",
     "hash-map",
     "sliding-window"
   ],

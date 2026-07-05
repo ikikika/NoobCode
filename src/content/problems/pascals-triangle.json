@@ -7,6 +7,7 @@
     "dynamic-programming"
   ],
   "patterns": [
+    "uncurated-questions",
     "dynamic-programming"
   ],
   "description": "Given an integer `numRows`, return the first `numRows` of **Pascal's\ntriangle**. Each number is the sum of the two numbers directly above it.",

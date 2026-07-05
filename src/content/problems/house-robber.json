@@ -7,6 +7,7 @@
     "dynamic-programming"
   ],
   "patterns": [
+    "uncurated-questions",
     "dynamic-programming"
   ],
   "description": "You are a robber planning to rob houses along a street. Each house has some\nmoney, but adjacent houses have connected alarms, so you cannot rob two\nadjacent houses. Given an integer array `nums`, return the **maximum** amount\nyou can rob without alerting the police.",

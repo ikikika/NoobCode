@@ -7,6 +7,7 @@
     "hash-set"
   ],
   "patterns": [
+    "uncurated-questions",
     "hash-set"
   ],
   "description": "A **happy number** is defined by this process: replace the number with the sum\nof the squares of its digits, and repeat until the number equals `1` (happy) or\nit loops endlessly in a cycle that never reaches `1`.\n\nGiven `n`, return `true` if it is a happy number, and `false` otherwise.",

@@ -8,6 +8,7 @@
     "sorting"
   ],
   "patterns": [
+    "uncurated-questions",
     "hash-map",
     "sorting"
   ],

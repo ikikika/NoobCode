@@ -8,6 +8,7 @@
     "recursion"
   ],
   "patterns": [
+    "uncurated-questions",
     "dynamic-programming",
     "recursion"
   ],

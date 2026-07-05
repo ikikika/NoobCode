@@ -7,6 +7,7 @@
     "two-pointers"
   ],
   "patterns": [
+    "uncurated-questions",
     "two-pointers"
   ],
   "description": "Given two strings `s` and `t`, return `true` if `s` is a **subsequence** of\n`t`, and `false` otherwise.\n\nA subsequence is formed by deleting some (possibly zero) characters from `t`\nwithout changing the order of the remaining characters.",

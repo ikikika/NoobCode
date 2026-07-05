@@ -7,6 +7,7 @@
     "breadth-first-search"
   ],
   "patterns": [
+    "uncurated-questions",
     "breadth-first-search",
     "greedy"
   ],
