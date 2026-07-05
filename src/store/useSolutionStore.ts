@@ -14,7 +14,7 @@ interface SolutionState {
 export const useSolutionStore = create<SolutionState>((set) => ({
   activeSolutionIndex: 0,
   activeStepIndex: 0,
-  activeLanguage: 'python',
+  activeLanguage: 'typescript',
   setSolutionIndex: (index) => set({ activeSolutionIndex: index, activeStepIndex: 0 }),
   setStepIndex: (index) => set({ activeStepIndex: index }),
   setLanguage: (language) => set({ activeLanguage: language }),

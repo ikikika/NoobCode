@@ -25,7 +25,7 @@ export async function seed(page: Page, opts: SeedOptions = {}): Promise<void> {
         state: {
           solved: {},
           savedCode: o.savedCode ?? {},
-          lastLanguage: o.lastLanguage ?? 'python',
+          lastLanguage: o.lastLanguage ?? 'typescript',
           attempts: [],
           review: {},
           schedule: {},

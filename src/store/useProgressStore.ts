@@ -53,7 +53,7 @@ export const useProgressStore = create<ProgressState>()(
     (set, get) => ({
       solved: {},
       savedCode: {},
-      lastLanguage: 'python',
+      lastLanguage: 'typescript',
       attempts: [],
       review: {},
       schedule: {},
