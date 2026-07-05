@@ -21,9 +21,42 @@ import { useMediaQuery } from '../../lib/useMediaQuery'
 
 type RightTab = 'code' | 'walkthrough' | 'results' | 'review' | 'history' | 'scratch'
 
+const WALKTHROUGH_TAB = { id: 'walkthrough', label: 'Walkthrough' } as const
+const MORE_TAB = { id: 'more', label: '...' } as const
+
+const ALL_RIGHT_TABS = [
+  { id: 'code', label: 'Code' },
+  WALKTHROUGH_TAB,
+  { id: 'results', label: 'Results' },
+  { id: 'review', label: 'Review' },
+  { id: 'history', label: 'History' },
+  { id: 'scratch', label: 'Scratch' },
+] as const
+
 export function ProblemDetail({ problem }: { problem: Problem }) {
-  const [rightTab, setRightTab] = useState<RightTab>('code')
+  const [rightTab, setRightTab] = useState<RightTab>('walkthrough')
+  const [showAllTabs, setShowAllTabs] = useState(false)
   const [walkthroughFullscreen, setWalkthroughFullscreen] = useState(false)
+
+  const switchRightTab = (tab: RightTab) => {
+    if (tab !== 'walkthrough') setShowAllTabs(true)
+    setRightTab(tab)
+  }
+
+  const onRightTabChange = (id: string) => {
+    if (id === 'more') {
+      setShowAllTabs((expanded) => {
+        if (expanded && rightTab !== 'walkthrough') setRightTab('walkthrough')
+        return !expanded
+      })
+      return
+    }
+    setRightTab(id as RightTab)
+  }
+
+  const visibleRightTabs = showAllTabs
+    ? [...ALL_RIGHT_TABS, MORE_TAB]
+    : [WALKTHROUGH_TAB, MORE_TAB]
 
   const lastLanguage = useProgressStore((s) => s.lastLanguage)
   const setLastLanguage = useProgressStore((s) => s.setLastLanguage)
@@ -70,7 +103,7 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
   }
 
   const handleRun = async (sampleOnly: boolean) => {
-    setRightTab('results')
+    switchRightTab('results')
     const fnName = problem.functionName[language]
     const userCode = code
     const tests = sampleOnly ? problem.tests.filter((t) => !t.hidden) : problem.tests
@@ -107,7 +140,7 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
           code: userCode,
         })
         storeReview(problem.slug, heuristicReview)
-        setRightTab('review')
+        switchRightTab('review')
 
         if (aiEnabled && apiKey) {
           const enhanced = await enhanceReview(
@@ -226,18 +259,7 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
             </div>
           </div>
 
-          <Tabs
-            tabs={[
-              { id: 'code', label: 'Code' },
-              { id: 'walkthrough', label: 'Walkthrough' },
-              { id: 'results', label: 'Results' },
-              { id: 'review', label: 'Review' },
-              { id: 'history', label: 'History' },
-              { id: 'scratch', label: 'Scratch' },
-            ]}
-            active={rightTab}
-            onChange={(id) => setRightTab(id as RightTab)}
-          />
+          <Tabs tabs={visibleRightTabs} active={rightTab} onChange={onRightTabChange} />
 
           <div className="min-h-0 flex-1">
             {rightTab === 'code' && (
