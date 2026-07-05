@@ -1,6 +1,7 @@
 import type { MouseEvent } from 'react'
 import { Link, NavLink, Outlet } from 'react-router-dom'
 import { SettingsMenu } from './SettingsMenu'
+import { ThemeToggle } from './ThemeToggle'
 
 function navClass({ isActive }: { isActive: boolean }) {
   return isActive ? 'on' : undefined
@@ -40,6 +41,7 @@ export function Layout() {
             +
           </Link>
           <SettingsMenu />
+          <ThemeToggle />
         </div>
       </header>
       <main id="main-content" tabIndex={-1} className="nc-main min-h-0 flex-1 overflow-auto">

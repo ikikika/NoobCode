@@ -190,7 +190,18 @@ const THEME_IDS = THEMES.map((t) => t.id)
 export type ThemeId = (typeof THEMES)[number]['id']
 
 export const DEFAULT_THEME: ThemeId = 'cream'
+export const DEFAULT_DARK_THEME: ThemeId = 'midnight'
 export const THEME_STORAGE_KEY = 'noobcode-theme'
+export const LAST_LIGHT_THEME_KEY = 'noobcode-last-light-theme'
+export const LAST_DARK_THEME_KEY = 'noobcode-last-dark-theme'
+
+export function getTheme(themeId: ThemeId): Theme | undefined {
+  return THEMES.find((t) => t.id === themeId)
+}
+
+export function isPresetDark(themeId: ThemeId): boolean {
+  return getTheme(themeId)?.dark ?? false
+}
 
 export function isThemeId(value: unknown): value is ThemeId {
   return typeof value === 'string' && THEME_IDS.includes(value)
