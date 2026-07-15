@@ -18,7 +18,7 @@ import type { ExecSpec } from '../features/runner/LanguageRunner'
 
 const problems = Object.values(builtinProblems)
 
-function finalStepCode(steps: { code: { javascript: string; typescript: string } }[]) {
+function finalStepCode(steps: { code: string }[]) {
   return steps[steps.length - 1].code
 }
 
@@ -32,17 +32,18 @@ describe('reference solutions pass their own tests', () => {
 
     problem.solutions.forEach((solution, i) => {
       const label = `${problem.slug} › solution[${i}] "${solution.approachName}"`
-      const code = finalStepCode(solution.steps)
 
       it(`${label} — JavaScript`, () => {
-        const result = runJsTests(code.javascript, problem.functionName.javascript, problem.tests, spec)
+        const code = finalStepCode(solution.steps.javascript)
+        const result = runJsTests(code, problem.functionName.javascript, problem.tests, spec)
         const failed = result.cases.filter((c) => !c.passed).map((c) => c.name)
         expect(result.error, `${label} JS load error: ${result.error}`).toBeUndefined()
         expect(result.passed, `${label} failing JS cases: ${failed.join(', ')}`).toBe(true)
       })
 
       it(`${label} — TypeScript`, () => {
-        const js = transpileTs(code.typescript)
+        const code = finalStepCode(solution.steps.typescript)
+        const js = transpileTs(code)
         const result = runJsTests(js, problem.functionName.typescript, problem.tests, spec)
         const failed = result.cases.filter((c) => !c.passed).map((c) => c.name)
         expect(result.error, `${label} TS load error: ${result.error}`).toBeUndefined()

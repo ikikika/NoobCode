@@ -119,53 +119,89 @@
           "twoPointer": false
         }
       },
-      "steps": [
-        {
-          "title": "Start from the function shape",
-          "explanation": "Begin with the signature and a default `0` return.",
-          "code": {
-            "python": "def max_profit(prices):\n    return 0\n",
-            "javascript": "function maxProfit(prices) {\n  return 0;\n}\n",
-            "typescript": "function maxProfit(prices: number[]): number {\n  return 0;\n}\n"
+      "steps": {
+        "python": [
+          {
+            "title": "Start from the function shape",
+            "explanation": "Begin with the signature and a default `0` return.",
+            "code": "def max_profit(prices):\n    return 0\n"
+          },
+          {
+            "title": "Track cheapest price and best profit",
+            "explanation": "Start with an impossibly high minimum and zero profit.",
+            "code": "def max_profit(prices):\n    min_price = float('inf')\n    best = 0\n    return best\n"
+          },
+          {
+            "title": "Walk through the prices",
+            "explanation": "Consider each day’s price once.",
+            "code": "def max_profit(prices):\n    min_price = float('inf')\n    best = 0\n    for p in prices:\n        pass\n    return best\n"
+          },
+          {
+            "title": "Update the cheapest price",
+            "explanation": "Lower the running minimum whenever we see a cheaper day.",
+            "code": "def max_profit(prices):\n    min_price = float('inf')\n    best = 0\n    for p in prices:\n        if p < min_price:\n            min_price = p\n    return best\n"
+          },
+          {
+            "title": "Update the best profit",
+            "explanation": "Otherwise, selling today against the cheapest day might beat our best so far.",
+            "code": "def max_profit(prices):\n    min_price = float('inf')\n    best = 0\n    for p in prices:\n        if p < min_price:\n            min_price = p\n        elif p - min_price > best:\n            best = p - min_price\n    return best\n"
           }
-        },
-        {
-          "title": "Track cheapest price and best profit",
-          "explanation": "Start with an impossibly high minimum and zero profit.",
-          "code": {
-            "python": "def max_profit(prices):\n    min_price = float('inf')\n    best = 0\n    return best\n",
-            "javascript": "function maxProfit(prices) {\n  let minPrice = Infinity;\n  let best = 0;\n  return best;\n}\n",
-            "typescript": "function maxProfit(prices: number[]): number {\n  let minPrice = Infinity;\n  let best = 0;\n  return best;\n}\n"
+        ],
+        "javascript": [
+          {
+            "title": "Start from the function shape",
+            "explanation": "Begin with the signature and a default `0` return.",
+            "code": "function maxProfit(prices) {\n  return 0;\n}\n"
+          },
+          {
+            "title": "Track cheapest price and best profit",
+            "explanation": "Start with an impossibly high minimum and zero profit.",
+            "code": "function maxProfit(prices) {\n  let minPrice = Infinity;\n  let best = 0;\n  return best;\n}\n"
+          },
+          {
+            "title": "Walk through the prices",
+            "explanation": "Consider each day’s price once.",
+            "code": "function maxProfit(prices) {\n  let minPrice = Infinity;\n  let best = 0;\n  for (const p of prices) {\n  }\n  return best;\n}\n"
+          },
+          {
+            "title": "Update the cheapest price",
+            "explanation": "Lower the running minimum whenever we see a cheaper day.",
+            "code": "function maxProfit(prices) {\n  let minPrice = Infinity;\n  let best = 0;\n  for (const p of prices) {\n    if (p < minPrice) {\n      minPrice = p;\n    }\n  }\n  return best;\n}\n"
+          },
+          {
+            "title": "Update the best profit",
+            "explanation": "Otherwise, selling today against the cheapest day might beat our best so far.",
+            "code": "function maxProfit(prices) {\n  let minPrice = Infinity;\n  let best = 0;\n  for (const p of prices) {\n    if (p < minPrice) {\n      minPrice = p;\n    } else if (p - minPrice > best) {\n      best = p - minPrice;\n    }\n  }\n  return best;\n}\n"
           }
-        },
-        {
-          "title": "Walk through the prices",
-          "explanation": "Consider each day’s price once.",
-          "code": {
-            "python": "def max_profit(prices):\n    min_price = float('inf')\n    best = 0\n    for p in prices:\n        pass\n    return best\n",
-            "javascript": "function maxProfit(prices) {\n  let minPrice = Infinity;\n  let best = 0;\n  for (const p of prices) {\n  }\n  return best;\n}\n",
-            "typescript": "function maxProfit(prices: number[]): number {\n  let minPrice = Infinity;\n  let best = 0;\n  for (const p of prices) {\n  }\n  return best;\n}\n"
+        ],
+        "typescript": [
+          {
+            "title": "Start from the function shape",
+            "explanation": "Begin with the signature and a default `0` return.",
+            "code": "function maxProfit(prices: number[]): number {\n  return 0;\n}\n"
+          },
+          {
+            "title": "Track cheapest price and best profit",
+            "explanation": "Start with an impossibly high minimum and zero profit.",
+            "code": "function maxProfit(prices: number[]): number {\n  let minPrice = Infinity;\n  let best = 0;\n  return best;\n}\n"
+          },
+          {
+            "title": "Walk through the prices",
+            "explanation": "Consider each day’s price once.",
+            "code": "function maxProfit(prices: number[]): number {\n  let minPrice = Infinity;\n  let best = 0;\n  for (const p of prices) {\n  }\n  return best;\n}\n"
+          },
+          {
+            "title": "Update the cheapest price",
+            "explanation": "Lower the running minimum whenever we see a cheaper day.",
+            "code": "function maxProfit(prices: number[]): number {\n  let minPrice = Infinity;\n  let best = 0;\n  for (const p of prices) {\n    if (p < minPrice) {\n      minPrice = p;\n    }\n  }\n  return best;\n}\n"
+          },
+          {
+            "title": "Update the best profit",
+            "explanation": "Otherwise, selling today against the cheapest day might beat our best so far.",
+            "code": "function maxProfit(prices: number[]): number {\n  let minPrice = Infinity;\n  let best = 0;\n  for (const p of prices) {\n    if (p < minPrice) {\n      minPrice = p;\n    } else if (p - minPrice > best) {\n      best = p - minPrice;\n    }\n  }\n  return best;\n}\n"
           }
-        },
-        {
-          "title": "Update the cheapest price",
-          "explanation": "Lower the running minimum whenever we see a cheaper day.",
-          "code": {
-            "python": "def max_profit(prices):\n    min_price = float('inf')\n    best = 0\n    for p in prices:\n        if p < min_price:\n            min_price = p\n    return best\n",
-            "javascript": "function maxProfit(prices) {\n  let minPrice = Infinity;\n  let best = 0;\n  for (const p of prices) {\n    if (p < minPrice) {\n      minPrice = p;\n    }\n  }\n  return best;\n}\n",
-            "typescript": "function maxProfit(prices: number[]): number {\n  let minPrice = Infinity;\n  let best = 0;\n  for (const p of prices) {\n    if (p < minPrice) {\n      minPrice = p;\n    }\n  }\n  return best;\n}\n"
-          }
-        },
-        {
-          "title": "Update the best profit",
-          "explanation": "Otherwise, selling today against the cheapest day might beat our best so far.",
-          "code": {
-            "python": "def max_profit(prices):\n    min_price = float('inf')\n    best = 0\n    for p in prices:\n        if p < min_price:\n            min_price = p\n        elif p - min_price > best:\n            best = p - min_price\n    return best\n",
-            "javascript": "function maxProfit(prices) {\n  let minPrice = Infinity;\n  let best = 0;\n  for (const p of prices) {\n    if (p < minPrice) {\n      minPrice = p;\n    } else if (p - minPrice > best) {\n      best = p - minPrice;\n    }\n  }\n  return best;\n}\n",
-            "typescript": "function maxProfit(prices: number[]): number {\n  let minPrice = Infinity;\n  let best = 0;\n  for (const p of prices) {\n    if (p < minPrice) {\n      minPrice = p;\n    } else if (p - minPrice > best) {\n      best = p - minPrice;\n    }\n  }\n  return best;\n}\n"
-          }
-        }
-      ]
+        ]
+      }
     },
     {
       "approachName": "Brute Force (all pairs)",
@@ -183,53 +219,89 @@
           "twoPointer": false
         }
       },
-      "steps": [
-        {
-          "title": "Start from the function shape",
-          "explanation": "Begin with the signature and a default `0` return.",
-          "code": {
-            "python": "def max_profit(prices):\n    return 0\n",
-            "javascript": "function maxProfit(prices) {\n  return 0;\n}\n",
-            "typescript": "function maxProfit(prices: number[]): number {\n  return 0;\n}\n"
+      "steps": {
+        "python": [
+          {
+            "title": "Start from the function shape",
+            "explanation": "Begin with the signature and a default `0` return.",
+            "code": "def max_profit(prices):\n    return 0\n"
+          },
+          {
+            "title": "Hold the best profit",
+            "explanation": "Track the largest profit found so far.",
+            "code": "def max_profit(prices):\n    best = 0\n    return best\n"
+          },
+          {
+            "title": "Pick a buy day",
+            "explanation": "Loop over each possible buy day `i`.",
+            "code": "def max_profit(prices):\n    best = 0\n    for i in range(len(prices)):\n        pass\n    return best\n"
+          },
+          {
+            "title": "Pick a later sell day",
+            "explanation": "For each buy day, try every later sell day `j`.",
+            "code": "def max_profit(prices):\n    best = 0\n    for i in range(len(prices)):\n        for j in range(i + 1, len(prices)):\n            pass\n    return best\n"
+          },
+          {
+            "title": "Keep the largest profit",
+            "explanation": "Compare each pair’s profit against the best seen so far.",
+            "code": "def max_profit(prices):\n    best = 0\n    for i in range(len(prices)):\n        for j in range(i + 1, len(prices)):\n            best = max(best, prices[j] - prices[i])\n    return best\n"
           }
-        },
-        {
-          "title": "Hold the best profit",
-          "explanation": "Track the largest profit found so far.",
-          "code": {
-            "python": "def max_profit(prices):\n    best = 0\n    return best\n",
-            "javascript": "function maxProfit(prices) {\n  let best = 0;\n  return best;\n}\n",
-            "typescript": "function maxProfit(prices: number[]): number {\n  let best = 0;\n  return best;\n}\n"
+        ],
+        "javascript": [
+          {
+            "title": "Start from the function shape",
+            "explanation": "Begin with the signature and a default `0` return.",
+            "code": "function maxProfit(prices) {\n  return 0;\n}\n"
+          },
+          {
+            "title": "Hold the best profit",
+            "explanation": "Track the largest profit found so far.",
+            "code": "function maxProfit(prices) {\n  let best = 0;\n  return best;\n}\n"
+          },
+          {
+            "title": "Pick a buy day",
+            "explanation": "Loop over each possible buy day `i`.",
+            "code": "function maxProfit(prices) {\n  let best = 0;\n  for (let i = 0; i < prices.length; i++) {\n  }\n  return best;\n}\n"
+          },
+          {
+            "title": "Pick a later sell day",
+            "explanation": "For each buy day, try every later sell day `j`.",
+            "code": "function maxProfit(prices) {\n  let best = 0;\n  for (let i = 0; i < prices.length; i++) {\n    for (let j = i + 1; j < prices.length; j++) {\n    }\n  }\n  return best;\n}\n"
+          },
+          {
+            "title": "Keep the largest profit",
+            "explanation": "Compare each pair’s profit against the best seen so far.",
+            "code": "function maxProfit(prices) {\n  let best = 0;\n  for (let i = 0; i < prices.length; i++) {\n    for (let j = i + 1; j < prices.length; j++) {\n      best = Math.max(best, prices[j] - prices[i]);\n    }\n  }\n  return best;\n}\n"
           }
-        },
-        {
-          "title": "Pick a buy day",
-          "explanation": "Loop over each possible buy day `i`.",
-          "code": {
-            "python": "def max_profit(prices):\n    best = 0\n    for i in range(len(prices)):\n        pass\n    return best\n",
-            "javascript": "function maxProfit(prices) {\n  let best = 0;\n  for (let i = 0; i < prices.length; i++) {\n  }\n  return best;\n}\n",
-            "typescript": "function maxProfit(prices: number[]): number {\n  let best = 0;\n  for (let i = 0; i < prices.length; i++) {\n  }\n  return best;\n}\n"
+        ],
+        "typescript": [
+          {
+            "title": "Start from the function shape",
+            "explanation": "Begin with the signature and a default `0` return.",
+            "code": "function maxProfit(prices: number[]): number {\n  return 0;\n}\n"
+          },
+          {
+            "title": "Hold the best profit",
+            "explanation": "Track the largest profit found so far.",
+            "code": "function maxProfit(prices: number[]): number {\n  let best = 0;\n  return best;\n}\n"
+          },
+          {
+            "title": "Pick a buy day",
+            "explanation": "Loop over each possible buy day `i`.",
+            "code": "function maxProfit(prices: number[]): number {\n  let best = 0;\n  for (let i = 0; i < prices.length; i++) {\n  }\n  return best;\n}\n"
+          },
+          {
+            "title": "Pick a later sell day",
+            "explanation": "For each buy day, try every later sell day `j`.",
+            "code": "function maxProfit(prices: number[]): number {\n  let best = 0;\n  for (let i = 0; i < prices.length; i++) {\n    for (let j = i + 1; j < prices.length; j++) {\n    }\n  }\n  return best;\n}\n"
+          },
+          {
+            "title": "Keep the largest profit",
+            "explanation": "Compare each pair’s profit against the best seen so far.",
+            "code": "function maxProfit(prices: number[]): number {\n  let best = 0;\n  for (let i = 0; i < prices.length; i++) {\n    for (let j = i + 1; j < prices.length; j++) {\n      best = Math.max(best, prices[j] - prices[i]);\n    }\n  }\n  return best;\n}\n"
           }
-        },
-        {
-          "title": "Pick a later sell day",
-          "explanation": "For each buy day, try every later sell day `j`.",
-          "code": {
-            "python": "def max_profit(prices):\n    best = 0\n    for i in range(len(prices)):\n        for j in range(i + 1, len(prices)):\n            pass\n    return best\n",
-            "javascript": "function maxProfit(prices) {\n  let best = 0;\n  for (let i = 0; i < prices.length; i++) {\n    for (let j = i + 1; j < prices.length; j++) {\n    }\n  }\n  return best;\n}\n",
-            "typescript": "function maxProfit(prices: number[]): number {\n  let best = 0;\n  for (let i = 0; i < prices.length; i++) {\n    for (let j = i + 1; j < prices.length; j++) {\n    }\n  }\n  return best;\n}\n"
-          }
-        },
-        {
-          "title": "Keep the largest profit",
-          "explanation": "Compare each pair’s profit against the best seen so far.",
-          "code": {
-            "python": "def max_profit(prices):\n    best = 0\n    for i in range(len(prices)):\n        for j in range(i + 1, len(prices)):\n            best = max(best, prices[j] - prices[i])\n    return best\n",
-            "javascript": "function maxProfit(prices) {\n  let best = 0;\n  for (let i = 0; i < prices.length; i++) {\n    for (let j = i + 1; j < prices.length; j++) {\n      best = Math.max(best, prices[j] - prices[i]);\n    }\n  }\n  return best;\n}\n",
-            "typescript": "function maxProfit(prices: number[]): number {\n  let best = 0;\n  for (let i = 0; i < prices.length; i++) {\n    for (let j = i + 1; j < prices.length; j++) {\n      best = Math.max(best, prices[j] - prices[i]);\n    }\n  }\n  return best;\n}\n"
-          }
-        }
-      ]
+        ]
+      }
     }
   ]
 }

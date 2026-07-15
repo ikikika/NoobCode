@@ -96,7 +96,11 @@ export function buildProblemSkeleton({
             twoPointer: false,
           },
         },
-        steps: [{ title: 'TODO', explanation: 'TODO', code: { ...stub } }],
+        steps: {
+          python: [{ title: 'TODO', explanation: 'TODO', code: stub.python }],
+          javascript: [{ title: 'TODO', explanation: 'TODO', code: stub.javascript }],
+          typescript: [{ title: 'TODO', explanation: 'TODO', code: stub.typescript }],
+        },
       },
     ],
   }

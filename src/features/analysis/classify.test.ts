@@ -63,7 +63,11 @@ const problem = {
           twoPointer: false,
         },
       },
-      steps: [{ explanation: 'x', code: { python: '', javascript: '' } }],
+      steps: {
+        python: [{ explanation: 'x', code: '' }],
+        javascript: [{ explanation: 'x', code: '' }],
+        typescript: [{ explanation: 'x', code: '' }],
+      },
     },
   ],
 } as unknown as Problem

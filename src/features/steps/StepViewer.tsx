@@ -41,11 +41,12 @@ export function StepViewer({
   const model = useSettingsStore((s) => s.model)
 
   const solution = solutions[Math.min(activeSolutionIndex, solutions.length - 1)]
-  const stepIndex = Math.min(activeStepIndex, solution.steps.length - 1)
-  const step = solution.steps[stepIndex]
+  const steps = solution.steps[language]
+  const stepIndex = Math.min(activeStepIndex, steps.length - 1)
+  const step = steps[stepIndex]
 
-  const original = stepIndex > 0 ? solution.steps[stepIndex - 1].code[language] : ''
-  const modified = step.code[language]
+  const original = stepIndex > 0 ? steps[stepIndex - 1].code : ''
+  const modified = step.code
 
   const [explanation, setExplanation] = useState<string | null>(null)
   const [explaining, setExplaining] = useState(false)
@@ -123,7 +124,7 @@ export function StepViewer({
             ‹ Prev
           </button>
           <div className="flex items-center gap-1.5">
-            {solution.steps.map((_, i) => (
+            {steps.map((_, i) => (
               <button
                 key={i}
                 onClick={() => setStepIndex(i)}
@@ -133,14 +134,14 @@ export function StepViewer({
             ))}
           </div>
           <button
-            onClick={() => setStepIndex(Math.min(solution.steps.length - 1, stepIndex + 1))}
-            disabled={stepIndex === solution.steps.length - 1}
+            onClick={() => setStepIndex(Math.min(steps.length - 1, stepIndex + 1))}
+            disabled={stepIndex === steps.length - 1}
             className="rounded-md border border-line px-2 py-1 text-xs text-fg-muted disabled:opacity-40 hover:text-fg"
           >
             Next ›
           </button>
           <span className="ml-auto text-xs text-fg-subtle">
-            Step {stepIndex + 1} / {solution.steps.length}
+            Step {stepIndex + 1} / {steps.length}
           </span>
         </div>
         {step.title && <h3 className="mb-1 text-sm font-semibold text-fg">{step.title}</h3>}

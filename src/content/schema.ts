@@ -41,9 +41,17 @@ export type Example = z.infer<typeof exampleSchema>
 export const solutionStepSchema = z.object({
   title: z.string().optional(),
   explanation: z.string(),
-  code: langCodeSchema,
+  code: z.string(),
 })
 export type SolutionStep = z.infer<typeof solutionStepSchema>
+
+/** Walkthrough steps keyed by language so each language can have its own count/content. */
+export const stepsByLanguageSchema = z.object({
+  python: z.array(solutionStepSchema).min(1),
+  javascript: z.array(solutionStepSchema).min(1),
+  typescript: z.array(solutionStepSchema).min(1),
+})
+export type StepsByLanguage = z.infer<typeof stepsByLanguageSchema>
 
 // IMPORTANT: pattern + technique schemas MUST precede solutionSchema.
 export const patternIdSchema = z.enum(PATTERNS)
@@ -70,7 +78,7 @@ export const solutionSchema = z.object({
   timeComplexity: z.string(),
   spaceComplexity: z.string(),
   technique: techniqueSchema.optional(),
-  steps: z.array(solutionStepSchema).min(1),
+  steps: stepsByLanguageSchema,
 })
 export type Solution = z.infer<typeof solutionSchema>
 

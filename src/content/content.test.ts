@@ -18,8 +18,9 @@ describe('built-in content', () => {
         expect(problem.functionName[lang], `${problem.slug} functionName.${lang}`).toBeTruthy()
         expect(problem.starterCode[lang], `${problem.slug} starterCode.${lang}`).toBeTruthy()
         for (const sol of problem.solutions) {
-          for (const step of sol.steps) {
-            expect(step.code[lang], `${problem.slug} step code.${lang}`).toBeTruthy()
+          expect(sol.steps[lang].length, `${problem.slug} steps.${lang}`).toBeGreaterThan(0)
+          for (const step of sol.steps[lang]) {
+            expect(step.code, `${problem.slug} step code.${lang}`).toBeTruthy()
           }
         }
       }
