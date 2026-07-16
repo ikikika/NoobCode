@@ -46,10 +46,10 @@ export function monacoSetup() {
         'editorLineNumber.foreground': m.lineNumber,
         'editor.lineHighlightBackground': m.lineHighlight,
         'editorCursor.foreground': m.cursor,
-        'diffEditor.insertedTextBackground': `#${m.diffInsert}80`,
-        'diffEditor.removedTextBackground': `#${m.diffRemove}80`,
-        'diffEditor.insertedLineBackground': `#${m.diffInsert}40`,
-        'diffEditor.removedLineBackground': `#${m.diffRemove}40`,
+        'diffEditor.insertedTextBackground': `#${m.diffInsert}20`,
+        'diffEditor.removedTextBackground': `#${m.diffRemove}20`,
+        'diffEditor.insertedLineBackground': `#${m.diffInsert}18`,
+        'diffEditor.removedLineBackground': `#${m.diffRemove}18`,
       },
     })
   }
@@ -77,10 +77,10 @@ function defineCustomMonacoTheme(c: CustomColors) {
       'editorLineNumber.foreground': c['fg-subtle'],
       'editor.lineHighlightBackground': c['surface-raised'],
       'editorCursor.foreground': c.accent,
-      'diffEditor.insertedTextBackground': `#${noHash(c['diff-added'])}80`,
-      'diffEditor.removedTextBackground': `#${noHash(c['diff-removed'])}80`,
-      'diffEditor.insertedLineBackground': `#${noHash(c['diff-added'])}40`,
-      'diffEditor.removedLineBackground': `#${noHash(c['diff-removed'])}40`,
+      'diffEditor.insertedTextBackground': `#${noHash(c['diff-added'])}33`,
+      'diffEditor.removedTextBackground': `#${noHash(c['diff-removed'])}33`,
+      'diffEditor.insertedLineBackground': `#${noHash(c['diff-added'])}18`,
+      'diffEditor.removedLineBackground': `#${noHash(c['diff-removed'])}18`,
     },
   })
 }
