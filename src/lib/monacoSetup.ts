@@ -77,10 +77,10 @@ function defineCustomMonacoTheme(c: CustomColors) {
       'editorLineNumber.foreground': c['fg-subtle'],
       'editor.lineHighlightBackground': c['surface-raised'],
       'editorCursor.foreground': c.accent,
-      'diffEditor.insertedTextBackground': `#${noHash(c['pass-surface'])}80`,
-      'diffEditor.removedTextBackground': `#${noHash(c['fail-surface'])}80`,
-      'diffEditor.insertedLineBackground': `#${noHash(c['pass-surface'])}40`,
-      'diffEditor.removedLineBackground': `#${noHash(c['fail-surface'])}40`,
+      'diffEditor.insertedTextBackground': `#${noHash(c['diff-added'])}80`,
+      'diffEditor.removedTextBackground': `#${noHash(c['diff-removed'])}80`,
+      'diffEditor.insertedLineBackground': `#${noHash(c['diff-added'])}40`,
+      'diffEditor.removedLineBackground': `#${noHash(c['diff-removed'])}40`,
     },
   })
 }
