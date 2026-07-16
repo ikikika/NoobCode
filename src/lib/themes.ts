@@ -194,6 +194,10 @@ export const DEFAULT_DARK_THEME: ThemeId = 'midnight'
 export const THEME_STORAGE_KEY = 'noobcode-theme'
 export const LAST_LIGHT_THEME_KEY = 'noobcode-last-light-theme'
 export const LAST_DARK_THEME_KEY = 'noobcode-last-dark-theme'
+/** 'system' | 'light' | 'dark' — whether light/dark follows the OS. */
+export const COLOR_SCHEME_STORAGE_KEY = 'noobcode-color-scheme'
+
+export type ColorSchemePreference = 'system' | 'light' | 'dark'
 
 export function getTheme(themeId: ThemeId): Theme | undefined {
   return THEMES.find((t) => t.id === themeId)

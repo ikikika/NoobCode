@@ -7,13 +7,26 @@
     <meta name="theme-color" content="#faf4e6" />
     <title>NoobCode</title>
     <script>
-      // Apply the saved color theme before first paint to avoid a flash. An
-      // unknown/absent id falls back to the cream defaults on :root. For a
-      // 'custom' theme, apply the saved per-token palette as inline vars too.
+      // Apply the color theme before first paint to avoid a flash.
+      // Preference: noobcode-color-scheme = system | light | dark (default system
+      // on first visit). Legacy installs with only noobcode-theme keep that lock.
       try {
+        var DARK = { charcoal: 1, midnight: 1, grape: 1 }
+        var scheme = localStorage.getItem('noobcode-color-scheme')
         var t = localStorage.getItem('noobcode-theme')
+        if (scheme !== 'system' && scheme !== 'light' && scheme !== 'dark') scheme = 'system'
+        var dark =
+          scheme === 'dark' ||
+          (scheme === 'system' &&
+            window.matchMedia &&
+            window.matchMedia('(prefers-color-scheme: dark)').matches)
+        if (scheme === 'system' || !t || t === 'custom' || !!DARK[t] !== dark) {
+          t =
+            localStorage.getItem(dark ? 'noobcode-last-dark-theme' : 'noobcode-last-light-theme') ||
+            (dark ? 'midnight' : 'cream')
+        }
         if (t) document.documentElement.dataset.theme = t
-        if (t === 'custom') {
+        if (t === 'custom' && scheme !== 'system') {
           var c = JSON.parse(localStorage.getItem('noobcode-custom-theme') || '{}')
           var root = document.documentElement
           for (var k in c) root.style.setProperty('--color-' + k, c[k])
