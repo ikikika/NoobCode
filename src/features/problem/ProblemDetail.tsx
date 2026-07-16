@@ -33,10 +33,21 @@ const ALL_RIGHT_TABS = [
   { id: 'scratch', label: 'Scratch' },
 ] as const
 
+type MobilePane = 'problem' | 'workspace'
+
+const MOBILE_PANES = [
+  { id: 'problem', label: 'Problem' },
+  { id: 'workspace', label: 'Workspace' },
+] as const
+
 export function ProblemDetail({ problem }: { problem: Problem }) {
   const [rightTab, setRightTab] = useState<RightTab>('walkthrough')
   const [showAllTabs, setShowAllTabs] = useState(false)
   const [walkthroughFullscreen, setWalkthroughFullscreen] = useState(false)
+  const [mobilePane, setMobilePane] = useState<MobilePane>('problem')
+
+  // Stack vs side-by-side; also drives the mobile full-screen pane tabs.
+  const isWide = useMediaQuery('(min-width: 768px)')
 
   const switchRightTab = (tab: RightTab) => {
     if (tab !== 'walkthrough') setShowAllTabs(true)
@@ -103,6 +114,7 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
   }
 
   const handleRun = async (sampleOnly: boolean) => {
+    if (!isWide) setMobilePane('workspace')
     switchRightTab('results')
     const fnName = problem.functionName[language]
     const userCode = code
@@ -163,10 +175,6 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
 
   const busy = status === 'loading' || status === 'running'
 
-  // Stack the panels vertically on narrow screens; side-by-side otherwise.
-  const isWide = useMediaQuery('(min-width: 768px)')
-  const direction = isWide ? 'horizontal' : 'vertical'
-
   // Ctrl/Cmd+Enter runs all tests. A ref keeps the listener stable while
   // always invoking the latest handler.
   const runRef = useRef(handleRun)
@@ -204,82 +212,97 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
     />
   )
 
+  const leftPanel = (
+    <div className="flex h-full flex-col">
+      <div className="min-h-0 flex-1">
+        <ProblemDescription problem={problem} />
+      </div>
+    </div>
+  )
+
+  const rightPanel = (
+    <div className="flex h-full flex-col">
+      <div className="flex flex-wrap items-center gap-2 border-b border-line p-2">
+        <LanguageSelect value={language} onChange={onChangeLanguage} />
+        <button
+          onClick={onReset}
+          className="rounded-md border border-line px-2.5 py-1 text-xs text-fg-muted hover:text-fg"
+        >
+          Reset
+        </button>
+        <div className="ml-auto flex items-center gap-2">
+          <button
+            onClick={() => handleRun(true)}
+            disabled={busy}
+            className="rounded-md border border-line px-3 py-1 text-xs font-medium text-fg hover:bg-surface-raised disabled:opacity-50"
+          >
+            Run Sample
+          </button>
+          {busy ? (
+            <button
+              onClick={() => interrupt(language)}
+              className="rounded-md border border-fail px-3 py-1 text-xs font-medium text-fail hover:bg-fail-surface"
+            >
+              Stop
+            </button>
+          ) : (
+            <button
+              onClick={() => handleRun(false)}
+              title="Run all tests (Ctrl/Cmd+Enter)"
+              className="flex items-center gap-1.5 rounded-md bg-accent px-3 py-1 text-xs font-medium text-accent-contrast hover:bg-accent-hover"
+            >
+              Run All
+              <kbd className="rounded border border-accent-contrast/40 px-1 text-[10px] font-normal opacity-80">
+                ⌘⏎
+              </kbd>
+            </button>
+          )}
+        </div>
+      </div>
+
+      <Tabs tabs={visibleRightTabs} active={rightTab} onChange={onRightTabChange} />
+
+      <div className="min-h-0 flex-1">
+        {rightTab === 'code' && (
+          <CodeEditor value={code} language={language} onChange={onChangeCode} />
+        )}
+        {rightTab === 'walkthrough' && !walkthroughFullscreen && walkthrough}
+        {rightTab === 'results' && (
+          <ResultsPanel status={status} result={result} loadingMessage={loadingMessage} />
+        )}
+        {rightTab === 'review' && <ReviewPanel slug={problem.slug} />}
+        {rightTab === 'history' && <HistoryPanel problem={problem} language={language} />}
+        {rightTab === 'scratch' && <ScratchPanel problem={problem} language={language} />}
+      </div>
+    </div>
+  )
+
   return (
     <>
-    <PanelGroup key={direction} direction={direction} className="h-full">
-      <Panel defaultSize={48} minSize={20}>
+      {isWide ? (
+        <PanelGroup direction="horizontal" className="h-full">
+          <Panel defaultSize={48} minSize={20}>
+            {leftPanel}
+          </Panel>
+          <PanelResizeHandle className="w-1.5 bg-line/40 transition-colors hover:bg-accent" />
+          <Panel defaultSize={52} minSize={20}>
+            {rightPanel}
+          </Panel>
+        </PanelGroup>
+      ) : (
         <div className="flex h-full flex-col">
-          <div className="min-h-0 flex-1">
-            <ProblemDescription problem={problem} />
-          </div>
+          <Tabs
+            tabs={[...MOBILE_PANES]}
+            active={mobilePane}
+            onChange={(id) => setMobilePane(id as MobilePane)}
+          />
+          <div className="min-h-0 flex-1">{mobilePane === 'problem' ? leftPanel : rightPanel}</div>
         </div>
-      </Panel>
+      )}
 
-      <PanelResizeHandle
-        className={`bg-line/40 transition-colors hover:bg-accent ${isWide ? 'w-1.5' : 'h-1.5'}`}
-      />
-
-      <Panel defaultSize={52} minSize={20}>
-        <div className="flex h-full flex-col">
-          <div className="flex flex-wrap items-center gap-2 border-b border-line p-2">
-            <LanguageSelect value={language} onChange={onChangeLanguage} />
-            <button
-              onClick={onReset}
-              className="rounded-md border border-line px-2.5 py-1 text-xs text-fg-muted hover:text-fg"
-            >
-              Reset
-            </button>
-            <div className="ml-auto flex items-center gap-2">
-              <button
-                onClick={() => handleRun(true)}
-                disabled={busy}
-                className="rounded-md border border-line px-3 py-1 text-xs font-medium text-fg hover:bg-surface-raised disabled:opacity-50"
-              >
-                Run Sample
-              </button>
-              {busy ? (
-                <button
-                  onClick={() => interrupt(language)}
-                  className="rounded-md border border-fail px-3 py-1 text-xs font-medium text-fail hover:bg-fail-surface"
-                >
-                  Stop
-                </button>
-              ) : (
-                <button
-                  onClick={() => handleRun(false)}
-                  title="Run all tests (Ctrl/Cmd+Enter)"
-                  className="flex items-center gap-1.5 rounded-md bg-accent px-3 py-1 text-xs font-medium text-accent-contrast hover:bg-accent-hover"
-                >
-                  Run All
-                  <kbd className="rounded border border-accent-contrast/40 px-1 text-[10px] font-normal opacity-80">
-                    ⌘⏎
-                  </kbd>
-                </button>
-              )}
-            </div>
-          </div>
-
-          <Tabs tabs={visibleRightTabs} active={rightTab} onChange={onRightTabChange} />
-
-          <div className="min-h-0 flex-1">
-            {rightTab === 'code' && (
-              <CodeEditor value={code} language={language} onChange={onChangeCode} />
-            )}
-            {rightTab === 'walkthrough' && !walkthroughFullscreen && walkthrough}
-            {rightTab === 'results' && (
-              <ResultsPanel status={status} result={result} loadingMessage={loadingMessage} />
-            )}
-            {rightTab === 'review' && <ReviewPanel slug={problem.slug} />}
-            {rightTab === 'history' && <HistoryPanel problem={problem} language={language} />}
-            {rightTab === 'scratch' && <ScratchPanel problem={problem} language={language} />}
-          </div>
-        </div>
-      </Panel>
-    </PanelGroup>
-
-    {walkthroughFullscreen && (
-      <div className="fixed inset-0 z-50 flex flex-col bg-surface">{walkthrough}</div>
-    )}
+      {walkthroughFullscreen && (
+        <div className="fixed inset-0 z-50 flex flex-col bg-surface">{walkthrough}</div>
+      )}
     </>
   )
 }

@@ -601,7 +601,7 @@ a.nc-reset {
   color: var(--color-fg);
 }
 
-/* Mobile boundary: keep this in lockstep with the 768px panel-stacking and
+/* Mobile boundary: keep this in lockstep with the 768px ProblemDetail and
    SkillsPage media queries so the whole app flips layout at one width. */
 @media (max-width: 767px) {
   .nc-head {
