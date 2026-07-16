@@ -1,11 +1,7 @@
 import type { MouseEvent } from 'react'
-import { Link, NavLink, Outlet } from 'react-router-dom'
+import { Link, Outlet } from 'react-router-dom'
 import { SettingsMenu } from './SettingsMenu'
 import { ThemeToggle } from './ThemeToggle'
-
-function navClass({ isActive }: { isActive: boolean }) {
-  return isActive ? 'on' : undefined
-}
 
 export function Layout() {
   // Hash routing makes an `href="#main"` skip link change the route, so move
@@ -28,14 +24,6 @@ export function Layout() {
         <Link to="/" className="nc-wordmark">
           <span className="br">{'</>'}</span> NoobCode
         </Link>
-        <nav className="nc-nav" aria-label="Primary">
-          <NavLink to="/problems" className={navClass}>
-            Problems
-          </NavLink>
-          <NavLink to="/skills" className={navClass}>
-            Skills
-          </NavLink>
-        </nav>
         <div className="nc-head-actions">
           <Link to="/new" className="nc-iconbtn" aria-label="New problem" title="New problem">
             +

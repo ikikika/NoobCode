@@ -18,14 +18,14 @@ describe('Layout accessibility', () => {
     expect(main?.getAttribute('tabindex')).toBe('-1')
   })
 
-  it('labels the primary navigation', () => {
+  it('does not show Problems or Skills nav tabs', () => {
     render(
       <MemoryRouter>
         <Layout />
       </MemoryRouter>,
     )
-    expect(screen.getByRole('navigation', { name: /primary/i })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Problems' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Skills' })).toBeInTheDocument()
+    expect(screen.queryByRole('navigation', { name: /primary/i })).not.toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: 'Problems' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: 'Skills' })).not.toBeInTheDocument()
   })
 })
