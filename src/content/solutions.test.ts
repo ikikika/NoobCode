@@ -33,22 +33,29 @@ describe('reference solutions pass their own tests', () => {
     problem.solutions.forEach((solution, i) => {
       const label = `${problem.slug} › solution[${i}] "${solution.approachName}"`
 
-      it(`${label} — JavaScript`, () => {
-        const code = finalStepCode(solution.steps.javascript)
-        const result = runJsTests(code, problem.functionName.javascript, problem.tests, spec)
-        const failed = result.cases.filter((c) => !c.passed).map((c) => c.name)
-        expect(result.error, `${label} JS load error: ${result.error}`).toBeUndefined()
-        expect(result.passed, `${label} failing JS cases: ${failed.join(', ')}`).toBe(true)
-      })
+      const jsSteps = solution.steps.javascript
+      const tsSteps = solution.steps.typescript
 
-      it(`${label} — TypeScript`, () => {
-        const code = finalStepCode(solution.steps.typescript)
-        const js = transpileTs(code)
-        const result = runJsTests(js, problem.functionName.typescript, problem.tests, spec)
-        const failed = result.cases.filter((c) => !c.passed).map((c) => c.name)
-        expect(result.error, `${label} TS load error: ${result.error}`).toBeUndefined()
-        expect(result.passed, `${label} failing TS cases: ${failed.join(', ')}`).toBe(true)
-      })
+      if (jsSteps) {
+        it(`${label} — JavaScript`, () => {
+          const code = finalStepCode(jsSteps)
+          const result = runJsTests(code, problem.functionName.javascript, problem.tests, spec)
+          const failed = result.cases.filter((c) => !c.passed).map((c) => c.name)
+          expect(result.error, `${label} JS load error: ${result.error}`).toBeUndefined()
+          expect(result.passed, `${label} failing JS cases: ${failed.join(', ')}`).toBe(true)
+        })
+      }
+
+      if (tsSteps) {
+        it(`${label} — TypeScript`, () => {
+          const code = finalStepCode(tsSteps)
+          const js = transpileTs(code)
+          const result = runJsTests(js, problem.functionName.typescript, problem.tests, spec)
+          const failed = result.cases.filter((c) => !c.passed).map((c) => c.name)
+          expect(result.error, `${label} TS load error: ${result.error}`).toBeUndefined()
+          expect(result.passed, `${label} failing TS cases: ${failed.join(', ')}`).toBe(true)
+        })
+      }
     })
   }
 })

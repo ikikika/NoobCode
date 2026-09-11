@@ -45,12 +45,18 @@ export const solutionStepSchema = z.object({
 })
 export type SolutionStep = z.infer<typeof solutionStepSchema>
 
-/** Walkthrough steps keyed by language so each language can have its own count/content. */
-export const stepsByLanguageSchema = z.object({
-  python: z.array(solutionStepSchema).min(1),
-  javascript: z.array(solutionStepSchema).min(1),
-  typescript: z.array(solutionStepSchema).min(1),
-})
+/** Walkthrough steps keyed by language so each language can have its own count/content.
+ * Languages are optional — include only the languages you want to ship for a solution.
+ * At least one language must have steps. */
+export const stepsByLanguageSchema = z
+  .object({
+    python: z.array(solutionStepSchema).min(1).optional(),
+    javascript: z.array(solutionStepSchema).min(1).optional(),
+    typescript: z.array(solutionStepSchema).min(1).optional(),
+  })
+  .refine((steps) => Boolean(steps.python || steps.javascript || steps.typescript), {
+    message: 'At least one language must have walkthrough steps',
+  })
 export type StepsByLanguage = z.infer<typeof stepsByLanguageSchema>
 
 // IMPORTANT: pattern + technique schemas MUST precede solutionSchema.
