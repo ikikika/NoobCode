@@ -143,6 +143,7 @@ export function StepViewer({
             fontSize: 13,
             scrollBeyondLastLine: false,
             automaticLayout: true,
+            wordWrap: 'on',
           }}
         />
       </div>
