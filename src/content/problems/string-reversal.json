@@ -147,7 +147,7 @@
     {
       "approachName": "Reduce",
       "summary": "Use a reduce function to iterate over the string and prepend each character to the result.",
-      "timeComplexity": "O(n)",
+      "timeComplexity": "O(n²)",
       "spaceComplexity": "O(n)",
       "technique": {
         "primaryPattern": "brute-force",
