@@ -26,7 +26,10 @@
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "validate:content": "tsx scripts/validate-content.ts",
-    "new:problem": "tsx scripts/new-problem.ts"
+    "new:problem": "tsx scripts/new-problem.ts",
+    "steps:unpack": "tsx scripts/steps.ts unpack",
+    "steps:pack": "tsx scripts/steps.ts pack",
+    "steps:check": "tsx scripts/steps.ts check"
   },
   "dependencies": {
     "@fontsource/hanken-grotesk": "^5.2.8",

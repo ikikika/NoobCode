@@ -3,7 +3,13 @@
 This document tells anyone — a human or an AI generating a new problem — how to
 decompose a `solution` into incremental **steps** so the Solution tab teaches the
 approach as a guided build-up. Read `docs/PROBLEM_JSON.md` for the full JSON
-field reference; this file is about the _pedagogy_ of the `steps` array.
+field reference (including **solution step sidecars** for multiline authoring);
+this file is about the _pedagogy_ of the `steps` array.
+
+## Authoring tip
+
+Prefer editing step code via sidecars (`npm run steps:unpack -- <slug>`), not as
+escaped `\n` strings in JSON. Pack when you are done (`npm run steps:pack`).
 
 ## The core idea
 

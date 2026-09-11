@@ -22,5 +22,6 @@
 
     "types": ["vite/client", "node", "vitest/globals", "@testing-library/jest-dom"]
   },
-  "include": ["src", "scripts"]
+  "include": ["src", "scripts"],
+  "exclude": ["src/content/problems/*/solutions"]
 }

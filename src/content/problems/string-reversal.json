@@ -1,0 +1,102 @@
+{
+  "slug": "string-reversal",
+  "title": "String Reversal",
+  "difficulty": "easy",
+  "tags": [],
+  "patterns": [
+    "brute-force"
+  ],
+  "description": "Given a string, return a new string with the reversed order of characters.",
+  "constraints": [],
+  "examples": [
+    {
+      "input": "'apple'",
+      "output": "'leppa'",
+      "explanation": "The reversed string of 'apple' is 'leppa'."
+    },
+    {
+      "input": "'hello'",
+      "output": "'olleh'",
+      "explanation": "The reversed string of 'hello' is 'olleh'."
+    },
+    {
+      "input": "'Greetings!'",
+      "output": "'!sgniteerG'",
+      "explanation": "The reversed string of 'Greetings!' is '!sgniteerG'."
+    }
+  ],
+  "functionName": {
+    "python": "reverse_string",
+    "javascript": "reverseString",
+    "typescript": "reverseString"
+  },
+  "starterCode": {
+    "python": "def reverse_string(string):\n    # Return the reversed string.\n    pass\n",
+    "javascript": "function reverseString(string) {\n  // Return the reversed string.\n}\n",
+    "typescript": "function reverseString(string: string): string {\n  // Return the reversed string.\n  return '';\n}\n"
+  },
+  "tests": [
+    {
+      "name": "reverses a string",
+      "args": [
+        "abcd"
+      ],
+      "expected": "dcba"
+    },
+    {
+      "name": "reverses a string with leading spaces",
+      "args": [
+        "  abcd"
+      ],
+      "expected": "dcba  "
+    }
+  ],
+  "solutions": [
+    {
+      "approachName": "Split / reverse / join",
+      "summary": "Split into characters, reverse the array, then join back into a string.",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "technique": {
+        "primaryPattern": "brute-force",
+        "optimal": true,
+        "signature": {
+          "maxLoopDepth": 0,
+          "usesHashStructure": false,
+          "usesSorting": false,
+          "usesRecursion": false,
+          "twoPointer": false
+        }
+      },
+      "steps": {
+        "typescript": [
+          {
+            "title": "Start from the function shape",
+            "explanation": "",
+            "code": "function reverseString(string: string): string {\n  return '';\n}"
+          },
+          {
+            "title": "Plan",
+            "explanation": "",
+            "code": "function reverseString(string: string): string {\n  // Split string into an array of letters.\n\n  // Reverse the order of letters in the Array\n\n  // Join reversed array back into a string (of letters).\n\n  return '';\n}"
+          },
+          {
+            "title": "Split string into letters",
+            "explanation": "",
+            "code": "function reverseString(string: string): string {\n  // Split string into an array of letters.\n  const letters = string.split('');\n\n  // Reverse the order of letters in the Array\n  \n  // Join reversed array back into a string (of letters).\n\n  return '';\n}"
+          },
+          {
+            "title": "Reverse order",
+            "explanation": "",
+            "code": "function reverseString(string: string): string {\n  // Split string into an array of letters.\n  const letters = string.split('');\n\n  // Reverse the order of letters in the Array\n  const reversedArray = letters.reverse();\n  \n  // Join reversed array back into a string (of letters).\n\n  return '';\n}"
+          },
+          {
+            "title": "Join reversed array",
+            "explanation": "",
+            "code": "function reverseString(string: string): string {\n  // Split string into an array of letters.\n  const letters = string.split('');\n\n  // Reverse the order of letters in the Array\n  const reversedArray = letters.reverse();\n\n  // Join reversed array back into a string (of letters).\n  const reversedString = reversedArray.join('');\n  \n  return reversedString;\n}"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,9 +1,15 @@
 import { readFileSync, readdirSync } from 'node:fs'
 import { resolve, basename } from 'node:path'
 import { problemSchema } from '../src/content/schema'
+import {
+  listProblemSlugsWithSidecars,
+  sidecarsMatchJson,
+} from './lib/solutionSidecars'
 
 // CI gate: every built-in problem JSON must parse against the schema (which now
 // requires code for every language), and its slug must match the filename.
+// When a problem has a solution-step sidecar directory, those files must also
+// match the JSON steps (run `npm run steps:pack` after editing sidecars).
 function main() {
   const dir = resolve('src/content/problems')
   const files = readdirSync(dir).filter((f) => f.endsWith('.json'))
@@ -29,6 +35,11 @@ function main() {
     if (result.data.slug !== expectedSlug) {
       errors.push(`[${file}] slug "${result.data.slug}" does not match filename "${expectedSlug}"`)
     }
+  }
+
+  for (const slug of listProblemSlugsWithSidecars()) {
+    const { ok, detail } = sidecarsMatchJson(slug)
+    if (!ok) errors.push(`[${slug}] solution sidecars out of sync: ${detail}`)
   }
 
   if (errors.length > 0) {

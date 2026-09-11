@@ -68,6 +68,9 @@ import (or `validate:content`) fail with the offending field path.
 
 ### Solution & steps
 
+`steps` is keyed by language. Include only the languages you are shipping; at
+least one language must have steps.
+
 ```json
 {
   "approachName": "Hash Map",
@@ -85,23 +88,76 @@ import (or `validate:content`) fail with the offending field path.
       "twoPointer": false
     }
   },
-  "steps": [
-    {
-      "title": "optional",
-      "explanation": "markdown",
-      "code": { "python": "...", "javascript": "...", "typescript": "..." }
-    }
-  ]
+  "steps": {
+    "typescript": [
+      {
+        "title": "optional",
+        "explanation": "markdown",
+        "code": "function twoSum(...) {\n  return [];\n}\n"
+      }
+    ]
+  }
 }
 ```
 
-- A solution needs **at least one step**. The Solution tab shows steps as a diff
-  from the previous step's code, so build the solution up incrementally (each
-  step's `code` is the full snapshot at that point).
+- A solution needs **at least one step** in at least one language. The Solution
+  tab shows steps as a diff from the previous step's code, so build the solution
+  up incrementally (each step's `code` is the full snapshot at that point).
 - `technique` is optional but recommended. The solution marked
   `"optimal": true` is used as the **reference** for the Compare tab and the
   built-in code review. Its `signature` (loop depth, hash use, sorting, etc.)
   drives the heuristic verdict.
+
+### Solution step sidecars
+
+Editing multiline `code` strings inside JSON (`\n` everywhere) is painful.
+Optional **sidecar** files let you author each step as a real source file, then
+pack them back into the JSON (which is still what the app loads).
+
+Layout next to `<slug>.json`:
+
+```
+src/content/problems/<slug>/
+  solutions/
+    00-<approach-slug>/
+      typescript/
+        01-<step-slug>.ts      # step code (real newlines)
+        01-<step-slug>.md      # title + explanation
+      javascript/
+        01-<step-slug>.js
+        01-<step-slug>.md
+      python/
+        01-<step-slug>.py
+        01-<step-slug>.md
+```
+
+Each `.md` companion uses YAML frontmatter:
+
+```md
+---
+title: Start from the function shape
+---
+
+Optional explanation markdown.
+```
+
+Commands:
+
+```bash
+# Create sidecars from an existing problem JSON
+npm run steps:unpack -- string-reversal
+
+# After editing .ts/.js/.py (+ .md), write steps back into the JSON
+npm run steps:pack -- string-reversal
+
+# Verify sidecars match JSON (also part of validate:content)
+npm run steps:check
+```
+
+Solution folders are ordered by their numeric prefix and must stay 1:1 with
+`solutions[]` in the JSON. Language folders are optional — only include the
+languages you are authoring. `npm run steps:pack` with no args packs every
+problem that already has a sidecar directory.
 
 ---
 
@@ -228,13 +284,15 @@ Void methods report `null`. The first `op` is always the constructor and its
 
 ## Common pitfalls
 
-- **All three languages are required.** Omitting `typescript` (or any language)
-  anywhere — `functionName`, `starterCode`, or a step's `code` — fails validation.
+- **`functionName` and `starterCode` need all three languages.** Walkthrough
+  `steps` may ship a subset of languages, but at least one language is required.
 - **`args` is a list of arguments, not a single value.** A one-argument function
   still needs `"args": [theValue]`.
 - **`expected` comparison is exact and structural.** `[1,0]` ≠ `[0,1]`.
 - **Slugs must be unique and match the filename.** `two-sum.json` must have
   `"slug": "two-sum"`; `validate:content` enforces this.
+- **If you use sidecars, pack before committing.** `validate:content` fails when
+  `<slug>/solutions` drifts from the JSON — run `npm run steps:pack`.
 - **TypeScript is executed, not type-checked.** Types are stripped before running,
   and the editor only does syntax highlighting — so a type error won't be
   reported, but a runtime error will.
