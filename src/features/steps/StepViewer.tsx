@@ -9,12 +9,14 @@ import { useSettingsStore } from '../../store/useSettingsStore'
 import { monacoThemeName } from '../../lib/monacoSetup'
 import { MarkdownView } from '../../components/MarkdownView'
 import { Spinner } from '../../components/Spinner'
+import { LanguageSelect } from '../editor/LanguageSelect'
 import { explainStep } from '../review/aiReview'
-import { SolutionPicker } from './SolutionPicker'
+import { SolutionPicker, firstSolutionIndexForLanguage } from './SolutionPicker'
 
 interface StepViewerProps {
   solutions: Solution[]
   language: LanguageId
+  onChangeLanguage: (language: LanguageId) => void
   problemTitle: string
   isFullscreen?: boolean
   onToggleFullscreen?: () => void
@@ -23,6 +25,7 @@ interface StepViewerProps {
 export function StepViewer({
   solutions,
   language,
+  onChangeLanguage,
   problemTitle,
   isFullscreen,
   onToggleFullscreen,
@@ -41,10 +44,15 @@ export function StepViewer({
   const model = useSettingsStore((s) => s.model)
 
   const solution = solutions[Math.min(activeSolutionIndex, solutions.length - 1)]
-  const steps = solution.steps[language]
-  const availableLangs = (['python', 'javascript', 'typescript'] as const).filter(
-    (lang) => (solution.steps[lang]?.length ?? 0) > 0,
-  )
+  const steps = solution?.steps[language]
+  const hasSteps = (steps?.length ?? 0) > 0
+
+  // If the active approach has no steps for this language, jump to the first that does.
+  useEffect(() => {
+    if (hasSteps) return
+    const next = firstSolutionIndexForLanguage(solutions, language)
+    if (next >= 0 && next !== activeSolutionIndex) setSolutionIndex(next)
+  }, [hasSteps, solutions, language, activeSolutionIndex, setSolutionIndex])
 
   const [explanation, setExplanation] = useState<string | null>(null)
   const [explaining, setExplaining] = useState(false)
@@ -55,34 +63,47 @@ export function StepViewer({
     setExplaining(false)
   }, [activeSolutionIndex, activeStepIndex, language])
 
-  if (!steps || steps.length === 0) {
+  const toolbar = (
+    <div className="flex flex-wrap items-center gap-2 border-b border-line p-3">
+      <LanguageSelect value={language} onChange={onChangeLanguage} />
+      <SolutionPicker
+        solutions={solutions}
+        language={language}
+        activeIndex={activeSolutionIndex}
+        onChange={setSolutionIndex}
+      />
+      {hasSteps && solution && (
+        <span className="text-xs text-fg-subtle">
+          {solution.timeComplexity} time · {solution.spaceComplexity} space
+        </span>
+      )}
+      {hasSteps && (
+        <button
+          onClick={toggleDiffLayout}
+          className="ml-auto rounded-md border border-line px-2 py-1 text-xs text-fg-muted hover:text-fg"
+        >
+          {diffLayout === 'split' ? 'Inline diff' : 'Split diff'}
+        </button>
+      )}
+      {onToggleFullscreen && (
+        <button
+          onClick={onToggleFullscreen}
+          aria-label={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
+          title={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
+          className={`rounded-md border border-line px-2 py-1 text-xs text-fg-muted hover:text-fg ${hasSteps ? '' : 'ml-auto'}`}
+        >
+          {isFullscreen ? 'Exit fullscreen ✕' : 'Fullscreen ⤢'}
+        </button>
+      )}
+    </div>
+  )
+
+  if (!hasSteps || !solution || !steps) {
     return (
       <div className="flex h-full flex-col">
-        <div className="flex flex-wrap items-center gap-2 border-b border-line p-3">
-          <SolutionPicker
-            solutions={solutions}
-            activeIndex={activeSolutionIndex}
-            onChange={setSolutionIndex}
-          />
-          <span className="text-xs text-fg-subtle">
-            {solution.timeComplexity} time · {solution.spaceComplexity} space
-          </span>
-          {onToggleFullscreen && (
-            <button
-              onClick={onToggleFullscreen}
-              aria-label={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
-              title={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
-              className="ml-auto rounded-md border border-line px-2 py-1 text-xs text-fg-muted hover:text-fg"
-            >
-              {isFullscreen ? 'Exit fullscreen ✕' : 'Fullscreen ⤢'}
-            </button>
-          )}
-        </div>
+        {toolbar}
         <div className="flex flex-1 flex-col items-center justify-center gap-1 p-6 text-center">
           <p className="text-sm text-fg-muted">No walkthrough for this language yet</p>
-          {availableLangs.length > 0 && (
-            <p className="text-xs text-fg-subtle">Available in {availableLangs.join(', ')}.</p>
-          )}
         </div>
       </div>
     )
@@ -106,32 +127,7 @@ export function StepViewer({
 
   return (
     <div className="flex h-full flex-col">
-      <div className="flex flex-wrap items-center gap-2 border-b border-line p-3">
-        <SolutionPicker
-          solutions={solutions}
-          activeIndex={activeSolutionIndex}
-          onChange={setSolutionIndex}
-        />
-        <span className="text-xs text-fg-subtle">
-          {solution.timeComplexity} time · {solution.spaceComplexity} space
-        </span>
-        <button
-          onClick={toggleDiffLayout}
-          className="ml-auto rounded-md border border-line px-2 py-1 text-xs text-fg-muted hover:text-fg"
-        >
-          {diffLayout === 'split' ? 'Inline diff' : 'Split diff'}
-        </button>
-        {onToggleFullscreen && (
-          <button
-            onClick={onToggleFullscreen}
-            aria-label={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
-            title={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
-            className="rounded-md border border-line px-2 py-1 text-xs text-fg-muted hover:text-fg"
-          >
-            {isFullscreen ? 'Exit fullscreen ✕' : 'Fullscreen ⤢'}
-          </button>
-        )}
-      </div>
+      {toolbar}
 
       <div className="min-h-0 flex-1">
         <DiffEditor

@@ -97,6 +97,93 @@
           }
         ]
       }
+    },
+    {
+      "approachName": "For of loop",
+      "summary": "Use a for-of loop to iterate over the string and prepend each character to the result.",
+      "timeComplexity": "O(n²)",
+      "spaceComplexity": "O(n)",
+      "technique": {
+        "primaryPattern": "brute-force",
+        "optimal": false,
+        "signature": {
+          "maxLoopDepth": 1,
+          "usesHashStructure": false,
+          "usesSorting": false,
+          "usesRecursion": false,
+          "twoPointer": false
+        }
+      },
+      "steps": {
+        "typescript": [
+          {
+            "title": "Start from the function shape",
+            "explanation": "",
+            "code": "function reverseString(string: string): string {\n  return '';\n}"
+          },
+          {
+            "title": "Plan",
+            "explanation": "",
+            "code": "function reverseString(string: string): string {\n  // define end state\n\n  // use for of loop to break string and iterate over the string\n\n    // prepend each character to the end state\n  \n  return '';\n}"
+          },
+          {
+            "title": "Define end state",
+            "explanation": "",
+            "code": "function reverseString(string: string): string {\n  // define end state\n  let reversedString = '';\n\n  // use for of loop to break string and iterate over the string\n\n    // prepend each character to the end state\n  \n  return reversedString;\n}"
+          },
+          {
+            "title": "For of loop",
+            "explanation": "",
+            "code": "function reverseString(string: string): string {\n  // define end state\n  let reversedString = '';\n\n  // use for of loop to break string and iterate over the string\n  for (const char of string) {\n    // prepend each character to the end state\n    \n  }\n  return reversedString;\n}\n\n// avoid classic for loop because it is easy to make mistakes\n// for( var i = 0; i < string.length; i++) \n// A classic indexed loop can go wrong more easily: off-by-one (i <= length), wrong direction when reversing, or var leaking the index. \n// for...of skips indexing, so those mistakes don’t come up."
+          },
+          {
+            "title": "Prepend to end state",
+            "explanation": "",
+            "code": "function reverseString(string: string): string {\n  // define end state\n  let reversedString = '';\n\n  // use for of loop to break string and iterate over the string\n  for (const char of string) {\n    // prepend each character to the end state\n    reversedString = char + reversedString;\n  }\n  return reversedString;\n}\n\n// avoid classic for loop because it is easy to make mistakes\n// for( var i = 0; i < string.length; i++) \n// A classic indexed loop can go wrong more easily: off-by-one (i <= length), wrong direction when reversing, or var leaking the index. \n// for...of skips indexing, so those mistakes don’t come up."
+          }
+        ]
+      }
+    },
+    {
+      "approachName": "Reduce",
+      "summary": "Use a reduce function to iterate over the string and prepend each character to the result.",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "technique": {
+        "primaryPattern": "brute-force",
+        "optimal": false,
+        "signature": {
+          "maxLoopDepth": 0,
+          "usesHashStructure": false,
+          "usesSorting": false,
+          "usesRecursion": false,
+          "twoPointer": false
+        }
+      },
+      "steps": {
+        "typescript": [
+          {
+            "title": "Start from the function shape",
+            "explanation": "",
+            "code": "function reverseString(string: string): string {\n  return '';\n}"
+          },
+          {
+            "title": "Plan",
+            "explanation": "",
+            "code": "function reverseString(string: string): string {\n  // split string\n  \n  // apply reduce function\n  \n  return '';\n}\n\n// reduce takes all different values within an array and condense them into a single value\n// reduce( () => {}, initialValue)\n// take initialValue and pass into the arrow function\n// whatever value returned will be used as starting value for every successive run of the arrow function"
+          },
+          {
+            "title": "Split string",
+            "explanation": "",
+            "code": "function reverseString(string: string): string {\n  // split string\n  return string.split('');\n  // apply reduce function\n}\n\n// reduce takes all different values within an array and condense them into a single value\n// reduce( () => {}, initialValue)\n// take initialValue and pass into the arrow function\n// whatever value returned will be used as starting value for every successive run of the arrow function"
+          },
+          {
+            "title": "Apply reduce",
+            "explanation": "",
+            "code": "function reverseString(string: string): string {\n  // split string\n  // apply reduce function\n  return string.split('').reduce((reversed, char) => char + reversed, '');\n}\n\n// reduce takes all different values within an array and condense them into a single value\n// reduce( () => {}, initialValue)\n// take initialValue and pass into the arrow function\n// whatever value returned will be used as starting value for every successive run of the arrow function"
+          }
+        ]
+      }
     }
   ]
 }

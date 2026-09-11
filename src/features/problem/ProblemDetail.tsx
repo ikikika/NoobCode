@@ -205,6 +205,7 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
     <StepViewer
       solutions={problem.solutions}
       language={language}
+      onChangeLanguage={onChangeLanguage}
       problemTitle={problem.title}
       isFullscreen={walkthroughFullscreen}
       onToggleFullscreen={() => setWalkthroughFullscreen((f) => !f)}
