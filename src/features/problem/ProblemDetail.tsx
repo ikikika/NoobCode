@@ -152,7 +152,6 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
           code: userCode,
         })
         storeReview(problem.slug, heuristicReview)
-        switchRightTab('review')
 
         if (aiEnabled && apiKey) {
           const enhanced = await enhanceReview(

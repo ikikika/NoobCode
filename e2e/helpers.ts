@@ -43,18 +43,14 @@ export async function openProblem(page: Page, slug: string): Promise<void> {
   await page.getByRole('button', { name: 'Run All' }).waitFor()
 }
 
-// Click "Run All" and assert every test passed. A passing run auto-switches the
-// right pane to the Review tab once the deterministic analysis finishes
-// (ProblemDetail sets rightTab='review'), which unmounts the results banner. So
-// wait for that hand-off (proves the run + review completed), then return to the
-// Results tab — the verdict persists in the runner store — and assert the banner.
+// Click "Run All" and assert every test passed. Run All switches the right pane
+// to the Results tab; wait for the pass banner there.
 export async function runAllExpectPass(page: Page): Promise<void> {
   await page.getByRole('button', { name: 'Run All' }).click()
-  await expect(page.getByRole('tab', { name: 'Review' })).toHaveAttribute('aria-selected', 'true', {
+  await expect(page.getByRole('tab', { name: 'Results' })).toHaveAttribute('aria-selected', 'true')
+  await expect(page.getByTestId('results-banner')).toContainText('All tests passed', {
     timeout: 90_000,
   })
-  await page.getByRole('tab', { name: 'Results' }).click()
-  await expect(page.getByTestId('results-banner')).toContainText('All tests passed')
 }
 
 // Correct reference solutions used as fixtures.
