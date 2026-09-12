@@ -1,0 +1,116 @@
+{
+  "slug": "palindrome",
+  "title": "Palindrome",
+  "difficulty": "easy",
+  "tags": [],
+  "patterns": [
+    "brute-force"
+  ],
+  "description": "Given a string, return true if the string is a palindrome or false if it is not.  Palindromes are strings that form the same word if it is reversed. *Do* include spaces and punctuation in determining if the string is a palindrome.",
+  "constraints": [],
+  "examples": [
+    {
+      "input": "'abba'",
+      "output": "true"
+    },
+    {
+      "input": "'abcdefg'",
+      "output": "false"
+    }
+  ],
+  "functionName": {
+    "python": "palindrome",
+    "javascript": "palindrome",
+    "typescript": "palindrome"
+  },
+  "starterCode": {
+    "python": "def palindrome(string):\n    # Return true or false.\n    pass\n",
+    "javascript": "function palindrome(string) {\n  // Return true or false.\n}\n",
+    "typescript": "function palindrome(string: string): string {\n  // Return true or false.\n  return '';\n}\n"
+  },
+  "tests": [
+    {
+      "name": "'aba ' is not a palindrome",
+      "args": [
+        "aba "
+      ],
+      "expected": false
+    },
+    {
+      "name": "'greetings' is not a palindrome",
+      "args": [
+        "greetings"
+      ],
+      "expected": false
+    },
+    {
+      "name": "'1000000001' is a palindrome",
+      "args": [
+        "1000000001"
+      ],
+      "expected": true
+    },
+    {
+      "name": "'pennep' is a palindrome",
+      "args": [
+        "pennep"
+      ],
+      "expected": true
+    }
+  ],
+  "solutions": [
+    {
+      "approachName": "Native JS functions",
+      "summary": "Split into characters, reverse the array, join back into a string, then compare the original string to the reversed string.",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "technique": {
+        "primaryPattern": "brute-force",
+        "optimal": true
+      },
+      "steps": {
+        "typescript": [
+          {
+            "title": "Start from the function shape",
+            "explanation": "",
+            "code": "function palindrome(string: string): boolean {\n\n  return true;\n}"
+          },
+          {
+            "title": "Implement js functions",
+            "explanation": "",
+            "code": "function palindrome(string: string): boolean {\n  const reversed = string\n    .split('')\n    .reverse()\n    .join('');\n\n  return reversed === string;\n}"
+          }
+        ]
+      }
+    },
+    {
+      "approachName": "JS every function",
+      "summary": "Use the every function to check if the string is a palindrome.",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "technique": {
+        "primaryPattern": "brute-force",
+        "optimal": true
+      },
+      "steps": {
+        "typescript": [
+          {
+            "title": "Start from the function shape",
+            "explanation": "",
+            "code": "function palindrome(string: string): boolean {\n\n  return true;\n}"
+          },
+          {
+            "title": "Plan",
+            "explanation": "",
+            "code": "function palindrome(string: string): boolean {\n  // split the string and apply every function\n  return true;\n}\n\n// const array = [0, 10, 14]\n// array.every(item => item > 0) // true\n// if any inner function returns false,\n// the every function will return false\n// if all inner functions return true,\n// the every function will return true\n"
+          },
+          {
+            "title": "Implement",
+            "explanation": "",
+            "code": "function palindrome(string: string): boolean {\n  // split the string and apply every function\n  return string.split('').every((char, i) => {\n    return char === string[string.length - i - 1];\n  });\n}\n\n// const array = [0, 10, 14]\n// array.every(item => item > 0) // true\n// if any inner function returns false,\n// the every function will return false\n// if all inner functions return true,\n// the every function will return true\n"
+          }
+        ]
+      }
+    }
+  ]
+}
