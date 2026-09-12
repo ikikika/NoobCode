@@ -94,6 +94,16 @@
             "title": "Join reversed array",
             "explanation": "",
             "code": "function reverseString(string: string): string {\n  // Split string into an array of letters.\n  const letters = string.split('');\n\n  // Reverse the order of letters in the Array\n  const reversedArray = letters.reverse();\n\n  // Join reversed array back into a string (of letters).\n  const reversedString = reversedArray.join('');\n  \n  return reversedString;\n}"
+          },
+          {
+            "title": "Bonus",
+            "explanation": "",
+            "code": "function reverseString(string: string): string {\n  // // Split string into an array of letters.\n  // const letters = string.split('');\n\n  // // Reverse the order of letters in the Array\n  // const reversedArray = letters.reverse();\n\n  // // Join reversed array back into a string (of letters).\n  // const reversedString = reversedArray.join('');\n  \n  // return reversedString;\n\n  // bonus: we can actually combine the steps into one line\n}"
+          },
+          {
+            "title": "Combine steps",
+            "explanation": "",
+            "code": "function reverseString(string: string): string {\n  // // Split string into an array of letters.\n  // const letters = string.split('');\n\n  // // Reverse the order of letters in the Array\n  // const reversedArray = letters.reverse();\n\n  // // Join reversed array back into a string (of letters).\n  // const reversedString = reversedArray.join('');\n  \n  // return reversedString;\n\n  // bonus: we can actually combine the steps into one line\n  return string.split('').reverse().join('');\n}"
           }
         ]
       }
