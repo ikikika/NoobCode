@@ -13,4 +13,6 @@ function reverseString(string: string): string {
 // avoid classic for loop because it is easy to make mistakes
 // for( var i = 0; i < string.length; i++) 
 // A classic indexed loop can go wrong more easily: off-by-one (i <= length), wrong direction when reversing, or var leaking the index. 
-// for...of skips indexing, so those mistakes don’t come up.
+// for...of skips indexing, so those mistakes don’t come up
+// for...of is for arrays and strings. remember like "the 'o' in of is not for 'objects'"
+// for...in is for objects

@@ -59,14 +59,7 @@
       "spaceComplexity": "O(n)",
       "technique": {
         "primaryPattern": "brute-force",
-        "optimal": true,
-        "signature": {
-          "maxLoopDepth": 0,
-          "usesHashStructure": false,
-          "usesSorting": false,
-          "usesRecursion": false,
-          "twoPointer": false
-        }
+        "optimal": true
       },
       "steps": {
         "typescript": [
@@ -144,12 +137,12 @@
           {
             "title": "For of loop",
             "explanation": "",
-            "code": "function reverseString(string: string): string {\n  // define end state\n  let reversedString = '';\n\n  // use for of loop to break string and iterate over the string\n  for (const char of string) {\n    // prepend each character to the end state\n    \n  }\n  return reversedString;\n}\n\n// avoid classic for loop because it is easy to make mistakes\n// for( var i = 0; i < string.length; i++) \n// A classic indexed loop can go wrong more easily: off-by-one (i <= length), wrong direction when reversing, or var leaking the index. \n// for...of skips indexing, so those mistakes don’t come up."
+            "code": "function reverseString(string: string): string {\n  // define end state\n  let reversedString = '';\n\n  // use for of loop to break string and iterate over the string\n  for (const char of string) {\n    // prepend each character to the end state\n    \n  }\n  return reversedString;\n}\n\n// avoid classic for loop because it is easy to make mistakes\n// for( var i = 0; i < string.length; i++) \n// A classic indexed loop can go wrong more easily: off-by-one (i <= length), wrong direction when reversing, or var leaking the index. \n// for...of skips indexing, so those mistakes don’t come up\n// for...of is for arrays and strings. remember like \"the 'o' in of is not for 'objects'\"\n// for...in is for objects"
           },
           {
             "title": "Prepend to end state",
             "explanation": "",
-            "code": "function reverseString(string: string): string {\n  // define end state\n  let reversedString = '';\n\n  // use for of loop to break string and iterate over the string\n  for (const char of string) {\n    // prepend each character to the end state\n    reversedString = char + reversedString;\n  }\n  return reversedString;\n}\n\n// avoid classic for loop because it is easy to make mistakes\n// for( var i = 0; i < string.length; i++) \n// A classic indexed loop can go wrong more easily: off-by-one (i <= length), wrong direction when reversing, or var leaking the index. \n// for...of skips indexing, so those mistakes don’t come up."
+            "code": "function reverseString(string: string): string {\n  // define end state\n  let reversedString = '';\n\n  // use for of loop to break string and iterate over the string\n  for (const char of string) {\n    // prepend each character to the end state\n    reversedString = char + reversedString;\n  }\n  return reversedString;\n}\n\n// avoid classic for loop because it is easy to make mistakes\n// for( var i = 0; i < string.length; i++) \n// A classic indexed loop can go wrong more easily: off-by-one (i <= length), wrong direction when reversing, or var leaking the index. \n// for...of skips indexing, so those mistakes don’t come up\n// for...of is for arrays and strings. remember like \"the 'o' in of is not for 'objects'\"\n// for...in is for objects"
           }
         ]
       }

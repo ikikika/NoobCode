@@ -74,7 +74,7 @@ export type TechniqueSignature = z.infer<typeof techniqueSignatureSchema>
 export const techniqueSchema = z.object({
   primaryPattern: patternIdSchema,
   optimal: z.boolean(),
-  signature: techniqueSignatureSchema,
+  signature: techniqueSignatureSchema.optional(),
 })
 export type Technique = z.infer<typeof techniqueSchema>
 

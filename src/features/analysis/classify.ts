@@ -35,34 +35,36 @@ export function buildReview(features: CodeFeatures, problem: Problem): MethodRev
   let referenceApproach: string | undefined
 
   if (reference?.technique) {
-    const sig = reference.technique.signature
     referenceApproach = `${reference.approachName} — ${reference.timeComplexity} time, ${reference.spaceComplexity} space`
 
-    const loopOk = features.maxLoopDepth <= sig.maxLoopDepth
-    const hashOk = !sig.usesHashStructure || features.usesHashStructure
-    isOptimal = loopOk && hashOk
+    const sig = reference.technique.signature
+    if (sig) {
+      const loopOk = features.maxLoopDepth <= sig.maxLoopDepth
+      const hashOk = !sig.usesHashStructure || features.usesHashStructure
+      isOptimal = loopOk && hashOk
 
-    if (!loopOk) {
-      inefficiencies.push(
-        `Your solution uses nested iteration (loop depth ${features.maxLoopDepth}); the optimal approach needs at most depth ${sig.maxLoopDepth}.`,
-      )
-      suggestions.push(
-        'Try to remove a nested loop — a hash structure can often replace the inner scan with an O(1) lookup.',
-      )
-    }
-    if (!hashOk) {
-      inefficiencies.push(
-        'The optimal approach relies on a hash map/set for constant-time lookups, which your solution does not use.',
-      )
-      suggestions.push(
-        'Introduce a dict/set (Python) or Map/Set (JS) to memoize values you have already seen.',
-      )
-    }
-    if (features.usesSorting && !sig.usesSorting) {
-      inefficiencies.push('Sorting adds an O(n log n) factor that the optimal solution avoids.')
-      suggestions.push(
-        'Consider whether a single linear pass with a hash structure removes the need to sort.',
-      )
+      if (!loopOk) {
+        inefficiencies.push(
+          `Your solution uses nested iteration (loop depth ${features.maxLoopDepth}); the optimal approach needs at most depth ${sig.maxLoopDepth}.`,
+        )
+        suggestions.push(
+          'Try to remove a nested loop — a hash structure can often replace the inner scan with an O(1) lookup.',
+        )
+      }
+      if (!hashOk) {
+        inefficiencies.push(
+          'The optimal approach relies on a hash map/set for constant-time lookups, which your solution does not use.',
+        )
+        suggestions.push(
+          'Introduce a dict/set (Python) or Map/Set (JS) to memoize values you have already seen.',
+        )
+      }
+      if (features.usesSorting && !sig.usesSorting) {
+        inefficiencies.push('Sorting adds an O(n log n) factor that the optimal solution avoids.')
+        suggestions.push(
+          'Consider whether a single linear pass with a hash structure removes the need to sort.',
+        )
+      }
     }
   }
 
