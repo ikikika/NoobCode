@@ -12,6 +12,12 @@ describe('built-in content', () => {
     }
   })
 
+  it('lists problems in ascending order', () => {
+    for (let i = 1; i < builtinMeta.length; i++) {
+      expect(builtinMeta[i]!.order).toBeGreaterThanOrEqual(builtinMeta[i - 1]!.order)
+    }
+  })
+
   it('provides starter code in every language and at least one walkthrough language', () => {
     for (const problem of Object.values(builtinProblems)) {
       for (const lang of LANGS) {

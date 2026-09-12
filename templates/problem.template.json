@@ -1,6 +1,7 @@
 {
   "slug": "problem-template",
   "title": "Problem Template",
+  "order": 0,
   "difficulty": "easy",
   "tags": ["array"],
   "patterns": ["brute-force"],

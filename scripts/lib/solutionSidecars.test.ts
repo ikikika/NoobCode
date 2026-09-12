@@ -51,6 +51,7 @@ describe('pack / unpack round-trip', () => {
     const problem = {
       slug,
       title: 'Demo',
+      order: 0,
       difficulty: 'easy',
       tags: [],
       patterns: ['two-pointers'],

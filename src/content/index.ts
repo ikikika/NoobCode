@@ -25,10 +25,11 @@ export const builtinMeta: ProblemMeta[] = Object.values(builtinProblems)
   .map((p) => ({
     slug: p.slug,
     title: p.title,
+    order: p.order,
     difficulty: p.difficulty,
     tags: p.tags,
     patterns: p.patterns,
   }))
-  .sort((a, b) => a.title.localeCompare(b.title))
+  .sort((a, b) => a.order - b.order || a.title.localeCompare(b.title))
 
 export const builtinSlugs: string[] = Object.keys(builtinProblems)

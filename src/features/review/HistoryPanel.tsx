@@ -1,5 +1,4 @@
 import { useMemo, useState } from 'react'
-import { DiffEditor } from '@monaco-editor/react'
 import type { LanguageId, Problem } from '../../content/schema'
 import { MONACO_LANGUAGE } from '../../content/schema'
 import { PATTERN_LABELS, type PatternId } from '../../content/patterns'
@@ -7,6 +6,7 @@ import { useTheme } from '../../store/useTheme'
 import { useUiPrefs } from '../../store/useUiPrefs'
 import { useProgressStore } from '../../store/useProgressStore'
 import { monacoThemeName } from '../../lib/monacoSetup'
+import { SafeDiffEditor } from '../editor/SafeDiffEditor'
 
 function relativeTime(ts: number, now: number): string {
   const diff = Math.max(0, now - ts)
@@ -90,7 +90,7 @@ export function HistoryPanel({ problem, language }: HistoryPanelProps) {
       </div>
 
       <div className="min-h-0 flex-1">
-        <DiffEditor
+        <SafeDiffEditor
           height="100%"
           language={MONACO_LANGUAGE[attemptLanguage]}
           theme={monacoThemeName(theme)}

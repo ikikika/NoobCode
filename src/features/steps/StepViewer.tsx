@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { DiffEditor } from '@monaco-editor/react'
 import type { LanguageId, Solution } from '../../content/schema'
 import { MONACO_LANGUAGE } from '../../content/schema'
 import { useTheme } from '../../store/useTheme'
@@ -10,6 +9,7 @@ import { monacoThemeName } from '../../lib/monacoSetup'
 import { MarkdownView } from '../../components/MarkdownView'
 import { Spinner } from '../../components/Spinner'
 import { LanguageSelect } from '../editor/LanguageSelect'
+import { SafeDiffEditor } from '../editor/SafeDiffEditor'
 import { explainStep } from '../review/aiReview'
 import { SolutionPicker, firstSolutionIndexForLanguage } from './SolutionPicker'
 
@@ -130,7 +130,7 @@ export function StepViewer({
       {toolbar}
 
       <div className="min-h-0 flex-1">
-        <DiffEditor
+        <SafeDiffEditor
           height="100%"
           language={MONACO_LANGUAGE[language]}
           theme={monacoThemeName(theme)}

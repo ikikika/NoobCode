@@ -70,6 +70,7 @@ export function buildProblemSkeleton({
   return {
     slug,
     title: resolvedTitle,
+    order: 0,
     difficulty,
     tags: [],
     patterns: ['brute-force'],

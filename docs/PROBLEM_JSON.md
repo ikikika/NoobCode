@@ -34,6 +34,7 @@ import (or `validate:content`) fail with the offending field path.
 | -------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
 | `slug`         | string                               | URL id. Must be unique and not collide with a built-in. For built-in files it must equal the filename (`two-sum.json` → `"two-sum"`). |
 | `title`        | string                               | Display name.                                                                                                                         |
+| `order`        | non-negative int                     | Sort key within a pattern group on the list page (lower first).                                                                       |
 | `difficulty`   | `"easy" \| "medium" \| "hard"`       |                                                                                                                                       |
 | `tags`         | string[]                             | Free-form labels shown as chips.                                                                                                      |
 | `patterns`     | PatternId[]                          | **At least one.** See [Patterns](#patterns).                                                                                          |

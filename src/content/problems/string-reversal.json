@@ -1,6 +1,7 @@
 {
   "slug": "string-reversal",
   "title": "String Reversal",
+  "order": 1,
   "difficulty": "easy",
   "tags": [],
   "patterns": [

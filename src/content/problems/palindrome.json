@@ -1,10 +1,12 @@
 {
   "slug": "palindrome",
   "title": "Palindrome",
+  "order": 2,
   "difficulty": "easy",
   "tags": [],
   "patterns": [
-    "brute-force"
+    "brute-force",
+    "two-pointers"
   ],
   "description": "Given a string, return true if the string is a palindrome or false if it is not.  Palindromes are strings that form the same word if it is reversed. *Do* include spaces and punctuation in determining if the string is a palindrome.",
   "constraints": [],
@@ -26,9 +28,16 @@
   "starterCode": {
     "python": "def palindrome(string):\n    # Return true or false.\n    pass\n",
     "javascript": "function palindrome(string) {\n  // Return true or false.\n}\n",
-    "typescript": "function palindrome(string: string): string {\n  // Return true or false.\n  return '';\n}\n"
+    "typescript": "function palindrome(string: string): boolean {\n  // Return true or false.\n  return '';\n}\n"
   },
   "tests": [
+    {
+      "name": "'aba' is a palindrome",
+      "args": [
+        "aba"
+      ],
+      "expected": true
+    },
     {
       "name": "'aba ' is not a palindrome",
       "args": [
@@ -66,7 +75,7 @@
       "spaceComplexity": "O(n)",
       "technique": {
         "primaryPattern": "brute-force",
-        "optimal": true
+        "optimal": false
       },
       "steps": {
         "typescript": [
@@ -89,8 +98,8 @@
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(n)",
       "technique": {
-        "primaryPattern": "brute-force",
-        "optimal": true
+        "primaryPattern": "two-pointers",
+        "optimal": false
       },
       "steps": {
         "typescript": [
@@ -108,6 +117,52 @@
             "title": "Implement",
             "explanation": "",
             "code": "function palindrome(string: string): boolean {\n  // split the string and apply every function\n  return string.split('').every((char, i) => {\n    return char === string[string.length - i - 1];\n  });\n}\n\n// const array = [0, 10, 14]\n// array.every(item => item > 0) // true\n// if any inner function returns false,\n// the every function will return false\n// if all inner functions return true,\n// the every function will return true\n"
+          }
+        ]
+      }
+    },
+    {
+      "approachName": "Two pointers",
+      "summary": "Compare characters from both ends and walk inward until the pointers meet—no copy of the string.",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "technique": {
+        "primaryPattern": "two-pointers",
+        "optimal": true,
+        "signature": {
+          "maxLoopDepth": 1,
+          "usesHashStructure": false,
+          "usesSorting": false,
+          "usesRecursion": false,
+          "twoPointer": true
+        }
+      },
+      "steps": {
+        "typescript": [
+          {
+            "title": "Start from the function shape",
+            "explanation": "",
+            "code": "function palindrome(string: string): boolean {\n\n  return true;\n}\n"
+          },
+          {
+            "title": "Place the pointers",
+            "explanation": "",
+            "code": "function palindrome(string: string): boolean {\n  // Place pointers at both ends of the string.\n  let left = 0;\n  let right = string.length - 1;\n\n  return true;\n}\n"
+          },
+          {
+            "title": "Walk inward",
+            "explanation": "",
+            "code": "function palindrome(string: string): boolean {\n  // Place pointers at both ends of the string.\n  let left = 0;\n  let right = string.length - 1;\n\n  // Walk inward until the pointers meet.\n  while (left < right) {\n\n  }\n\n  return true;\n}\n"
+          },
+          {
+            "title": "Reject on mismatch",
+            "explanation": "",
+            "code": "function palindrome(string: string): boolean {\n  // Place pointers at both ends of the string.\n  let left = 0;\n  let right = string.length - 1;\n\n  // Walk inward until the pointers meet.\n  while (left < right) {\n    // Characters must match; otherwise it is not a palindrome.\n    if (string[left] !== string[right]) {\n      return false;\n    }\n  }\n\n  return true;\n}\n"
+          },
+          {
+            "title": "Move pointers onwards",
+            "explanation": "",
+            "code": "function palindrome(string: string): boolean {\n  // Place pointers at both ends of the string.\n  let left = 0;\n  let right = string.length - 1;\n\n  // Walk inward until the pointers meet.\n  while (left < right) {\n    // Characters must match; otherwise it is not a palindrome.\n    if (string[left] !== string[right]) {\n      return false;\n    }\n    left++;\n    right--;\n  }\n\n  return true;\n}\n"
           }
         ]
       }
