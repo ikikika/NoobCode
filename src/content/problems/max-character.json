@@ -1,0 +1,113 @@
+{
+  "slug": "max-character",
+  "title": "Max Character",
+  "order": 2,
+  "difficulty": "easy",
+  "tags": [],
+  "patterns": [
+    "hash-map"
+  ],
+  "description": "Given a string, return the character that is most commonly used in the string",
+  "constraints": [],
+  "examples": [
+    {
+      "input": "'abcccccccd'",
+      "output": "'c'"
+    },
+    {
+      "input": "'apple 1231111'",
+      "output": "'1'"
+    }
+  ],
+  "functionName": {
+    "python": "maxChar",
+    "javascript": "maxChar",
+    "typescript": "maxChar"
+  },
+  "starterCode": {
+    "python": "def maxChar(string):\n    # Return ''\n    pass\n",
+    "javascript": "function maxChar(string) {\n  // Return ''\n}\n",
+    "typescript": "function maxChar(string: string): string {\n  // Return ''\n  return '';\n}\n"
+  },
+  "tests": [
+    {
+      "name": "most frequently used char",
+      "args": [
+        "abcccccccd"
+      ],
+      "expected": "c"
+    },
+    {
+      "name": "most frequently used char",
+      "args": [
+        "apple 1231111"
+      ],
+      "expected": "1"
+    },
+    {
+      "name": "most frequently used char",
+      "args": [
+        "abcdefghijklmnaaaaa"
+      ],
+      "expected": "a"
+    },
+    {
+      "name": "most frequently used char",
+      "args": [
+        "ab1c1d1e1f1g1"
+      ],
+      "expected": "1"
+    }
+  ],
+  "solutions": [
+    {
+      "approachName": "Character Map",
+      "summary": "Create a map of characters and their frequencies, then return the character with the highest frequency.",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "technique": {
+        "primaryPattern": "hash-map",
+        "optimal": true
+      },
+      "steps": {
+        "typescript": [
+          {
+            "title": "Start from the function shape",
+            "explanation": "",
+            "code": "function maxChar(string: string): string {\n\n  return '';\n}"
+          },
+          {
+            "title": "Plan",
+            "explanation": "",
+            "code": "function maxChar(string: string): string {\n  // initialise a character map object\n\n  // initialise a max counter\n\n  // initialise a max character variable\n\n  // loop through the string\n\n    // if the character is not in the map, add it to the map with a value of 1\n\n    // if the character is in the map, increment the value\n\n  // loop through the character map\n\n    // if the value is greater than the max counter, update the max counter and the max character\n\n  // return the max character\n  return '';\n}"
+          },
+          {
+            "title": "Initialise variables",
+            "explanation": "",
+            "code": "function maxChar(string: string): string {\n  // initialise a character map object\n  const charMap: Record<string, number> = {};\n\n  // initialise a max counter\n  let maxCount = 0;\n  \n  // initialise a max character variable\n  let maxChar = '';\n\n  // loop through the string\n\n    // if the character is not in the map, add it to the map with a value of 1\n\n    // if the character is in the map, increment the value\n\n  // loop through the character map\n\n    // if the value is greater than the max counter, update the max counter and the max character\n\n  // return the max character\n  return maxChar;\n}"
+          },
+          {
+            "title": "Loop through the string",
+            "explanation": "",
+            "code": "function maxChar(string: string): string {\n  // initialise a character map object\n  const charMap: Record<string, number> = {};\n\n  // initialise a max counter\n  let maxCount = 0;\n\n  // initialise a max character variable\n  let maxChar = '';\n\n  // loop through the string\n  for (let char of string) {\n    \n    // if the character is not in the map, add it to the map with a value of 1\n\n    // if the character is in the map, increment the value\n  \n  }\n  // loop through the character map\n\n    // if the value is greater than the max counter, update the max counter and the max character\n\n  // return the max character\n  return maxChar;\n}"
+          },
+          {
+            "title": "Form the character map",
+            "explanation": "",
+            "code": "function maxChar(string: string): string {\n  // initialise a character map object\n  const charMap: Record<string, number> = {};\n\n  // initialise a max counter\n  let maxCount = 0;\n\n  // initialise a max character variable\n  let maxChar = '';\n\n  // loop through the string\n  for (let char of string) {\n    \n    if (charMap[char]) {\n      // if the character is not in the map, add it to the map with a value of 1\n      charMap[char]++;\n\n    } else {\n      // if the character is in the map, increment the value\n      charMap[char] = 1;\n      \n    }\n  }\n  // loop through the character map\n\n    // if the value is greater than the max counter, update the max counter and the max character\n\n  // return the max character\n  return maxChar;\n}\n\n// eg, charMap = { \"a\": 1, \"b\": 2, \"c\": 3 }\n// charMap[\"c\"] = 3"
+          },
+          {
+            "title": "Loop through character map",
+            "explanation": "",
+            "code": "function maxChar(string: string): string {\n  // initialise a character map object\n  const charMap: Record<string, number> = {};\n\n  // initialise a max counter\n  let maxCount = 0;\n\n  // initialise a max character variable\n  let maxChar = '';\n\n  // loop through the string\n  for (let char of string) {\n\n    if (charMap[char]) {\n      // if the character is not in the map, add it to the map with a value of 1\n      charMap[char]++;\n\n    } else {\n      // if the character is in the map, increment the value\n      charMap[char] = 1;\n\n    }\n  }\n  // loop through the character map\n  for (let char in charMap) {\n    \n    // if the value is greater than the max counter, update the max counter and the max character\n  }\n  \n  // return the max character\n  return maxChar;\n}\n\n// eg, charMap = { \"a\": 1, \"b\": 2, \"c\": 3 }\n// charMap[\"c\"] = 3"
+          },
+          {
+            "title": "Identify max character",
+            "explanation": "",
+            "code": "function maxChar(string: string): string {\n  // initialise a character map object\n  const charMap: Record<string, number> = {};\n\n  // initialise a max counter\n  let maxCount = 0;\n\n  // initialise a max character variable\n  let maxChar = '';\n\n  // loop through the string\n  for (let char of string) {\n\n    if (charMap[char]) {\n      // if the character is not in the map, add it to the map with a value of 1\n      charMap[char]++;\n\n    } else {\n      // if the character is in the map, increment the value\n      charMap[char] = 1;\n\n    }\n  }\n  // loop through the character map\n  for (let char in charMap) {\n\n    // if the value is greater than the max counter, update the max counter and the max character\n    if (charMap[char] > maxCount) {\n      maxCount = charMap[char];\n      maxChar = char;\n    }\n    \n  }\n  \n  // return the max character\n  return maxChar;\n}\n\n// eg, charMap = { \"a\": 1, \"b\": 2, \"c\": 3 }\n// charMap[\"c\"] = 3"
+          }
+        ]
+      }
+    }
+  ]
+}

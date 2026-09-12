@@ -160,7 +160,7 @@
             "code": "function palindrome(string: string): boolean {\n  // Place pointers at both ends of the string.\n  let left = 0;\n  let right = string.length - 1;\n\n  // Walk inward until the pointers meet.\n  while (left < right) {\n    // Characters must match; otherwise it is not a palindrome.\n    if (string[left] !== string[right]) {\n      return false;\n    }\n  }\n\n  return true;\n}\n"
           },
           {
-            "title": "Move pointers onwards",
+            "title": "Advance pointers",
             "explanation": "",
             "code": "function palindrome(string: string): boolean {\n  // Place pointers at both ends of the string.\n  let left = 0;\n  let right = string.length - 1;\n\n  // Walk inward until the pointers meet.\n  while (left < right) {\n    // Characters must match; otherwise it is not a palindrome.\n    if (string[left] !== string[right]) {\n      return false;\n    }\n    left++;\n    right--;\n  }\n\n  return true;\n}\n"
           }

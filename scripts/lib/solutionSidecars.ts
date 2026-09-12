@@ -31,13 +31,31 @@ import {
 import { basename, join, resolve } from 'node:path'
 import {
   problemSchema,
+  solutionSchema,
+  solutionStepSchema,
   type LanguageId,
   type ProblemInput,
   type SolutionStep,
   type StepsByLanguage,
 } from '../../src/content/schema'
+import { z } from 'zod'
 
 export const PROBLEMS_DIR = resolve('src/content/problems')
+
+/** Allows empty/missing language step arrays so `steps:pack` can fill them from sidecars. */
+const packDraftProblemSchema = problemSchema.extend({
+  solutions: z
+    .array(
+      solutionSchema.extend({
+        steps: z.object({
+          python: z.array(solutionStepSchema).optional(),
+          javascript: z.array(solutionStepSchema).optional(),
+          typescript: z.array(solutionStepSchema).optional(),
+        }),
+      }),
+    )
+    .min(1),
+})
 
 export const LANG_EXT: Record<LanguageId, string> = {
   python: 'py',
@@ -125,13 +143,20 @@ export function listProblemSlugsWithSidecars(problemsDir: string = PROBLEMS_DIR)
     .sort()
 }
 
-export function readProblemJson(slug: string, problemsDir: string = PROBLEMS_DIR): ProblemInput {
+export function readProblemJson(
+  slug: string,
+  problemsDir: string = PROBLEMS_DIR,
+  opts: { allowEmptySteps?: boolean } = {},
+): ProblemInput {
   const file = sidecarPaths(slug, problemsDir).json
   if (!existsSync(file)) {
     throw new Error(`Missing problem JSON: ${file}`)
   }
   const raw = JSON.parse(readFileSync(file, 'utf8')) as unknown
-  const parsed = problemSchema.safeParse(raw)
+  // Pack replaces steps from sidecars, so empty placeholder arrays are OK then.
+  // Unpack / sync checks still require a fully valid problem.
+  const schema = opts.allowEmptySteps ? packDraftProblemSchema : problemSchema
+  const parsed = schema.safeParse(raw)
   if (!parsed.success) {
     throw new Error(`Invalid problem JSON for "${slug}":\n${parsed.error.message}`)
   }
@@ -217,7 +242,7 @@ export function packSlug(
   problemsDir: string = PROBLEMS_DIR,
 ): { solutionsUpdated: number; path: string } {
   const paths = sidecarPaths(slug, problemsDir)
-  const problem = readProblemJson(slug, problemsDir)
+  const problem = readProblemJson(slug, problemsDir, { allowEmptySteps: true })
   const sidecarSteps = readStepsFromSidecars(slug, problemsDir)
 
   if (sidecarSteps.length !== problem.solutions.length) {
