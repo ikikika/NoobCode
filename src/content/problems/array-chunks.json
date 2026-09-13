@@ -1,0 +1,259 @@
+{
+  "slug": "array-chunks",
+  "title": "Array Chunks",
+  "order": 2,
+  "difficulty": "easy",
+  "tags": [],
+  "patterns": [
+    "brute-force"
+  ],
+  "description": "Given an array and chunk size, divide the array into many subarrays where each subarray is of length size",
+  "constraints": [],
+  "examples": [
+    {
+      "input": "[1, 2, 3, 4], 2",
+      "output": "[[ 1, 2], [3, 4]]"
+    },
+    {
+      "input": "[1, 2, 3, 4, 5], 2",
+      "output": "[[ 1, 2], [3, 4], [5]]"
+    },
+    {
+      "input": "[1, 2, 3, 4, 5, 6, 7, 8], 3",
+      "output": "[[ 1, 2, 3], [4, 5, 6], [7, 8]]"
+    },
+    {
+      "input": "[1, 2, 3, 4, 5], 4",
+      "output": "[[ 1, 2, 3, 4], [5]]"
+    },
+    {
+      "input": "[1, 2, 3, 4, 5], 10",
+      "output": "[[ 1, 2, 3, 4, 5]]"
+    }
+  ],
+  "functionName": {
+    "python": "chunk",
+    "javascript": "chunk",
+    "typescript": "chunk"
+  },
+  "starterCode": {
+    "python": "def chunk(array, size):\n    # Return an array of arrays.\n    pass\n",
+    "javascript": "function chunk(array, size) {\n  // Return an array of arrays.\n}\n",
+    "typescript": "function chunk(array: number[], size: number): number[][] {\n  // Return an array of arrays.\n  return [];\n}\n"
+  },
+  "tests": [
+    {
+      "name": "chunk divides an array of 10 elements with chunk size 2",
+      "args": [
+        [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        2
+      ],
+      "expected": [
+        [
+          1,
+          2
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          5,
+          6
+        ],
+        [
+          7,
+          8
+        ],
+        [
+          9,
+          10
+        ]
+      ]
+    },
+    {
+      "name": "chunk divides an array of 3 elements with chunk size 1",
+      "args": [
+        [
+          1,
+          2,
+          3
+        ],
+        1
+      ],
+      "expected": [
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ]
+    },
+    {
+      "name": "chunk divides an array of 5 elements with chunk size 3",
+      "args": [
+        [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        3
+      ],
+      "expected": [
+        [
+          1,
+          2,
+          3
+        ],
+        [
+          4,
+          5
+        ]
+      ]
+    },
+    {
+      "name": "chunk divides an array of 13 elements with chunk size 5",
+      "args": [
+        [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13
+        ],
+        5
+      ],
+      "expected": [
+        [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        [
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        [
+          11,
+          12,
+          13
+        ]
+      ]
+    }
+  ],
+  "solutions": [
+    {
+      "approachName": "Loop through array and push to new array",
+      "summary": "Walk the array, start a new chunk when the last one is missing or full",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "technique": {
+        "primaryPattern": "brute-force",
+        "optimal": true
+      },
+      "steps": {
+        "typescript": [
+          {
+            "title": "Start from the function shape",
+            "explanation": "",
+            "code": "function chunk(array: number[], size: number): number[][] {\n  return [];\n}"
+          },
+          {
+            "title": "Analyse problem",
+            "explanation": "",
+            "code": "function chunk(array: number[], size: number): number[][] {\n  return [];\n}\n\n// make sense of the problem\n// const array = [1, 2, 3, 4], const size = 2\n// create a new array to store the chunks called 'chunked', const chunked = []\n// loop through unchunked array [1, 2, 3, 4]\n  \n  // 1st item = 1\n  // retrieve the last element in 'chunked', at this point it's undefined\n  // means it's empty, so we should start a new chunk\n  // push a new chunk into 'chunked' with the current element, \n  // chunked = [[1]]\n\n  // 2nd item = 2\n  // retrieve the last element in 'chunked', at this point it's [1]\n  // means its not empty\n  // check if the length of the last element is equal to size\n  // at this point, size of last element is 1\n  // so we should add the current element into the last element\n  // chunked = [[1, 2]]\n\n  // 3rd item = 3\n  // retrieve the last element in 'chunked', at this point it's [1, 2]\n  // check if the length of the last element is equal to size\n  // at this point, size of last element is 2, which is equal to size\n  // so we should start a new chunk\n  // push a new chunk into 'chunked' with the current element\n  // chunked = [[1, 2], [3]]\n  \n  // 4th item = 4\n  // retrieve the last element in 'chunked', at this point it's [3]\n  // check if the length of the last element is equal to size\n  // at this point, size of last element is 1\n  // so we should add the current element into the last element\n  // chunked = [[1, 2], [3, 4]]\n  \n  // no more items to loop through, so we return 'chunked'\n  \n  "
+          },
+          {
+            "title": "Plan",
+            "explanation": "",
+            "code": "function chunk(array: number[], size: number): number[][] {\n  // create a new array to store the chunks called 'chunked'\n\n  // loop through unchunked array\n\n    // retrieve the last element in 'chunked'\n\n    // if last element does not exist\n\n      // push a new chunk into 'chunked' with the current element\n\n    // if last element exist and its length is equal to size (means it's full)  \n    \n      // push a new chunk into 'chunked' with the current element\n\n    // else, add current element into chunked\n    \n  return [];\n}\n\n// make sense of the problem\n// const array = [1, 2, 3, 4], const size = 2\n// create a new array to store the chunks called 'chunked', const chunked = []\n// loop through unchunked array [1, 2, 3, 4]\n  \n  // 1st item = 1\n  // retrieve the last element in 'chunked', at this point it's undefined\n  // means it's empty, so we should start a new chunk\n  // push a new chunk into 'chunked' with the current element, \n  // chunked = [[1]]\n\n  // 2nd item = 2\n  // retrieve the last element in 'chunked', at this point it's [1]\n  // means its not empty\n  // check if the length of the last element is equal to size\n  // at this point, size of last element is 1\n  // so we should add the current element into the last element\n  // chunked = [[1, 2]]\n\n  // 3rd item = 3\n  // retrieve the last element in 'chunked', at this point it's [1, 2]\n  // check if the length of the last element is equal to size\n  // at this point, size of last element is 2, which is equal to size\n  // so we should start a new chunk\n  // push a new chunk into 'chunked' with the current element\n  // chunked = [[1, 2], [3]]\n  \n  // 4th item = 4\n  // retrieve the last element in 'chunked', at this point it's [3]\n  // check if the length of the last element is equal to size\n  // at this point, size of last element is 1\n  // so we should add the current element into the last element\n  // chunked = [[1, 2], [3, 4]]\n  \n  // no more items to loop through, so we return 'chunked'\n  \n  "
+          },
+          {
+            "title": "Refine plan",
+            "explanation": "",
+            "code": "function chunk(array: number[], size: number): number[][] {\n  // create a new array to store the chunks called 'chunked'\n\n  // loop through unchunked array\n\n    // retrieve the last element in 'chunked'\n\n    // if last element does not exist or if last element exist and its length is equal to size (means it's full)\n    \n      // push a new chunk into 'chunked' with the current element\n\n    // else, add current element into chunked\n    \n  return [];\n}\n\n// make sense of the problem\n// const array = [1, 2, 3, 4], const size = 2\n// create a new array to store the chunks called 'chunked', const chunked = []\n// loop through unchunked array [1, 2, 3, 4]\n  \n  // 1st item = 1\n  // retrieve the last element in 'chunked', at this point it's undefined\n  // means it's empty, so we should start a new chunk\n  // push a new chunk into 'chunked' with the current element, \n  // chunked = [[1]]\n\n  // 2nd item = 2\n  // retrieve the last element in 'chunked', at this point it's [1]\n  // means its not empty\n  // check if the length of the last element is equal to size\n  // at this point, size of last element is 1\n  // so we should add the current element into the last element\n  // chunked = [[1, 2]]\n\n  // 3rd item = 3\n  // retrieve the last element in 'chunked', at this point it's [1, 2]\n  // check if the length of the last element is equal to size\n  // at this point, size of last element is 2, which is equal to size\n  // so we should start a new chunk\n  // push a new chunk into 'chunked' with the current element\n  // chunked = [[1, 2], [3]]\n  \n  // 4th item = 4\n  // retrieve the last element in 'chunked', at this point it's [3]\n  // check if the length of the last element is equal to size\n  // at this point, size of last element is 1\n  // so we should add the current element into the last element\n  // chunked = [[1, 2], [3, 4]]\n  \n  // no more items to loop through, so we return 'chunked'\n  \n  "
+          },
+          {
+            "title": "Loop through unchunked array",
+            "explanation": "",
+            "code": "function chunk(array: number[], size: number): number[][] {\n  // create a new array to store the chunks called 'chunked'\n  const chunked: number[][] = [];\n\n  // loop through unchunked array\n  for (let item of array) {\n\n    // retrieve the last element in 'chunked'\n    const last = chunked[chunked.length - 1];\n\n    // if last element does not exist or if last element exist and its length is equal to size (means it's full)\n    \n      // push a new chunk into 'chunked' with the current element\n\n    // else, add current element into chunked\n  }  \n\n  return chunked;\n}\n\n// make sense of the problem\n// const array = [1, 2, 3, 4], const size = 2\n// create a new array to store the chunks called 'chunked', const chunked = []\n// loop through unchunked array [1, 2, 3, 4]\n  \n  // 1st item = 1\n  // retrieve the last element in 'chunked', at this point it's undefined\n  // means it's empty, so we should start a new chunk\n  // push a new chunk into 'chunked' with the current element, \n  // chunked = [[1]]\n\n  // 2nd item = 2\n  // retrieve the last element in 'chunked', at this point it's [1]\n  // means its not empty\n  // check if the length of the last element is equal to size\n  // at this point, size of last element is 1\n  // so we should add the current element into the last element\n  // chunked = [[1, 2]]\n\n  // 3rd item = 3\n  // retrieve the last element in 'chunked', at this point it's [1, 2]\n  // check if the length of the last element is equal to size\n  // at this point, size of last element is 2, which is equal to size\n  // so we should start a new chunk\n  // push a new chunk into 'chunked' with the current element\n  // chunked = [[1, 2], [3]]\n  \n  // 4th item = 4\n  // retrieve the last element in 'chunked', at this point it's [3]\n  // check if the length of the last element is equal to size\n  // at this point, size of last element is 1\n  // so we should add the current element into the last element\n  // chunked = [[1, 2], [3, 4]]\n  \n  // no more items to loop through, so we return 'chunked'\n  \n  "
+          },
+          {
+            "title": "If last element does not exist or is full",
+            "explanation": "",
+            "code": "function chunk(array: number[], size: number): number[][] {\n  // create a new array to store the chunks called 'chunked'\n  const chunked: number[][] = [];\n\n  // loop through unchunked array\n  for (let item of array) {\n\n    // retrieve the last element in 'chunked'\n    const last = chunked[chunked.length - 1];\n\n    // if last element does not exist or if last element exist and its length is equal to size (means it's full)\n    if (!last || last.length === size) {\n\n      // push a new chunk into 'chunked' with the current element\n      chunked.push([item]);\n\n    }\n      // else, add current element into chunked\n  }  \n  \n  return chunked;\n}\n\n// make sense of the problem\n// const array = [1, 2, 3, 4], const size = 2\n// create a new array to store the chunks called 'chunked', const chunked = []\n// loop through unchunked array [1, 2, 3, 4]\n  \n  // 1st item = 1\n  // retrieve the last element in 'chunked', at this point it's undefined\n  // means it's empty, so we should start a new chunk\n  // push a new chunk into 'chunked' with the current element, \n  // chunked = [[1]]\n\n  // 2nd item = 2\n  // retrieve the last element in 'chunked', at this point it's [1]\n  // means its not empty\n  // check if the length of the last element is equal to size\n  // at this point, size of last element is 1\n  // so we should add the current element into the last element\n  // chunked = [[1, 2]]\n\n  // 3rd item = 3\n  // retrieve the last element in 'chunked', at this point it's [1, 2]\n  // check if the length of the last element is equal to size\n  // at this point, size of last element is 2, which is equal to size\n  // so we should start a new chunk\n  // push a new chunk into 'chunked' with the current element\n  // chunked = [[1, 2], [3]]\n  \n  // 4th item = 4\n  // retrieve the last element in 'chunked', at this point it's [3]\n  // check if the length of the last element is equal to size\n  // at this point, size of last element is 1\n  // so we should add the current element into the last element\n  // chunked = [[1, 2], [3, 4]]\n  \n  // no more items to loop through, so we return 'chunked'\n  \n  "
+          },
+          {
+            "title": "If last element is not full",
+            "explanation": "",
+            "code": "function chunk(array: number[], size: number): number[][] {\n  // create a new array to store the chunks called 'chunked'\n  const chunked: number[][] = [];\n\n  // loop through unchunked array\n  for (let item of array) {\n\n    // retrieve the last element in 'chunked'\n    const last = chunked[chunked.length - 1];\n\n    // if last element does not exist or if last element exist and its length is equal to size (means it's full)\n    if (!last || last.length === size) {\n\n      // push a new chunk into 'chunked' with the current element\n      chunked.push([item]);\n\n    } else {\n      // else, add current element into chunked\n      last.push(item);\n    }\n    \n  }  \n  \n  return chunked;\n}\n\n// make sense of the problem\n// const array = [1, 2, 3, 4], const size = 2\n// create a new array to store the chunks called 'chunked', const chunked = []\n// loop through unchunked array [1, 2, 3, 4]\n  \n  // 1st item = 1\n  // retrieve the last element in 'chunked', at this point it's undefined\n  // means it's empty, so we should start a new chunk\n  // push a new chunk into 'chunked' with the current element, \n  // chunked = [[1]]\n\n  // 2nd item = 2\n  // retrieve the last element in 'chunked', at this point it's [1]\n  // means its not empty\n  // check if the length of the last element is equal to size\n  // at this point, size of last element is 1\n  // so we should add the current element into the last element\n  // chunked = [[1, 2]]\n\n  // 3rd item = 3\n  // retrieve the last element in 'chunked', at this point it's [1, 2]\n  // check if the length of the last element is equal to size\n  // at this point, size of last element is 2, which is equal to size\n  // so we should start a new chunk\n  // push a new chunk into 'chunked' with the current element\n  // chunked = [[1, 2], [3]]\n  \n  // 4th item = 4\n  // retrieve the last element in 'chunked', at this point it's [3]\n  // check if the length of the last element is equal to size\n  // at this point, size of last element is 1\n  // so we should add the current element into the last element\n  // chunked = [[1, 2], [3, 4]]\n  \n  // no more items to loop through, so we return 'chunked'\n  \n  "
+          }
+        ]
+      }
+    },
+    {
+      "approachName": "Sliced-based solution",
+      "summary": "Create chunks by slicing the array into smaller arrays of size 'size'",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "technique": {
+        "primaryPattern": "brute-force",
+        "optimal": false
+      },
+      "steps": {
+        "typescript": [
+          {
+            "title": "Start from the function shape",
+            "explanation": "",
+            "code": "function chunk(array: number[], size: number): number[][] {\n  return [];\n}"
+          },
+          {
+            "title": "Plan",
+            "explanation": "",
+            "code": "function chunk(array: number[], size: number): number[][] {\n  // create a new array to store the chunks called 'chunked'\n\n  // create a variable to store the current index called 'index'\n\n  // while index is less than array length\n  \n    // push a slice of length 'size' from 'array' into 'chunked'\n\n    // increment index by 'size'\n\n  return [];\n}\n\n// for loop when you know the exact number of times to run the code, \n// while loop when the number of iterations is unknown and depends on a dynamic condition\n\n// slice(start_index, end_index) \n// end_index is not included in output\n// const array = [\"a\", \"b\", \"c\", \"d\", \"e\"]\n// array.slice(0, 2) = [\"a\", \"b\"]\n// array.slice(2, 4) = [\"c\", \"d\"]"
+          },
+          {
+            "title": "Write the while loop",
+            "explanation": "",
+            "code": "function chunk(array: number[], size: number): number[][] {\n  // create a new array to store the chunks called 'chunked'\n  const chunked: number[][] = [];\n\n  // create a variable to store the current index called 'index'\n  let index = 0;\n\n  // while index is less than array length\n  while (index < array.length) {\n\n    // push a slice of length 'size' from 'array' into 'chunked'\n\n    // increment index by 'size'\n\n  }\n\n  return chunked;\n}\n\n// for loop when you know the exact number of times to run the code, \n// while loop when the number of iterations is unknown and depends on a dynamic condition\n\n// slice(start_index, end_index) \n// end_index is not included in output\n// const array = [\"a\", \"b\", \"c\", \"d\", \"e\"]\n// array.slice(0, 2) = [\"a\", \"b\"]\n// array.slice(2, 4) = [\"c\", \"d\"]"
+          },
+          {
+            "title": "Push slices into chunked",
+            "explanation": "",
+            "code": "function chunk(array: number[], size: number): number[][] {\n  // create a new array to store the chunks called 'chunked'\n  const chunked: number[][] = [];\n\n  // create a variable to store the current index called 'index'\n  let index = 0;\n\n  // while index is less than array length\n  while (index < array.length) {\n\n    // push a slice of length 'size' from 'array' into 'chunked'\n    chunked.push(array.slice(index, index + size));\n\n    // increment index by 'size'\n    index += size;\n\n  }\n\n  return chunked;\n}\n\n// for loop when you know the exact number of times to run the code, \n// while loop when the number of iterations is unknown and depends on a dynamic condition\n\n// slice(start_index, end_index) \n// end_index is not included in output\n// const array = [\"a\", \"b\", \"c\", \"d\", \"e\"]\n// array.slice(0, 2) = [\"a\", \"b\"]\n// array.slice(2, 4) = [\"c\", \"d\"]"
+          }
+        ]
+      }
+    }
+  ]
+}
