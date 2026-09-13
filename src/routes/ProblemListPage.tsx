@@ -51,18 +51,18 @@ function formatDate(iso: string): string {
 export function ProblemListPage() {
   const solved = useProgressStore((s) => s.solved)
   const [searchParams, setSearchParams] = useSearchParams()
-  const selectedPattern = isPatternId(searchParams.get('pattern'))
-    ? searchParams.get('pattern')
+
+  const patternParam = searchParams.get('pattern')
+  const difficultyParam = searchParams.get('difficulty')
+  const sortParam = searchParams.get('sort')
+  const dirParam = searchParams.get('dir')
+
+  const selectedPattern: PatternId | null = isPatternId(patternParam) ? patternParam : null
+  const selectedDifficulty: Difficulty | null = isDifficulty(difficultyParam)
+    ? difficultyParam
     : null
-  const selectedDifficulty = isDifficulty(searchParams.get('difficulty'))
-    ? searchParams.get('difficulty')
-    : null
-  const sortKey: SortKey = isSortKey(searchParams.get('sort'))
-    ? (searchParams.get('sort') as SortKey)
-    : 'date'
-  const sortDir: SortDir = isSortDir(searchParams.get('dir'))
-    ? (searchParams.get('dir') as SortDir)
-    : 'desc'
+  const sortKey: SortKey = isSortKey(sortParam) ? sortParam : 'date'
+  const sortDir: SortDir = isSortDir(dirParam) ? dirParam : 'desc'
 
   const availablePatterns = useMemo(() => {
     const used = new Set(builtinMeta.flatMap((p) => p.patterns))
