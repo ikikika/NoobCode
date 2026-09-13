@@ -59,13 +59,10 @@ export function ProblemListPage() {
     : null
   const sortKey: SortKey = isSortKey(searchParams.get('sort'))
     ? (searchParams.get('sort') as SortKey)
-    : 'order'
-  const sortDir: SortDir =
-    isSortDir(searchParams.get('dir'))
-      ? (searchParams.get('dir') as SortDir)
-      : sortKey === 'date'
-        ? 'desc'
-        : 'asc'
+    : 'date'
+  const sortDir: SortDir = isSortDir(searchParams.get('dir'))
+    ? (searchParams.get('dir') as SortDir)
+    : 'desc'
 
   const availablePatterns = useMemo(() => {
     const used = new Set(builtinMeta.flatMap((p) => p.patterns))
@@ -153,14 +150,11 @@ export function ProblemListPage() {
   }
 
   function toggleDateSort() {
-    if (sortKey !== 'date') {
-      updateParams({ sort: 'date', dir: 'desc' })
-      return
-    }
-    if (sortDir === 'desc') {
+    if (sortKey === 'date' && sortDir === 'desc') {
       updateParams({ sort: 'date', dir: 'asc' })
       return
     }
+    // Back to default: newest first (omit params)
     updateParams({ sort: null, dir: null })
   }
 

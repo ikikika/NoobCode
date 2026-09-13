@@ -1,6 +1,5 @@
 import type { MouseEvent } from 'react'
 import { Link, Outlet } from 'react-router-dom'
-import { SettingsMenu } from './SettingsMenu'
 import { ThemeToggle } from './ThemeToggle'
 
 export function Layout() {
@@ -25,10 +24,6 @@ export function Layout() {
           <span className="br">{'</>'}</span> NoobCode
         </Link>
         <div className="nc-head-actions">
-          <Link to="/new" className="nc-iconbtn" aria-label="New problem" title="New problem">
-            +
-          </Link>
-          <SettingsMenu />
           <ThemeToggle />
         </div>
       </header>
