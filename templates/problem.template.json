@@ -2,6 +2,8 @@
   "slug": "problem-template",
   "title": "Problem Template",
   "order": 0,
+  "date": "2026-01-01",
+  "visible": true,
   "difficulty": "easy",
   "tags": ["array"],
   "patterns": ["brute-force"],

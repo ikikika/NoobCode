@@ -2,6 +2,8 @@
   "slug": "array-chunks",
   "title": "Array Chunks",
   "order": 2,
+  "date": "2026-09-13",
+  "visible": true,
   "difficulty": "easy",
   "tags": [],
   "patterns": [

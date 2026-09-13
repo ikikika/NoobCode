@@ -52,6 +52,8 @@ describe('pack / unpack round-trip', () => {
       slug,
       title: 'Demo',
       order: 0,
+      date: '2026-01-01',
+      visible: true,
       difficulty: 'easy',
       tags: [],
       patterns: ['two-pointers'],

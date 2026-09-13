@@ -93,6 +93,10 @@ export const problemSchema = z.object({
   title: z.string(),
   /** Lower numbers appear first within a pattern group on the list page. */
   order: z.number().int().nonnegative(),
+  /** When the problem was added (ISO calendar date, YYYY-MM-DD). */
+  date: z.string().date(),
+  /** When false, the problem is hidden from the problem list. */
+  visible: z.boolean(),
   difficulty: z.enum(['easy', 'medium', 'hard']),
   tags: z.array(z.string()),
   patterns: z.array(patternIdSchema).min(1),

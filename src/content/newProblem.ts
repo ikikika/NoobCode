@@ -71,6 +71,8 @@ export function buildProblemSkeleton({
     slug,
     title: resolvedTitle,
     order: 0,
+    date: new Date().toISOString().slice(0, 10),
+    visible: true,
     difficulty,
     tags: [],
     patterns: ['brute-force'],

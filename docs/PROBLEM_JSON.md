@@ -35,6 +35,8 @@ import (or `validate:content`) fail with the offending field path.
 | `slug`         | string                               | URL id. Must be unique and not collide with a built-in. For built-in files it must equal the filename (`two-sum.json` → `"two-sum"`). |
 | `title`        | string                               | Display name.                                                                                                                         |
 | `order`        | non-negative int                     | Sort key within a pattern group on the list page (lower first).                                                                       |
+| `date`         | string (`YYYY-MM-DD`)                | When the problem was added.                                                                                                           |
+| `visible`      | boolean                              | When `false`, hidden from the problem list (still loadable by URL).                                                                   |
 | `difficulty`   | `"easy" \| "medium" \| "hard"`       |                                                                                                                                       |
 | `tags`         | string[]                             | Free-form labels shown as chips.                                                                                                      |
 | `patterns`     | PatternId[]                          | **At least one.** See [Patterns](#patterns).                                                                                          |
@@ -183,6 +185,9 @@ A valid, copy-pasteable problem (`add` returns `a + b`):
 {
   "slug": "add-two-numbers-basic",
   "title": "Add Two Numbers",
+  "order": 0,
+  "date": "2026-01-01",
+  "visible": true,
   "difficulty": "easy",
   "tags": ["math"],
   "patterns": ["brute-force"],

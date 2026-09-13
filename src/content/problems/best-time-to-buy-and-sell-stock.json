@@ -2,6 +2,8 @@
   "slug": "best-time-to-buy-and-sell-stock",
   "title": "Best Time to Buy and Sell Stock",
   "order": 3,
+  "date": "2026-06-08",
+  "visible": false,
   "difficulty": "easy",
   "tags": [
     "array",
@@ -26,7 +28,7 @@
     {
       "input": "prices = [7,6,4,3,1]",
       "output": "0",
-      "explanation": "Prices only fall — no profit."
+      "explanation": "Prices only fall \u2014 no profit."
     }
   ],
   "functionName": {
@@ -134,7 +136,7 @@
           },
           {
             "title": "Walk through the prices",
-            "explanation": "Consider each day’s price once.",
+            "explanation": "Consider each day\u2019s price once.",
             "code": "def max_profit(prices):\n    min_price = float('inf')\n    best = 0\n    for p in prices:\n        pass\n    return best\n"
           },
           {
@@ -161,7 +163,7 @@
           },
           {
             "title": "Walk through the prices",
-            "explanation": "Consider each day’s price once.",
+            "explanation": "Consider each day\u2019s price once.",
             "code": "function maxProfit(prices) {\n  let minPrice = Infinity;\n  let best = 0;\n  for (const p of prices) {\n  }\n  return best;\n}\n"
           },
           {
@@ -188,7 +190,7 @@
           },
           {
             "title": "Walk through the prices",
-            "explanation": "Consider each day’s price once.",
+            "explanation": "Consider each day\u2019s price once.",
             "code": "function maxProfit(prices: number[]): number {\n  let minPrice = Infinity;\n  let best = 0;\n  for (const p of prices) {\n  }\n  return best;\n}\n"
           },
           {
@@ -244,7 +246,7 @@
           },
           {
             "title": "Keep the largest profit",
-            "explanation": "Compare each pair’s profit against the best seen so far.",
+            "explanation": "Compare each pair\u2019s profit against the best seen so far.",
             "code": "def max_profit(prices):\n    best = 0\n    for i in range(len(prices)):\n        for j in range(i + 1, len(prices)):\n            best = max(best, prices[j] - prices[i])\n    return best\n"
           }
         ],
@@ -271,7 +273,7 @@
           },
           {
             "title": "Keep the largest profit",
-            "explanation": "Compare each pair’s profit against the best seen so far.",
+            "explanation": "Compare each pair\u2019s profit against the best seen so far.",
             "code": "function maxProfit(prices) {\n  let best = 0;\n  for (let i = 0; i < prices.length; i++) {\n    for (let j = i + 1; j < prices.length; j++) {\n      best = Math.max(best, prices[j] - prices[i]);\n    }\n  }\n  return best;\n}\n"
           }
         ],
@@ -298,7 +300,7 @@
           },
           {
             "title": "Keep the largest profit",
-            "explanation": "Compare each pair’s profit against the best seen so far.",
+            "explanation": "Compare each pair\u2019s profit against the best seen so far.",
             "code": "function maxProfit(prices: number[]): number {\n  let best = 0;\n  for (let i = 0; i < prices.length; i++) {\n    for (let j = i + 1; j < prices.length; j++) {\n      best = Math.max(best, prices[j] - prices[i]);\n    }\n  }\n  return best;\n}\n"
           }
         ]

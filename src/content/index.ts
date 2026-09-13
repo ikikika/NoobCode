@@ -22,6 +22,7 @@ for (const [path, data] of Object.entries(modules)) {
 }
 
 export const builtinMeta: ProblemMeta[] = Object.values(builtinProblems)
+  .filter((p) => p.visible)
   .map((p) => ({
     slug: p.slug,
     title: p.title,

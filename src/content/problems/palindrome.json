@@ -2,6 +2,8 @@
   "slug": "palindrome",
   "title": "Palindrome",
   "order": 2,
+  "date": "2026-09-12",
+  "visible": true,
   "difficulty": "easy",
   "tags": [],
   "patterns": [
@@ -123,7 +125,7 @@
     },
     {
       "approachName": "Two pointers",
-      "summary": "Compare characters from both ends and walk inward until the pointers meet—no copy of the string.",
+      "summary": "Compare characters from both ends and walk inward until the pointers meet\u2014no copy of the string.",
       "timeComplexity": "O(n)",
       "spaceComplexity": "O(1)",
       "technique": {
