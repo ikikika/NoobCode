@@ -4,7 +4,7 @@ import { MarkdownView } from '../../components/MarkdownView'
 
 export function ProblemDescription({ problem }: { problem: Problem }) {
   return (
-    <div className="flex flex-col gap-4 overflow-auto p-4">
+    <div className="flex h-full flex-col gap-4 overflow-auto p-4">
       <div>
         <h1 className="text-xl font-bold text-fg">{problem.title}</h1>
         <div className="mt-2 flex flex-wrap items-center gap-2">

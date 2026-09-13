@@ -1,0 +1,206 @@
+{
+  "slug": "container-with-most-water",
+  "title": "Container With Most Water",
+  "order": 4,
+  "difficulty": "medium",
+  "tags": [
+    "array",
+    "two-pointers"
+  ],
+  "patterns": [
+    "two-pointers",
+    "brute-force"
+  ],
+  "description": "https://leetcode.com/problems/container-with-most-water/description/\n\nYou are given an integer array `height` of length `n`. There are `n` vertical lines drawn such that the two endpoints of the `i`th line are `(i, 0)` and `(i, height[i])`.\n\nFind two lines that together with the x-axis form a container, such that the container contains the most water.\n\nReturn the maximum amount of water a container can store.\n\nNotice that you may not slant the container.\n\n![Container with most water — max area 49 between height 8 and 7](/container-with-most-water.jpg)",
+  "constraints": [
+    "n == height.length",
+    "2 <= n <= 10^5",
+    "0 <= height[i] <= 10^4"
+  ],
+  "examples": [
+    {
+      "input": "height = [1,8,6,2,5,4,8,3,7]",
+      "output": "49",
+      "explanation": "The max area is between indices 1 and 8: min(8, 7) * (8 - 1) = 49."
+    },
+    {
+      "input": "height = [1,1]",
+      "output": "1"
+    }
+  ],
+  "functionName": {
+    "python": "max_area",
+    "javascript": "maxArea",
+    "typescript": "maxArea"
+  },
+  "starterCode": {
+    "python": "def max_area(height):\n    # Return the maximum water a container can store.\n    pass\n",
+    "javascript": "function maxArea(height) {\n  // Return the maximum water a container can store.\n}\n",
+    "typescript": "function maxArea(height: number[]): number {\n  // Return the maximum water a container can store.\n  return 0;\n}\n"
+  },
+  "tests": [
+    {
+      "name": "classic example",
+      "args": [
+        [
+          1,
+          8,
+          6,
+          2,
+          5,
+          4,
+          8,
+          3,
+          7
+        ]
+      ],
+      "expected": 49
+    },
+    {
+      "name": "two equal lines",
+      "args": [
+        [
+          1,
+          1
+        ]
+      ],
+      "expected": 1
+    },
+    {
+      "name": "equal walls at ends",
+      "args": [
+        [
+          4,
+          3,
+          2,
+          1,
+          4
+        ]
+      ],
+      "expected": 16,
+      "hidden": true
+    },
+    {
+      "name": "increasing then taller end",
+      "args": [
+        [
+          1,
+          2,
+          1
+        ]
+      ],
+      "expected": 2,
+      "hidden": true
+    },
+    {
+      "name": "taller on the left",
+      "args": [
+        [
+          2,
+          3,
+          4,
+          5,
+          18,
+          17,
+          6
+        ]
+      ],
+      "expected": 17,
+      "hidden": true
+    }
+  ],
+  "solutions": [
+    {
+      "approachName": "Brute Force (all pairs)",
+      "summary": "Try every pair of lines and keep the largest area.",
+      "timeComplexity": "O(n^2)",
+      "spaceComplexity": "O(1)",
+      "technique": {
+        "primaryPattern": "brute-force",
+        "optimal": false,
+        "signature": {
+          "maxLoopDepth": 2,
+          "usesHashStructure": false,
+          "usesSorting": false,
+          "usesRecursion": false,
+          "twoPointer": false
+        }
+      },
+      "steps": {
+        "typescript": [
+          {
+            "title": "Start from the function shape",
+            "explanation": "",
+            "code": "function maxArea(height: number[]): number {\n  return 0;\n}\n\n// understand the problem\n// eg height = [1,8,6,2,5,4,8,3,7]\n\n// 8    x         x\n// 7    x x       x   x\n// 6    x x       x   x\n// 5    x x   x   x   x\n// 4    x x   x x x   x\n// 3    x x   x x x x x\n// 2    x x x x x x x x\n// 1  x x x x x x x x x\n//    0 1 2 3 4 5 6 7 8\n\n// we need to find the two lines that form the container with the most water\n// the container is formed by the two lines and the x-axis\n// the area of the container is the width of the container times the height of the container\n// the width of the container is the distance between the two lines\n// the height of the container is the minimum of the two lines\n\n// in this example, lets consider the area formed by the longest lines: height[1], height[6] and height[8]\n// area between height[1] and height[6] is 48\n// area between height[1] and height[8] is 49\n// area between height[6] and height[8] is 14\n// so the maximum area is 49\n// we can deduce that the longest lines do not always form the container with the most water\n// we need to take into account the distance between the two lines as well\n\n// we need to consider all the pairs that can be formed by the values in the array\n// we can use a nested loop to iterate through all pairs of lines\n"
+          },
+          {
+            "title": "Plan",
+            "explanation": "",
+            "code": "function maxArea(height: number[]): number {\n  // create a variable to store the best area called 'best'\n  let best = 0;\n  \n  // first for loop to pick a left line\n\n    // nested second for loop to pick a right line\n\n      // calculate the area of the container\n\n      // update the best area if the current area is greater\n\n  return best;\n}\n\n// understand the problem\n// eg height = [1,8,6,2,5,4,8,3,7]\n\n// 8    x         x\n// 7    x x       x   x\n// 6    x x       x   x\n// 5    x x   x   x   x\n// 4    x x   x x x   x\n// 3    x x   x x x x x\n// 2    x x x x x x x x\n// 1  x x x x x x x x x\n//    0 1 2 3 4 5 6 7 8\n\n// we need to find the two lines that form the container with the most water\n// the container is formed by the two lines and the x-axis\n// the area of the container is the width of the container times the height of the container\n// the width of the container is the distance between the two lines\n// the height of the container is the minimum of the two lines\n\n// in this example, lets consider the area formed by the longest lines: height[1], height[6] and height[8]\n// area between height[1] and height[6] is 48\n// area between height[1] and height[8] is 49\n// area between height[6] and height[8] is 14\n// so the maximum area is 49\n// we can deduce that the longest lines do not always form the container with the most water\n// we need to take into account the distance between the two lines as well\n\n// we need to consider all the pairs that can be formed by the values in the array\n// we can use a nested loop to iterate through all pairs of lines\n"
+          },
+          {
+            "title": "Pick a left line",
+            "explanation": "",
+            "code": "function maxArea(height: number[]): number {\n  // create a variable to store the best area called 'best'\n  let best = 0;\n  \n  // first for loop to pick a left line\n  for (let i = 0; i < height.length; i++) {\n\n    // nested second for loop to pick a right line\n\n      // calculate the area of the container\n\n      // update the best area if the current area is greater\n  }\n\n  return best;\n}\n\n// understand the problem\n// eg height = [1,8,6,2,5,4,8,3,7]\n\n// 8    x         x\n// 7    x x       x   x\n// 6    x x       x   x\n// 5    x x   x   x   x\n// 4    x x   x x x   x\n// 3    x x   x x x x x\n// 2    x x x x x x x x\n// 1  x x x x x x x x x\n//    0 1 2 3 4 5 6 7 8\n\n// we need to find the two lines that form the container with the most water\n// the container is formed by the two lines and the x-axis\n// the area of the container is the width of the container times the height of the container\n// the width of the container is the distance between the two lines\n// the height of the container is the minimum of the two lines\n\n// in this example, lets consider the area formed by the longest lines: height[1], height[6] and height[8]\n// area between height[1] and height[6] is 48\n// area between height[1] and height[8] is 49\n// area between height[6] and height[8] is 14\n// so the maximum area is 49\n// we can deduce that the longest lines do not always form the container with the most water\n// we need to take into account the distance between the two lines as well\n\n// we need to consider all the pairs that can be formed by the values in the array\n// we can use a nested loop to iterate through all pairs of lines\n"
+          },
+          {
+            "title": "Pick a right line",
+            "explanation": "",
+            "code": "function maxArea(height: number[]): number {\n  // create a variable to store the best area called 'best'\n  let best = 0;\n  \n  // first for loop to pick a left line\n  for (let i = 0; i < height.length; i++) {\n\n    // nested second for loop to pick a right line\n    for (let j = i + 1; j < height.length; j++) {\n\n      // calculate the area of the container\n\n      // update the best area if the current area is greater\n    }\n  }\n\n  return best;\n}\n\n// understand the problem\n// eg height = [1,8,6,2,5,4,8,3,7]\n\n// 8    x         x\n// 7    x x       x   x\n// 6    x x       x   x\n// 5    x x   x   x   x\n// 4    x x   x x x   x\n// 3    x x   x x x x x\n// 2    x x x x x x x x\n// 1  x x x x x x x x x\n//    0 1 2 3 4 5 6 7 8\n\n// we need to find the two lines that form the container with the most water\n// the container is formed by the two lines and the x-axis\n// the area of the container is the width of the container times the height of the container\n// the width of the container is the distance between the two lines\n// the height of the container is the minimum of the two lines\n\n// in this example, lets consider the area formed by the longest lines: height[1], height[6] and height[8]\n// area between height[1] and height[6] is 48\n// area between height[1] and height[8] is 49\n// area between height[6] and height[8] is 14\n// so the maximum area is 49\n// we can deduce that the longest lines do not always form the container with the most water\n// we need to take into account the distance between the two lines as well\n\n// we need to consider all the pairs that can be formed by the values in the array\n// we can use a nested loop to iterate through all pairs of lines\n"
+          },
+          {
+            "title": "Keep the largest area",
+            "explanation": "",
+            "code": "function maxArea(height: number[]): number {\n  // create a variable to store the best area called 'best'\n  let best = 0;\n  \n  // first for loop to pick a left line\n  for (let i = 0; i < height.length; i++) {\n\n    // nested second for loop to pick a right line\n    for (let j = i + 1; j < height.length; j++) {\n\n      // calculate the area of the container\n      const area = Math.min(height[i], height[j]) * (j - i);\n\n      // update the best area if the current area is greater\n      best = Math.max(best, area);\n    }\n  }\n\n  return best;\n}\n\n// understand the problem\n// eg height = [1,8,6,2,5,4,8,3,7]\n\n// 8    x         x\n// 7    x x       x   x\n// 6    x x       x   x\n// 5    x x   x   x   x\n// 4    x x   x x x   x\n// 3    x x   x x x x x\n// 2    x x x x x x x x\n// 1  x x x x x x x x x\n//    0 1 2 3 4 5 6 7 8\n\n// we need to find the two lines that form the container with the most water\n// the container is formed by the two lines and the x-axis\n// the area of the container is the width of the container times the height of the container\n// the width of the container is the distance between the two lines\n// the height of the container is the minimum of the two lines\n\n// in this example, lets consider the area formed by the longest lines: height[1], height[6] and height[8]\n// area between height[1] and height[6] is 48\n// area between height[1] and height[8] is 49\n// area between height[6] and height[8] is 14\n// so the maximum area is 49\n// we can deduce that the longest lines do not always form the container with the most water\n// we need to take into account the distance between the two lines as well\n\n// we need to consider all the pairs that can be formed by the values in the array\n// we can use a nested loop to iterate through all pairs of lines\n"
+          }
+        ]
+      }
+    },
+    {
+      "approachName": "Two Pointers",
+      "summary": "Start at both ends and always move the shorter line inward.",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "technique": {
+        "primaryPattern": "two-pointers",
+        "optimal": true,
+        "signature": {
+          "maxLoopDepth": 1,
+          "usesHashStructure": false,
+          "usesSorting": false,
+          "usesRecursion": false,
+          "twoPointer": true
+        }
+      },
+      "steps": {
+        "typescript": [
+          {
+            "title": "Start from the function shape",
+            "explanation": "",
+            "code": "function maxArea(height: number[]): number {\n  return 0;\n}\n\n// understand the problem\n// eg height = [1,8,6,2,5,4,8,3,7]\n\n// 8    x         x\n// 7    x x       x   x\n// 6    x x       x   x\n// 5    x x   x   x   x\n// 4    x x   x x x   x\n// 3    x x   x x x x x\n// 2    x x x x x x x x\n// 1  x x x x x x x x x\n//    0 1 2 3 4 5 6 7 8\n\n// we need to find the two lines that form the container with the most water\n// the container is formed by the two lines and the x-axis\n// the area of the container is the width of the container times the height of the container\n// the width of the container is the distance between the two lines\n// the height of the container is the minimum of the two lines\n\n// in this example, we start from both ends, height[0] and height[8], area formed is 8\n// notice that moving the longer line inward will not increase the area, \n// so we move the shorter line inward, we get height[1] and height[8], area formed is 49\n\n// we move the shorter line inward again, we get height[1] and height[7], area formed is 18\n\n// we move the shorter line inward again, we get height[1] and height[6], area formed is 40\n\n// we continue this process until the two pointers meet\n\n// this approach is better because we do not need to check all pairs of lines\n// we only need to check the pairs that are formed by the shorter line\n// this reduces the time complexity from O(n^2) to O(n)"
+          },
+          {
+            "title": "Plan",
+            "explanation": "",
+            "code": "function maxArea(height: number[]): number {\n  // start pointers at both ends\n  let left = 0;\n  let right = height.length - 1;\n  \n  // create a variable to store the best area called 'best'\n  let best = 0;\n\n  // use a while loop to move the pointers inward\n\n    // calculate the current area of the container\n\n    // update the best area if the current area is greater\n\n    // move the shorter pointer inward\n\n  return best;\n}\n\n// understand the problem\n// eg height = [1,8,6,2,5,4,8,3,7]\n\n// 8    x         x\n// 7    x x       x   x\n// 6    x x       x   x\n// 5    x x   x   x   x\n// 4    x x   x x x   x\n// 3    x x   x x x x x\n// 2    x x x x x x x x\n// 1  x x x x x x x x x\n//    0 1 2 3 4 5 6 7 8\n\n// we need to find the two lines that form the container with the most water\n// the container is formed by the two lines and the x-axis\n// the area of the container is the width of the container times the height of the container\n// the width of the container is the distance between the two lines\n// the height of the container is the minimum of the two lines\n\n// in this example, we start from both ends, height[0] and height[8], area formed is 8\n// notice that moving the longer line inward will not increase the area, \n// so we move the shorter line inward, we get height[1] and height[8], area formed is 49\n\n// we move the shorter line inward again, we get height[1] and height[7], area formed is 18\n\n// we move the shorter line inward again, we get height[1] and height[6], area formed is 40\n\n// we continue this process until the two pointers meet\n\n// this approach is better because we do not need to check all pairs of lines\n// we only need to check the pairs that are formed by the shorter line\n// this reduces the time complexity from O(n^2) to O(n)"
+          },
+          {
+            "title": "Walk until the pointers meet",
+            "explanation": "",
+            "code": "function maxArea(height: number[]): number {\n  // start pointers at both ends\n  let left = 0;\n  let right = height.length - 1;\n  \n  // create a variable to store the best area called 'best'\n  let best = 0;\n\n  // use a while loop to move the pointers inward\n  while (left < right) {\n\n    // calculate the current area of the container\n\n    // update the best area if the current area is greater\n\n    // move the shorter pointer inward\n  }\n\n  return best;\n}\n\n// understand the problem\n// eg height = [1,8,6,2,5,4,8,3,7]\n\n// 8    x         x\n// 7    x x       x   x\n// 6    x x       x   x\n// 5    x x   x   x   x\n// 4    x x   x x x   x\n// 3    x x   x x x x x\n// 2    x x x x x x x x\n// 1  x x x x x x x x x\n//    0 1 2 3 4 5 6 7 8\n\n// we need to find the two lines that form the container with the most water\n// the container is formed by the two lines and the x-axis\n// the area of the container is the width of the container times the height of the container\n// the width of the container is the distance between the two lines\n// the height of the container is the minimum of the two lines\n\n// in this example, we start from both ends, height[0] and height[8], area formed is 8\n// notice that moving the longer line inward will not increase the area, \n// so we move the shorter line inward, we get height[1] and height[8], area formed is 49\n\n// we move the shorter line inward again, we get height[1] and height[7], area formed is 18\n\n// we move the shorter line inward again, we get height[1] and height[6], area formed is 40\n\n// we continue this process until the two pointers meet\n\n// this approach is better because we do not need to check all pairs of lines\n// we only need to check the pairs that are formed by the shorter line\n// this reduces the time complexity from O(n^2) to O(n)"
+          },
+          {
+            "title": "Measure the current area",
+            "explanation": "",
+            "code": "function maxArea(height: number[]): number {\n  // start pointers at both ends\n  let left = 0;\n  let right = height.length - 1;\n  \n  // create a variable to store the best area called 'best'\n  let best = 0;\n\n  // use a while loop to move the pointers inward\n  while (left < right) {\n\n    // calculate the current area of the container\n    const area = Math.min(height[left], height[right]) * (right - left);\n\n    // update the best area if the current area is greater\n    best = Math.max(best, area);\n\n    // move the shorter pointer inward\n  }\n\n  return best;\n}\n\n// understand the problem\n// eg height = [1,8,6,2,5,4,8,3,7]\n\n// 8    x         x\n// 7    x x       x   x\n// 6    x x       x   x\n// 5    x x   x   x   x\n// 4    x x   x x x   x\n// 3    x x   x x x x x\n// 2    x x x x x x x x\n// 1  x x x x x x x x x\n//    0 1 2 3 4 5 6 7 8\n\n// we need to find the two lines that form the container with the most water\n// the container is formed by the two lines and the x-axis\n// the area of the container is the width of the container times the height of the container\n// the width of the container is the distance between the two lines\n// the height of the container is the minimum of the two lines\n\n// in this example, we start from both ends, height[0] and height[8], area formed is 8\n// notice that moving the longer line inward will not increase the area, \n// so we move the shorter line inward, we get height[1] and height[8], area formed is 49\n\n// we move the shorter line inward again, we get height[1] and height[7], area formed is 18\n\n// we move the shorter line inward again, we get height[1] and height[6], area formed is 40\n\n// we continue this process until the two pointers meet\n\n// this approach is better because we do not need to check all pairs of lines\n// we only need to check the pairs that are formed by the shorter line\n// this reduces the time complexity from O(n^2) to O(n)"
+          },
+          {
+            "title": "Move the shorter line",
+            "explanation": "",
+            "code": "function maxArea(height: number[]): number {\n  // start pointers at both ends\n  let left = 0;\n  let right = height.length - 1;\n  \n  // create a variable to store the best area called 'best'\n  let best = 0;\n\n  // use a while loop to move the pointers inward\n  while (left < right) {\n\n    // calculate the current area of the container\n    const area = Math.min(height[left], height[right]) * (right - left);\n\n    // update the best area if the current area is greater\n    best = Math.max(best, area);\n\n    // move the shorter pointer inward\n    if (height[left] < height[right]) {\n      left++;\n    } else {\n      right--;\n    }\n  }\n\n  return best;\n}\n\n// understand the problem\n// eg height = [1,8,6,2,5,4,8,3,7]\n\n// 8    x         x\n// 7    x x       x   x\n// 6    x x       x   x\n// 5    x x   x   x   x\n// 4    x x   x x x   x\n// 3    x x   x x x x x\n// 2    x x x x x x x x\n// 1  x x x x x x x x x\n//    0 1 2 3 4 5 6 7 8\n\n// we need to find the two lines that form the container with the most water\n// the container is formed by the two lines and the x-axis\n// the area of the container is the width of the container times the height of the container\n// the width of the container is the distance between the two lines\n// the height of the container is the minimum of the two lines\n\n// in this example, we start from both ends, height[0] and height[8], area formed is 8\n// notice that moving the longer line inward will not increase the area, \n// so we move the shorter line inward, we get height[1] and height[8], area formed is 49\n\n// we move the shorter line inward again, we get height[1] and height[7], area formed is 18\n\n// we move the shorter line inward again, we get height[1] and height[6], area formed is 40\n\n// we continue this process until the two pointers meet\n\n// this approach is better because we do not need to check all pairs of lines\n// we only need to check the pairs that are formed by the shorter line\n// this reduces the time complexity from O(n^2) to O(n)"
+          }
+        ]
+      }
+    }
+  ]
+}
