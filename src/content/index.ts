@@ -27,6 +27,7 @@ export const builtinMeta: ProblemMeta[] = Object.values(builtinProblems)
     slug: p.slug,
     title: p.title,
     order: p.order,
+    date: p.date,
     difficulty: p.difficulty,
     tags: p.tags,
     patterns: p.patterns,

@@ -130,7 +130,10 @@ export type Problem = z.infer<typeof problemSchema>
 export type ProblemInput = z.input<typeof problemSchema>
 export type Difficulty = Problem['difficulty']
 
-export type ProblemMeta = Pick<Problem, 'slug' | 'title' | 'order' | 'difficulty' | 'tags' | 'patterns'>
+export type ProblemMeta = Pick<
+  Problem,
+  'slug' | 'title' | 'order' | 'date' | 'difficulty' | 'tags' | 'patterns'
+>
 
 export const LANGUAGE_LABELS: Record<LanguageId, string> = {
   python: 'Python',
