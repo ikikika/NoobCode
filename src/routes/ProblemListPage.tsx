@@ -2,10 +2,11 @@ import { useMemo, type ReactNode } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { builtinMeta } from '../content'
 import { PATTERNS, PATTERN_LABELS, type PatternId } from '../content/patterns'
-import type { Difficulty } from '../content/schema'
+import type { Difficulty, ProblemMeta } from '../content/schema'
 import { useProgressStore } from '../store/useProgressStore'
 import { DifficultyBadge } from '../components/DifficultyBadge'
 import { Check } from '../components/ui'
+import { useMediaQuery } from '../lib/useMediaQuery'
 
 const DIFFICULTIES: Difficulty[] = ['easy', 'medium', 'hard']
 
@@ -51,6 +52,7 @@ function formatDate(iso: string): string {
 export function ProblemListPage() {
   const solved = useProgressStore((s) => s.solved)
   const [searchParams, setSearchParams] = useSearchParams()
+  const isNarrow = useMediaQuery('(max-width: 767px)')
 
   const patternParam = searchParams.get('pattern')
   const difficultyParam = searchParams.get('difficulty')
@@ -63,6 +65,8 @@ export function ProblemListPage() {
     : null
   const sortKey: SortKey = isSortKey(sortParam) ? sortParam : 'date'
   const sortDir: SortDir = isSortDir(dirParam) ? dirParam : 'desc'
+  const newestFirst = sortKey === 'date' && sortDir === 'desc'
+  const oldestFirst = sortKey === 'date' && sortDir === 'asc'
 
   const availablePatterns = useMemo(() => {
     const used = new Set(builtinMeta.flatMap((p) => p.patterns))
@@ -138,24 +142,17 @@ export function ProblemListPage() {
 
   function updateFilters(next: { pattern?: PatternId | null; difficulty?: Difficulty | null }) {
     updateParams({
-      pattern:
-        next.pattern !== undefined
-          ? next.pattern
-          : selectedPattern,
-      difficulty:
-        next.difficulty !== undefined
-          ? next.difficulty
-          : selectedDifficulty,
+      pattern: next.pattern !== undefined ? next.pattern : selectedPattern,
+      difficulty: next.difficulty !== undefined ? next.difficulty : selectedDifficulty,
     })
   }
 
-  function toggleDateSort() {
-    if (sortKey === 'date' && sortDir === 'desc') {
-      updateParams({ sort: 'date', dir: 'asc' })
-      return
-    }
-    // Back to default: newest first (omit params)
+  function sortNewest() {
     updateParams({ sort: null, dir: null })
+  }
+
+  function sortOldest() {
+    updateParams({ sort: 'date', dir: 'asc' })
   }
 
   const filterSummary = [
@@ -166,7 +163,13 @@ export function ProblemListPage() {
     .join(' · ')
 
   return (
-    <div style={{ padding: '44px 64px 64px', maxWidth: 1040, margin: '0 auto' }}>
+    <div
+      style={{
+        padding: isNarrow ? '28px 20px 48px' : '44px 64px 64px',
+        maxWidth: 1040,
+        margin: '0 auto',
+      }}
+    >
       <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginBottom: 28 }}>
         <FilterRow label="Pattern">
           <FilterChip
@@ -203,6 +206,11 @@ export function ProblemListPage() {
             />
           ))}
         </FilterRow>
+
+        <FilterRow label="Date">
+          <FilterChip label="Newest" active={newestFirst} onClick={sortNewest} />
+          <FilterChip label="Oldest" active={oldestFirst} onClick={sortOldest} />
+        </FilterRow>
       </div>
 
       <div
@@ -213,91 +221,43 @@ export function ProblemListPage() {
         {filterSummary ? ` · ${filterSummary}` : ''}
       </div>
 
-      <div
-        className="nc-mono"
-        style={{
-          display: 'grid',
-          gridTemplateColumns: `minmax(0, 1fr) ${DATE_COL_WIDTH}px ${DIFF_COL_WIDTH}px`,
-          gap: 13,
-          alignItems: 'center',
-          padding: '0 12px 8px',
-          margin: '0 -12px',
-          fontSize: 11,
-          color: 'var(--color-fg-subtle)',
-          letterSpacing: '0.04em',
-          textTransform: 'uppercase',
-          borderBottom: '1px solid var(--color-line-soft)',
-        }}
-      >
-        <span style={{ paddingLeft: 28 }}>Problem</span>
-        <button
-          type="button"
-          onClick={toggleDateSort}
-          aria-pressed={sortKey === 'date'}
+      {!isNarrow && (
+        <div
+          className="nc-mono"
           style={{
-            background: 'none',
-            border: 'none',
-            padding: 0,
-            margin: 0,
-            cursor: 'pointer',
-            color: sortKey === 'date' ? 'var(--color-accent)' : 'var(--color-fg-subtle)',
-            font: 'inherit',
-            letterSpacing: 'inherit',
-            textTransform: 'inherit',
-            textAlign: 'left',
-            display: 'inline-flex',
+            display: 'grid',
+            gridTemplateColumns: `minmax(0, 1fr) ${DATE_COL_WIDTH}px ${DIFF_COL_WIDTH}px`,
+            gap: 13,
             alignItems: 'center',
-            gap: 4,
+            padding: '0 12px 8px',
+            margin: '0 -12px',
+            fontSize: 11,
+            color: 'var(--color-fg-subtle)',
+            letterSpacing: '0.04em',
+            textTransform: 'uppercase',
+            borderBottom: '1px solid var(--color-line-soft)',
           }}
         >
-          Date
-          <span aria-hidden="true">{sortKey === 'date' ? (sortDir === 'desc' ? '↓' : '↑') : ''}</span>
-        </button>
-        <span style={{ textAlign: 'right' }}>Level</span>
-      </div>
+          <span style={{ paddingLeft: 28 }}>Problem</span>
+          <span>Date</span>
+          <span style={{ textAlign: 'right' }}>Level</span>
+        </div>
+      )}
 
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
-        {items.map((p) => (
-          <Link key={p.slug} className="nc-reset" to={`/problems/${p.slug}`}>
-            <div
-              className="nc-row-hover"
-              style={{
-                display: 'grid',
-                gridTemplateColumns: `minmax(0, 1fr) ${DATE_COL_WIDTH}px ${DIFF_COL_WIDTH}px`,
-                alignItems: 'center',
-                gap: 13,
-                padding: '9px 12px',
-                margin: '0 -12px',
-              }}
-            >
-              <span style={{ display: 'flex', alignItems: 'center', gap: 13, minWidth: 0 }}>
-                <Check on={!!solved[p.slug]} />
-                <span
-                  className="t"
-                  style={{
-                    fontSize: 15,
-                    fontWeight: 500,
-                    transition: 'color .12s',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  {p.title}
-                </span>
-              </span>
-              <span
-                className="nc-mono"
-                style={{ fontSize: 12, color: 'var(--color-fg-subtle)', fontVariantNumeric: 'tabular-nums' }}
-              >
-                {formatDate(p.date)}
-              </span>
-              <span style={{ justifySelf: 'end' }}>
-                <DifficultyBadge difficulty={p.difficulty} />
-              </span>
-            </div>
-          </Link>
-        ))}
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: isNarrow ? 10 : 0,
+        }}
+      >
+        {items.map((p) =>
+          isNarrow ? (
+            <ProblemCard key={p.slug} problem={p} solved={!!solved[p.slug]} />
+          ) : (
+            <ProblemRow key={p.slug} problem={p} solved={!!solved[p.slug]} />
+          ),
+        )}
         {items.length === 0 && (
           <p style={{ fontSize: 14, color: 'var(--color-fg-muted)', padding: '12px 0' }}>
             No problems match these filters.
@@ -305,6 +265,108 @@ export function ProblemListPage() {
         )}
       </div>
     </div>
+  )
+}
+
+function ProblemRow({ problem, solved }: { problem: ProblemMeta; solved: boolean }) {
+  return (
+    <Link className="nc-reset" to={`/problems/${problem.slug}`}>
+      <div
+        className="nc-row-hover"
+        style={{
+          display: 'grid',
+          gridTemplateColumns: `minmax(0, 1fr) ${DATE_COL_WIDTH}px ${DIFF_COL_WIDTH}px`,
+          alignItems: 'center',
+          gap: 13,
+          padding: '9px 12px',
+          margin: '0 -12px',
+        }}
+      >
+        <span style={{ display: 'flex', alignItems: 'center', gap: 13, minWidth: 0 }}>
+          <Check on={solved} />
+          <span
+            className="t"
+            style={{
+              fontSize: 15,
+              fontWeight: 500,
+              transition: 'color .12s',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            {problem.title}
+          </span>
+        </span>
+        <span
+          className="nc-mono"
+          style={{ fontSize: 12, color: 'var(--color-fg-subtle)', fontVariantNumeric: 'tabular-nums' }}
+        >
+          {formatDate(problem.date)}
+        </span>
+        <span style={{ justifySelf: 'end' }}>
+          <DifficultyBadge difficulty={problem.difficulty} />
+        </span>
+      </div>
+    </Link>
+  )
+}
+
+function ProblemCard({ problem, solved }: { problem: ProblemMeta; solved: boolean }) {
+  return (
+    <Link className="nc-reset" to={`/problems/${problem.slug}`}>
+      <div
+        className="nc-row-hover"
+        style={{
+          display: 'flex',
+          gap: 12,
+          alignItems: 'flex-start',
+          padding: '14px 14px',
+          border: '1px solid var(--color-line)',
+          borderRadius: 10,
+          background: 'var(--color-surface-raised)',
+        }}
+      >
+        <span style={{ paddingTop: 2 }}>
+          <Check on={solved} />
+        </span>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div
+            className="t"
+            style={{
+              fontSize: 15,
+              fontWeight: 500,
+              lineHeight: 1.35,
+              transition: 'color .12s',
+              whiteSpace: 'normal',
+            }}
+          >
+            {problem.title}
+          </div>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: 10,
+              marginTop: 10,
+            }}
+          >
+            <span
+              className="nc-mono"
+              style={{
+                fontSize: 12,
+                color: 'var(--color-fg-subtle)',
+                fontVariantNumeric: 'tabular-nums',
+              }}
+            >
+              {formatDate(problem.date)}
+            </span>
+            <DifficultyBadge difficulty={problem.difficulty} />
+          </div>
+        </div>
+      </div>
+    </Link>
   )
 }
 
@@ -341,7 +403,7 @@ function FilterChip({
   onClick,
 }: {
   label: string
-  count: number
+  count?: number
   active: boolean
   onClick: () => void
 }) {
@@ -366,16 +428,18 @@ function FilterChip({
       }}
     >
       {label}
-      <span
-        className="nc-mono"
-        style={{
-          fontSize: 11,
-          opacity: 0.75,
-          fontVariantNumeric: 'tabular-nums',
-        }}
-      >
-        {count}
-      </span>
+      {count !== undefined && (
+        <span
+          className="nc-mono"
+          style={{
+            fontSize: 11,
+            opacity: 0.75,
+            fontVariantNumeric: 'tabular-nums',
+          }}
+        >
+          {count}
+        </span>
+      )}
     </button>
   )
 }
